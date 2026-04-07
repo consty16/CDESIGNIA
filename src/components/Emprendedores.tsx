@@ -7,18 +7,11 @@ export const Emprendedores: React.FC = () => {
     <div className="min-h-screen bg-bg">
       <div className="max-w-[1000px] mx-auto px-6 md:px-12 pt-12 md:pt-20 pb-8">
         <header className="text-center mb-16 pt-20">
-          <div className="mb-12">
-            <Link 
-              to="/" 
-              className="inline-block text-[10px] uppercase tracking-[0.2em] text-text-primary border border-white/20 px-6 py-2.5 rounded transition-all hover:bg-white/5 hover:border-lilac hover:shadow-[0_0_15px_rgba(196,181,253,0.2)]"
-            >
-              ← Volver al Inicio
-            </Link>
-          </div>
+
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="inline-block text-[10px] uppercase tracking-[0.25em] text-white border border-white/20 px-4 py-1.5 mb-8 bg-white/5 rounded backdrop-blur-sm shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+            className="inline-block text-base md:text-xl font-black uppercase tracking-[0.3em] text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.8)] border border-lilac/50 px-10 py-4 mb-8 bg-lilac/10 rounded-full backdrop-blur-sm shadow-[0_0_35px_rgba(167,139,250,0.6)] hover:scale-105 transition-transform"
           >
             Especial Emprendedores
           </motion.div>
