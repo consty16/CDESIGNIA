@@ -150,33 +150,35 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
               </button>
               
               <div className={cn(
-                "absolute top-full left-0 mt-2 w-48 bg-bg-tertiary border border-lilac/20 rounded-lg overflow-hidden transition-all duration-300 z-50 shadow-2xl backdrop-blur-xl",
+                "absolute top-full left-0 pt-2 w-48 transition-all duration-300 z-50",
                 isProjectsOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible translate-y-2 pointer-events-none"
               )}>
-                <a
-                  href="https://www.instagram.com/andromedamodamasculina/?hl=es"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="block px-6 py-3 text-[10px] uppercase tracking-widest text-white/80 hover:text-white hover:bg-lilac/20 transition-colors border-b border-white/5"
-                >
-                  ✦ ANDROMEDA ↗
-                </a>
-                <a
-                  href="https://madtecnoymas.netlify.app/"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="block px-6 py-3 text-[10px] uppercase tracking-widest text-white/80 hover:text-white hover:bg-lilac/20 transition-colors border-b border-white/5"
-                >
-                  ❋ MAD TECNO ↗
-                </a>
-                <a
-                  href="/sc-security-consulting.html"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="block px-6 py-3 text-[10px] uppercase tracking-widest text-white/80 hover:text-white hover:bg-lilac/20 transition-colors"
-                >
-                  ◈ SC SECURITY CONSULTING ↗
-                </a>
+                <div className="w-full bg-bg-tertiary border border-lilac/20 rounded-lg overflow-hidden shadow-2xl backdrop-blur-xl">
+                  <a
+                    href="https://www.instagram.com/andromedamodamasculina/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="block px-6 py-3 text-[10px] uppercase tracking-widest text-white/80 hover:text-white hover:bg-lilac/20 transition-colors border-b border-white/5"
+                  >
+                    ✦ ANDROMEDA ↗
+                  </a>
+                  <a
+                    href="https://madtecnoymas.netlify.app/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="block px-6 py-3 text-[10px] uppercase tracking-widest text-white/80 hover:text-white hover:bg-lilac/20 transition-colors border-b border-white/5"
+                  >
+                    ❋ MAD TECNO ↗
+                  </a>
+                  <a
+                    href="/sc-security-consulting.html"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="block px-6 py-3 text-[10px] uppercase tracking-widest text-white/80 hover:text-white hover:bg-lilac/20 transition-colors"
+                  >
+                    ◈ SC SECURITY CONSULTING ↗
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -721,7 +723,7 @@ export const Contact: React.FC = () => {
           <p className="text-white/70 text-sm">San Miguel de Tucumán, Tucumán, Argentina</p>
         </div>
         <a
-          href="mailto:constanzarissop91@gmail.com"
+          href="https://mail.google.com/mail/?view=cm&fs=1&to=constanzarissop91@gmail.com"
           target="_blank"
           rel="noreferrer"
           className="text-white border border-white/40 px-10 py-4 text-sm uppercase tracking-widest hover:bg-white/10 transition-all rounded shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)] hover:border-white flex items-center gap-3"
