@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "DM Sans", system-ui, sans-serif;
+
+  --color-bg: #0a090f;
+  --color-bg-secondary: #110f1a;
+  --color-bg-tertiary: #1a1626;
+  --color-lilac: #c4b5fd;
+  --color-lilac-dim: #a78bfa;
+  --color-text-primary: #f0eeff;
+  --color-text-secondary: #a89ec4;
+  --color-text-muted: #6b6280;
+  --color-wa: #25d366;
+}
+
+@layer base {
+  body {
+    @apply bg-bg text-text-primary font-sans overflow-x-hidden;
+    cursor: none;
+  }
+
+  @media (max-width: 768px) {
+    body {
+      cursor: auto;
+    }
+  }
+}
+
+@layer components {
+  .hero-glow::before {
+    content: '';
+    position: absolute;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(167, 139, 250, 0.1) 0%, transparent 70%);
+    top: 5%;
+    right: -150px;
+    animation: breathe 7s ease-in-out infinite;
+  }
+
+  .hero-glow::after {
+    content: '';
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(92, 26, 92, 0.15) 0%, transparent 70%);
+    bottom: 10%;
+    left: -50px;
+    animation: breathe 9s ease-in-out infinite reverse;
+  }
+
+  @keyframes breathe {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+
+  .chat-dot {
+    @apply w-1.5 h-1.5 rounded-full bg-green-400;
+    animation: pdot 2s infinite;
+  }
+
+  @keyframes pdot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
