@@ -46,6 +46,7 @@ export const Navbar: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOp
 
 export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpenOverlay }) => {
   const [scrollPos, setScrollPos] = useState(0);
+  const [isProjectsOpen, setIsProjectsOpen] = useState(false);
   const carouselRef = React.useRef<HTMLDivElement>(null);
 
   const influencers = [
@@ -135,15 +136,23 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
             >
               Quiénes somos
             </a>
-            <div className="relative group/dropdown">
+            <div 
+              className="relative"
+              onMouseLeave={() => setIsProjectsOpen(false)}
+            >
               <button
+                onClick={() => setIsProjectsOpen(!isProjectsOpen)}
+                onMouseEnter={() => setIsProjectsOpen(true)}
                 className="border border-white/40 text-white px-8 py-3 text-xs uppercase tracking-widest hover:bg-white/10 transition-all rounded shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.5)] flex items-center gap-2"
               >
                 Projects
-                <span className="text-[8px] opacity-50 group-hover/dropdown:rotate-180 transition-transform">▼</span>
+                <span className={cn("text-[8px] opacity-50 transition-transform", isProjectsOpen ? "rotate-180" : "")}>▼</span>
               </button>
               
-              <div className="absolute top-full left-0 mt-2 w-48 bg-bg-tertiary border border-lilac/20 rounded-lg overflow-hidden opacity-0 invisible group-hover/dropdown:opacity-100 group-hover/dropdown:visible transition-all duration-300 z-50 shadow-2xl backdrop-blur-xl translate-y-2 group-hover/dropdown:translate-y-0">
+              <div className={cn(
+                "absolute top-full left-0 mt-2 w-48 bg-bg-tertiary border border-lilac/20 rounded-lg overflow-hidden transition-all duration-300 z-50 shadow-2xl backdrop-blur-xl",
+                isProjectsOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible translate-y-2 pointer-events-none"
+              )}>
                 <a
                   href="https://www.instagram.com/andromedamodamasculina/?hl=es"
                   target="_blank"
@@ -712,7 +721,7 @@ export const Contact: React.FC = () => {
           <p className="text-white/70 text-sm">San Miguel de Tucumán, Tucumán, Argentina</p>
         </div>
         <a
-          href="https://mail.google.com/mail/?view=cm&fs=1&to=constanzarissop91@gmail.com"
+          href="mailto:constanzarissop91@gmail.com"
           target="_blank"
           rel="noreferrer"
           className="text-white border border-white/40 px-10 py-4 text-sm uppercase tracking-widest hover:bg-white/10 transition-all rounded shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)] hover:border-white flex items-center gap-3"
