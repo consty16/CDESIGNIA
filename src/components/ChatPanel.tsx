@@ -50,7 +50,7 @@ export const ChatPanel: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ 
       console.error('Chat error:', error);
       setMessages([
         ...newMessages,
-        { role: 'model', parts: [{ text: 'Ups, hubo un error 😅 Escribinos a [constanzarissop91@gmail.com](https://mail.google.com/mail/?view=cm&fs=1&to=constanzarissop91@gmail.com)' }] },
+        { role: 'model', parts: [{ text: 'Ups, hubo un error 😅 Escribinos a [constanzarissop91@gmail.com](mailto:constanzarissop91@gmail.com)' }] },
       ]);
     } finally {
       setIsLoading(false);

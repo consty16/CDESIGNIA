@@ -729,9 +729,14 @@ export const Contact: React.FC = () => {
           <p className="text-white/70 text-sm">San Miguel de Tucumán, Tucumán, Argentina</p>
         </div>
         <a
-          href="https://mail.google.com/mail/?view=cm&fs=1&to=constanzarissop91@gmail.com"
-          target="_blank"
-          rel="noreferrer"
+          href="mailto:constanzarissop91@gmail.com"
+          onClick={(e) => {
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            if (!isMobile) {
+              e.preventDefault();
+              window.open("https://mail.google.com/mail/?view=cm&fs=1&to=constanzarissop91@gmail.com", "_blank", "noreferrer");
+            }
+          }}
           className="text-white border border-white/40 px-10 py-4 text-sm uppercase tracking-widest hover:bg-white/10 transition-all rounded shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)] hover:border-white flex items-center gap-3"
         >
           <Mail size={18} className="drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]" />
