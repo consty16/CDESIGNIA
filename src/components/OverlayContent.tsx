@@ -121,6 +121,7 @@ const projects: Project[] = [
   { title: "RUBIA KIDS", sub: "Humor IA", icon: "❋", category: 'humor', video: "/rubiakids.mp4" },
   { title: "SERENA", sub: "Humor IA", icon: "❋", category: 'humor', video: "/serena.mp4" },
   { title: "SHENLONG NEW YEAR", sub: "Humor IA", icon: "❋", category: 'humor', video: "/shenglongnewyear.mp4" },
+  { title: "FORTINO", sub: "Trabajo Destacado", icon: "◈", category: 'trabajos', video: "/fortino.mp4" },
   { title: "Galería Florida", sub: "Publicidad IA", icon: "◈", category: 'trabajos', video: "/GALERIA.mp4" },
   { title: "Dist. Giar Mayorista", sub: "Publicidad Inteligente", icon: "◇", category: 'trabajos' },
   { title: "Bless Inmobiliaria", sub: "Branding & Publicidad", icon: "◆", category: 'trabajos' },

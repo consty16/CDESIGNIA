@@ -349,6 +349,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
 export const FeaturedWorks: React.FC = () => {
   const carouselRef = React.useRef<HTMLDivElement>(null);
   const works = [
+    { id: 32, title: 'FORTINO', video: '/fortino.mp4' },
     { id: 1, title: 'BUTTMAN', video: '/BUTTMAN.mp4' },
     { id: 2, title: 'CARDON', video: '/CARDON.mp4' },
     { id: 3, title: 'JUANITAJO', video: '/JUANITAJO.mp4' },
