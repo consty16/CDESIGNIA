@@ -19,22 +19,22 @@ exports.handler = async (event) => {
 
     // Modelos específicos para cada tipo de tarea
     const MODELOS = {
-      "MAQUILLAJE": "zylim0702/makeup-transfer", 
-      "MÁSCARAS": "deepinsight/insightface",    
-      "VESTIDOS": "yisol/IDM-VTON"               
+      "MAQUILLAJE": "zylim0702/makeup-transfer",
+      "MÁSCARAS": "deepinsight/insightface",
+      "VESTIDOS": "yisol/IDM-VTON"
     };
 
     const endpoint = MODELOS[category] || MODELOS["MÁSCARAS"];
 
-    // Instrucciones de estilo Nova IA
+    // Instrucciones de estilo Nova IA (PROMPTS_ESTILO)
     const PROMPTS = {
-      "MAQUILLAJE": "High-fashion crystal makeup, neon fuchsia details, hyper-realistic skin, 8k resolution.",
-      "MÁSCARAS": "Luxury mask fusion, cinematic lighting, neon purple highlights, seamless integration, editorial style.",
-      "VESTIDOS": "Professional virtual try-on, elegant fabric flow, realistic shadows, tucumano design essence."
+      "MAQUILLAJE": "Artistic crystal makeup transfer, high-fashion editorial, neon fuchsia glow, 8k, maintain facial features.",
+      "MÁSCARAS": "Seamless cinematic face fusion, luxury mask integration, deep purple lighting, hyper-realistic, match skin tones.",
+      "VESTIDOS": "Professional virtual try-on, elegant drapery, realistic fabric physics, studio lighting, lila aesthetics."
     };
 
     const response = await fetch(`https://api-inference.huggingface.co/models/${endpoint}`, {
-      headers: { 
+      headers: {
         Authorization: `Bearer ${TOKEN}`,
         "Content-Type": "application/json"
       },
@@ -54,7 +54,7 @@ exports.handler = async (event) => {
     }
 
     const buffer = await response.arrayBuffer();
-    
+
     return {
       statusCode: 200,
       headers: { "Content-Type": "image/png" },
