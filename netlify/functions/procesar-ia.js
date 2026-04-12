@@ -11,7 +11,11 @@ exports.handler = async (event) => {
       return { statusCode: 500, body: JSON.stringify({ error: "No se encontró REPLICATE_API_TOKEN en Netlify." }) };
     }
 
-    const targetImageUrl = `data:image/jpeg;base64,${template}`;
+    // Detectar si el template es una URL o base64
+    const targetImageUrl = template.startsWith('http') 
+      ? template 
+      : `data:image/jpeg;base64,${template}`;
+      
     const userImageUrl = `data:image/jpeg;base64,${image}`;
 
     // ── Paso 1: crear la predicción en Replicate (lucataco/faceswap) ──

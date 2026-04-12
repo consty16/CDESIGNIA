@@ -110,19 +110,28 @@ export const IALab = () => {
           ctx.fillStyle = '#000';
           ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-          // 2. Dibujar Usuario (Cover Logic para no deformar)
-          const scale = Math.max(canvas.width / userImg.width, canvas.height / userImg.height);
+          // 2. Dibujar Usuario (Ajuste Proporcional)
+          // Escalamos un poco más para que el rostro llene mejor el espacio de la máscara
+          const scale = Math.max(canvas.width / userImg.width, canvas.height / userImg.height) * 1.1;
           const x = (canvas.width - userImg.width * scale) / 2;
-          const y = (canvas.height - userImg.height * scale) / 2;
+          // Subimos un poco el rostro (offset negativo en y) para alinear ojos
+          const y = (canvas.height - userImg.height * scale) / 2 - (canvas.height * 0.05);
           
           ctx.filter = 'brightness(1.05) contrast(1.02)';
           ctx.drawImage(userImg, x, y, userImg.width * scale, userImg.height * scale);
           ctx.filter = 'none';
 
           // 3. Superposición del Asset (Diseño Original)
+          // Lo escalamos ligeramente al 95% para que no se vea desproporcionado
+          const maskScale = 0.95;
+          const mw = canvas.width * maskScale;
+          const mh = canvas.height * maskScale;
+          const mx = (canvas.width - mw) / 2;
+          const my = (canvas.height - mh) / 2;
+
           ctx.globalCompositeOperation = 'source-over';
           ctx.globalAlpha = 1.0;
-          ctx.drawImage(templateImg, 0, 0, canvas.width, canvas.height);
+          ctx.drawImage(templateImg, mx, my, mw, mh);
 
           resolve(canvas.toDataURL('image/jpeg', 0.95));
         };
@@ -192,8 +201,9 @@ export const IALab = () => {
     pollinationsImg.src = pollinationsUrl;
 
     try {
-      const templateBase64 = await toBase64(selectedAsset);
-      const replicateUrl = await callReplicate(cleanUserPhoto, templateBase64);
+      // Usamos la URL absoluta del asset para que Replicate pueda acceder directamente
+      const absoluteAssetUrl = window.location.origin + selectedAsset;
+      const replicateUrl = await callReplicate(cleanUserPhoto, absoluteAssetUrl);
       setResultReplicate({ url: replicateUrl, ready: true, error: false });
     } catch (e: any) {
       console.error('Replicate error:', e.message);
