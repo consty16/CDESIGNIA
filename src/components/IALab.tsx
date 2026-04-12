@@ -211,13 +211,13 @@ export const IALab = () => {
               <h2 className="text-3xl font-serif italic text-white mb-2 text-center uppercase tracking-widest drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">C DESIGN LAB ✨</h2>
               <p className="text-[10px] text-lilac-neon uppercase tracking-[0.4em] mb-10 text-center italic">Digital Fashion Creation</p>
 
-              <div className="w-full max-h-[70vh] rounded-[2rem] overflow-hidden border border-lilac-neon shadow-[0_0_60px_rgba(168,85,247,0.4)] relative bg-black/50 group flex items-center justify-center p-4">
+              <div className="w-full max-h-[70vh] aspect-square md:aspect-auto md:h-[60vh] rounded-[2.5rem] border border-lilac-neon shadow-[0_0_60px_rgba(168,85,247,0.4)] relative bg-black/50 group flex items-center justify-center p-4 md:p-10">
                 {result.url && (
                   <motion.img
-                    initial={{ scale: 1.1, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
                     src={result.url}
-                    className="max-w-full max-h-full object-contain"
+                    className="max-w-full max-h-full object-contain shadow-2xl rounded-xl"
                     alt="C DESIGN LAB Result"
                   />
                 )}
