@@ -37,7 +37,7 @@ exports.handler = async (event) => {
     
     const MODEL_ID = "stabilityai/stable-diffusion-xl-base-1.0";
 
-    const response = await fetch(`https://api-inference.huggingface.co/models/${MODEL_ID}`, {
+    const response = await fetch(`https://router.huggingface.co/models/${MODEL_ID}`, {
       headers: { 
         Authorization: `Bearer ${TOKEN}`,
         "Content-Type": "application/json"
@@ -61,7 +61,7 @@ exports.handler = async (event) => {
 
       // Fallback a v1.5
       if (response.status === 503 || response.status === 404 || response.status === 500) {
-          const fallbackResponse = await fetch("https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5", {
+          const fallbackResponse = await fetch("https://router.huggingface.co/models/runwayml/stable-diffusion-v1-5", {
               headers: { Authorization: `Bearer ${TOKEN}`, "Content-Type": "application/json" },
               method: "POST",
               body: JSON.stringify({ 
