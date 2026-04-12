@@ -36,9 +36,9 @@ const MOCK_GALLERY: Record<string, string[]> = {
 };
 
 const WAITING_MESSAGES = [
-  "Nova está conceptualizando tu idea...",
+  "C DESIGN IA está conceptualizando tu idea...",
   "Sintetizando texturas de alta costura...",
-  "Gemini está diseñando tu visión...",
+  "Nuestra IA está diseñando tu visión...",
   "Renderizando obra maestra 8K...",
 ];
 
@@ -89,8 +89,8 @@ export const IALab = () => {
 
       setResult({
         url: imageUrl,
-        advice: `Nova ha fusionado tu visión "${userPrompt}" con la estética ${activeCategory.toLowerCase()} para crear esta pieza única de alta costura digital.`,
-        tags: [activeCategory.toLowerCase(), 'nova-ia', 'editorial', 'c-design-ia', 'flux'],
+        advice: `C DESIGN IA ha fusionado tu visión "${userPrompt}" con la estética ${activeCategory.toLowerCase()} para crear esta pieza única de alta costura digital.`,
+        tags: [activeCategory.toLowerCase(), 'c-design-ia', 'editorial', 'haute-couture', 'flux'],
         ready: true,
         error: false
       });
@@ -118,8 +118,8 @@ export const IALab = () => {
           <span className="text-[10px] uppercase tracking-widest font-bold">Volver</span>
         </Link>
         <div className="text-right">
-          <h1 className="text-3xl md:text-6xl font-serif italic text-white uppercase tracking-tighter">Nova Lab</h1>
-          <p className="text-[10px] text-lilac-neon mt-2 uppercase tracking-widest font-medium">C DESIGN IA · Premium Edition</p>
+          <h1 className="text-3xl md:text-6xl font-serif italic text-white uppercase tracking-tighter">C DESIGN LAB</h1>
+          <p className="text-[10px] text-lilac-neon mt-2 uppercase tracking-widest font-medium">IA · Premium Edition</p>
         </div>
       </nav>
 
@@ -187,13 +187,13 @@ export const IALab = () => {
                 <Loader2 className="animate-spin w-5 h-5" />
               ) : (
                 <>
-                  <Send className="w-4 h-4" /> GENERAR CON NOVA IA ✨
+                  <Send className="w-4 h-4" /> GENERAR CON C DESIGN IA ✨
                 </>
               )}
             </button>
 
             <p className="mt-6 text-[9px] text-white/30 text-center uppercase tracking-widest leading-loose">
-              Nova combinará tu descripción con la estética del diseño seleccionado para crear una pieza única.
+              Nuestra IA combinará tu descripción con la estética del diseño seleccionado para crear una pieza única.
             </p>
           </div>
         </div>
@@ -208,17 +208,17 @@ export const IALab = () => {
             className="fixed inset-0 z-[2000] flex items-center justify-center p-6 bg-black/95 backdrop-blur-2xl overflow-y-auto"
           >
             <div className="w-full max-w-xl flex flex-col items-center py-10">
-              <h2 className="text-3xl font-serif italic text-white mb-2 text-center uppercase tracking-widest drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">Nova Vision ✨</h2>
+              <h2 className="text-3xl font-serif italic text-white mb-2 text-center uppercase tracking-widest drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">C DESIGN LAB ✨</h2>
               <p className="text-[10px] text-lilac-neon uppercase tracking-[0.4em] mb-10 text-center italic">Digital Fashion Creation</p>
 
-              <div className="w-full aspect-square rounded-[2rem] overflow-hidden border border-lilac-neon shadow-[0_0_60px_rgba(168,85,247,0.4)] relative bg-black group">
+              <div className="w-full max-h-[70vh] rounded-[2rem] overflow-hidden border border-lilac-neon shadow-[0_0_60px_rgba(168,85,247,0.4)] relative bg-black/50 group flex items-center justify-center">
                 {result.url && (
                   <motion.img
                     initial={{ scale: 1.1, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     src={result.url}
-                    className="w-full h-full object-cover"
-                    alt="Nova Creative Design"
+                    className="w-full h-full object-contain max-h-full"
+                    alt="C DESIGN LAB Result"
                   />
                 )}
                 {!result.url && !result.error && (
@@ -244,7 +244,7 @@ export const IALab = () => {
                   </div>
                   <h3 className="text-[9px] uppercase tracking-[0.4em] text-white/40 font-bold mb-4">Análisis del Diseñador</h3>
                   <p className="text-xl font-serif text-white/90 leading-relaxed italic">
-                    "{result.advice || 'Nova está analizando la composición...'}"
+                    "{result.advice || 'C DESIGN IA está analizando la composición...'}"
                   </p>
                 </div>
 
@@ -262,13 +262,14 @@ export const IALab = () => {
                       initial={{ y: 10, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       href={result.url}
-                      download="nova-design.jpg"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="w-full py-5 rounded-2xl font-bold text-xs text-white bg-lilac-neon hover:bg-lilac-glow shadow-[0_0_30px_rgba(168,85,247,0.5)] transition-all uppercase tracking-[0.2em] flex items-center justify-center gap-3 relative z-[2010]"
                     >
-                      <Download className="w-4 h-4" /> DESCARGAR DISEÑO
+                      <Download className="w-4 h-4" /> DESCARGAR LOOK
                     </motion.a>
                   )}
-                  <button onClick={() => setShowResults(false)} className="text-[9px] text-white/20 uppercase tracking-[0.4em] hover:text-white transition-colors">Cerrar Laboratorio</button>
+                  <button onClick={() => setShowResults(false)} className="text-[9px] text-white/20 uppercase tracking-[0.4em] hover:text-white transition-colors">Cerrar C DESIGN LAB</button>
                 </div>
               </div>
             </div>
