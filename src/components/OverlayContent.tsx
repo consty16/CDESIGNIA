@@ -181,7 +181,7 @@ export const MuestrasContent = () => {
               "px-5 py-2 text-[10px] uppercase tracking-widest rounded-full border transition-all duration-300",
               filter === cat.id 
                 ? "bg-white text-black border-white shadow-[0_0_20px_rgba(255,255,255,0.8)] font-bold" 
-                : "bg-transparent text-white border-white/30 hover:border-white hover:text-white hover:shadow-[0_0_15px_rgba(255,255,255,0.5)]"
+                : "bg-transparent text-white border-white/30 hover:border-white hover:text-white hover:shadow-[0_0_15px_rgba(255,255,255,0.5)] font-bold"
             )}
           >
             {cat.label}
@@ -502,7 +502,7 @@ export const ServicesContent = () => (
           href="https://wa.me/5493815341233"
           target="_blank"
           rel="noreferrer"
-          className="inline-flex items-center gap-2 text-[10px] uppercase tracking-widest text-wa border border-wa/30 px-4 py-1.5 hover:bg-wa/10 transition-all rounded"
+          className="inline-flex items-center gap-2 text-[10px] uppercase tracking-widest text-wa border border-wa/30 px-4 py-1.5 hover:bg-wa/10 transition-all rounded font-bold"
         >
           Consultar por WhatsApp ↗
         </a>

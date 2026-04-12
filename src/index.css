@@ -4,11 +4,16 @@
 @theme {
   --font-serif: "Cormorant Garamond", Georgia, serif;
   --font-sans: "DM Sans", system-ui, sans-serif;
+  --font-orbitron: "Orbitron", sans-serif;
+  --font-urbanist: "Urbanist", sans-serif;
 
   --color-bg: #0a090f;
+  --color-bg-deep: #0a0a0a;
   --color-bg-secondary: #110f1a;
   --color-bg-tertiary: #1a1626;
   --color-lilac: #c4b5fd;
+  --color-lilac-neon: #a855f7;
+  --color-lilac-glow: #d8b4fe;
   --color-lilac-dim: #a78bfa;
   --color-text-primary: #f0eeff;
   --color-text-secondary: #a89ec4;
@@ -18,8 +23,13 @@
 
 @layer base {
   body {
-    @apply bg-bg text-text-primary font-sans overflow-x-hidden;
+    @apply bg-bg-deep text-text-primary font-sans overflow-x-hidden;
     cursor: none;
+  }
+
+  .neon-glow {
+    text-shadow: 0 0 10px #a855f7, 0 0 20px #a855f7;
+    filter: drop-shadow(0 0 10px #a855f7);
   }
 
   @media (max-width: 768px) {
