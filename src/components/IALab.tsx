@@ -3,7 +3,14 @@ import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
 import { Upload, Sparkles, Loader2, ChevronLeft, Image as ImageIcon } from 'lucide-react';
 
-const getAssetUrl = (name: string) => name;
+// Cargador de archivos dinámico para compatibilidad con producción (Vite)
+const assetFiles = import.meta.glob('../assets/*.{png,jpg,jpeg,svg,webp}', { eager: true, as: 'url' });
+
+const getAssetUrl = (name: string) => {
+  // Buscamos el archivo que termine exactamente con el nombre solicitado
+  const path = Object.keys(assetFiles).find(key => key.endsWith(`/${name}`));
+  return path ? (assetFiles[path] as string) : '';
+};
 
 const CATEGORIES = [
   { id: 'MÁSCARAS', label: 'MÁSCARAS', icon: '🎭' },
@@ -13,19 +20,19 @@ const CATEGORIES = [
 
 const MOCK_GALLERY: Record<string, string[]> = {
   MÁSCARAS: [
-    '/src/assets/1.png', '/src/assets/2.png', '/src/assets/3.png', '/src/assets/4.png',
-    '/src/assets/5.png', '/src/assets/6.png', '/src/assets/7.png', '/src/assets/8.png',
-    '/src/assets/9.png', '/src/assets/10.png', '/src/assets/11.png', '/src/assets/12.png'
+    getAssetUrl('1.png'), getAssetUrl('2.png'), getAssetUrl('3.png'), getAssetUrl('4.png'),
+    getAssetUrl('5.png'), getAssetUrl('6.png'), getAssetUrl('7.png'), getAssetUrl('8.png'),
+    getAssetUrl('9.png'), getAssetUrl('10.png'), getAssetUrl('11.png'), getAssetUrl('12.png')
   ],
   VESTIDOS: [
-    '/src/assets/13.png', '/src/assets/14.png', '/src/assets/15.png', '/src/assets/16.png',
-    '/src/assets/17.png', '/src/assets/18.png', '/src/assets/19.png', '/src/assets/20.png',
-    '/src/assets/21.png', '/src/assets/22.png', '/src/assets/23.png', '/src/assets/24.png'
+    getAssetUrl('13.png'), getAssetUrl('14.png'), getAssetUrl('15.png'), getAssetUrl('16.png'),
+    getAssetUrl('17.png'), getAssetUrl('18.png'), getAssetUrl('19.png'), getAssetUrl('20.png'),
+    getAssetUrl('21.png'), getAssetUrl('22.png'), getAssetUrl('23.png'), getAssetUrl('24.png')
   ],
   MAQUILLAJE: [
-    '/src/assets/25.png', '/src/assets/26.png', '/src/assets/27.png', '/src/assets/28.png',
-    '/src/assets/29.png', '/src/assets/30.png', '/src/assets/31.png', '/src/assets/32.png',
-    '/src/assets/33.png', '/src/assets/34.png', '/src/assets/35.png', '/src/assets/36.png'
+    getAssetUrl('25.png'), getAssetUrl('26.png'), getAssetUrl('27.png'), getAssetUrl('28.png'),
+    getAssetUrl('29.png'), getAssetUrl('30.png'), getAssetUrl('31.png'), getAssetUrl('32.png'),
+    getAssetUrl('33.png'), getAssetUrl('34.png'), getAssetUrl('35.png'), getAssetUrl('36.png')
   ]
 };
 
