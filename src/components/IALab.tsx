@@ -46,9 +46,9 @@ const WAITING_MESSAGES = [
 ];
 
 const PROMPTS: Record<string, string> = {
-  "MAQUILLAJE": "high fashion model with artistic crystal makeup, neon fuchsia glow, editorial photography, 8k, ultra realistic, beauty campaign",
-  "MÁSCARAS": "luxury fashion model wearing elegant ornate mask, deep purple cinematic lighting, hyper-realistic, haute couture, mysterious",
-  "VESTIDOS": "elegant fashion model wearing luxury evening dress, lila purple aesthetics, studio lighting, vogue editorial, ultra realistic"
+  "MAQUILLAJE": "Masterpiece, professional studio lighting, high fashion model with artistic crystal makeup, neon fuchsia glow, editorial photography, 8k, ultra realistic, highly detailed skin, beauty campaign, sharp focus, skin pores visible, dramatic violet rim light",
+  "MÁSCARAS": "Masterpiece, professional studio lighting, luxury fashion model wearing elegant ornate mask, deep purple cinematic lighting, hyper-realistic, haute couture, mysterious, 8k, highly detailed skin, sharp focus, cinematic atmosphere, intricate textures",
+  "VESTIDOS": "Masterpiece, professional studio lighting, elegant fashion model wearing luxury evening dress, lila purple aesthetics, vogue editorial style, ultra realistic, 8k, highly detailed skin, sharp focus, expensive fabric texture, soft bokeh background"
 };
 
 interface ResultState {
@@ -105,15 +105,32 @@ export const IALab = () => {
         const templateImg = new Image();
         templateImg.crossOrigin = 'anonymous';
         templateImg.onload = () => {
-          const blendMap: Record<string, GlobalCompositeOperation> = {
-            'MAQUILLAJE': 'multiply',
-            'MÁSCARAS': 'overlay',
-            'VESTIDOS': 'multiply',
-          };
-          ctx.globalCompositeOperation = blendMap[activeCategory] || 'overlay';
-          ctx.globalAlpha = 0.78;
+          // Limpiar y optimizar fondo
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          
+          // CAPA 1: Aplicar Filtro Pro al Usuario
+          ctx.filter = 'brightness(1.02) contrast(1.05) saturate(1.1)';
+          ctx.drawImage(userImg, 0, 0);
+          ctx.filter = 'none';
+
+          // CAPA 2: LÓGICA DE CLIPPING MASK / SUPERPOSICIÓN PRO
+          // Si es Maquillaje, usamos un blend que se integre con la piel
+          // Si es Máscara o Vestido, usamos superposición directa (precisa si el asset tiene alpha)
+          if (activeCategory === 'MAQUILLAJE') {
+            ctx.globalCompositeOperation = 'multiply';
+            ctx.globalAlpha = 0.85;
+          } else {
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.globalAlpha = 1.0;
+          }
+          
           ctx.drawImage(templateImg, 0, 0, canvas.width, canvas.height);
-          resolve(canvas.toDataURL('image/jpeg', 0.92));
+          
+          // Restaurar modo normal
+          ctx.globalCompositeOperation = 'source-over';
+          ctx.globalAlpha = 1.0;
+
+          resolve(canvas.toDataURL('image/jpeg', 0.95));
         };
         templateImg.onerror = () => reject('Error cargando plantilla');
         templateImg.src = selectedAsset!;

@@ -12,9 +12,9 @@ exports.handler = async (event) => {
     }
 
     const PROMPTS = {
-      "MAQUILLAJE": "Apply artistic crystal makeup with neon fuchsia glow, high fashion editorial style, maintain facial features and identity",
-      "MÁSCARAS": "Apply a seamless luxury ornate mask, deep purple cinematic lighting, hyper-realistic, maintain facial structure",
-      "VESTIDOS": "Apply an elegant luxury evening dress with realistic fabric physics, studio lighting, lila purple aesthetics"
+      "MAQUILLAJE": "Masterpiece, professional studio lighting, high fashion model with artistic crystal makeup, neon fuchsia glow, editorial photography, 8k, ultra realistic, highly detailed skin, beauty campaign, sharp focus, skin pores visible, dramatic violet rim light",
+      "MÁSCARAS": "Masterpiece, professional studio lighting, luxury fashion model wearing elegant ornate mask, deep purple cinematic lighting, hyper-realistic, haute couture, mysterious, 8k, highly detailed skin, sharp focus, cinematic atmosphere, intricate textures",
+      "VESTIDOS": "Masterpiece, professional studio lighting, elegant fashion model wearing luxury evening dress, lila purple aesthetics, vogue editorial style, ultra realistic, 8k, highly detailed skin, sharp focus, expensive fabric texture, soft bokeh background"
     };
 
     const prompt = PROMPTS[category] || PROMPTS["MÁSCARAS"];
@@ -26,16 +26,20 @@ exports.handler = async (event) => {
       headers: {
         Authorization: `Bearer ${TOKEN}`,
         "Content-Type": "application/json",
-        "Prefer": "wait" // esperar resultado directamente (hasta 60s)
+        "Prefer": "wait"
       },
       body: JSON.stringify({
-        version: "30c1d0b916a6f8efce20493f5d61ee27491ab2a60437c13c588468b9810ec23d",
+        version: "a07f252abbbd832009640b27f063ea52d87d7a23a185ca165bec23b5adc8deaf",
         input: {
           image: imageDataUrl,
           prompt: prompt,
-          num_inference_steps: 20,
-          image_guidance_scale: 1.5,
-          guidance_scale: 7.5,
+          negative_prompt: "bad quality, blurry, low resolution, distorted, extra limbs, ugly, watermark, text, grainy",
+          style: "3D", // Estilo base de alta calidad para fofr
+          instant_id_strength: 1.0,
+          denoising_strength: 0.65,
+          prompt_strength: 7,
+          scheduler: "K_EULER_ANCESTRAL",
+          num_inference_steps: 30
         }
       })
     });
