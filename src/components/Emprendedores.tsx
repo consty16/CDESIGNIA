@@ -11,7 +11,7 @@ export const Emprendedores: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="inline-block text-base md:text-xl font-black uppercase tracking-[0.3em] text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.8)] border border-lilac/50 px-10 py-4 mb-8 bg-lilac/10 rounded-full backdrop-blur-sm shadow-[0_0_35px_rgba(167,139,250,0.6)] hover:scale-105 transition-transform"
+            className="inline-block text-[11px] md:text-sm font-black uppercase tracking-[0.3em] text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.8)] border border-lilac/50 px-10 py-4 mb-8 bg-lilac/10 rounded-full backdrop-blur-sm shadow-[0_0_35px_rgba(167,139,250,0.6)] hover:scale-105 transition-transform"
           >
             Especial Emprendedores
           </motion.div>
@@ -20,7 +20,7 @@ export const Emprendedores: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             className="font-serif text-4xl md:text-6xl font-light leading-[1.1] mb-8 tracking-tight"
           >
-            C DESIGN IA – <em className="italic text-lilac">Marketing Accesible</em> para Emprendedores
+            <em className="italic text-lilac">Marketing Accesible</em> para Emprendedores
           </motion.h1>
         </header>
 

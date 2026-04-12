@@ -36,14 +36,12 @@ export const Navbar: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOp
       </ul>
       <ul className="flex items-center gap-2">
         <li>
-          <a
-            href="/emprendedores"
-            target="_blank"
-            rel="noreferrer"
+          <Link
+            to="/emprendedores"
             className="text-[10px] uppercase tracking-[0.15em] text-white border border-lilac/40 px-5 py-2 hover:bg-lilac/20 transition-all rounded shadow-[0_0_15px_rgba(196,181,253,0.2)] hover:shadow-[0_0_25px_rgba(196,181,253,0.5)] bg-lilac/5 font-bold"
           >
             ¿sos emprendedor?
-          </a>
+          </Link>
         </li>
       </ul>
     </nav>

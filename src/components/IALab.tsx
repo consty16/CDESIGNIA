@@ -82,25 +82,39 @@ export const IALab = () => {
     setIsGenerating(true);
     setResultImage(null);
 
+    const toBase64 = (url: string): Promise<string> => 
+      fetch(url)
+        .then(response => response.blob())
+        .then(blob => new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        }));
+
     try {
+      const templateBase64 = await toBase64(selectedAsset);
+      
       const response = await fetch("/.netlify/functions/procesar-ia", {
         method: "POST",
         body: JSON.stringify({
           category: activeCategory,
-          image: userPhoto,
-          template: selectedAsset
+          image: userPhoto.replace(/^data:image\/\w+;base64,/, ""),
+          template: templateBase64.replace(/^data:image\/\w+;base64,/, "")
         }),
       });
 
+      const responseText = await response.text();
+
       if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText || "Generation failed");
+        console.error("Error en la respuesta de la IA:", responseText);
+        throw new Error(responseText || "La IA no pudo procesar la imagen");
       }
 
-      const blob = await response.blob();
-      setResultImage(URL.createObjectURL(blob));
-    } catch (error) {
+      setResultImage(`data:image/png;base64,${responseText}`);
+    } catch (error: any) {
       console.error("Error generating magic:", error);
+      alert("Error en el Laboratorio: " + error.message);
       setResultImage(selectedAsset);
     } finally {
       setIsGenerating(false);
