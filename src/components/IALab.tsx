@@ -46,9 +46,9 @@ const WAITING_MESSAGES = [
 ];
 
 const PROMPTS: Record<string, string> = {
-  "MAQUILLAJE": "Photorealistic face swap. High-end fashion editorial. Keep user's facial identity 100% intact. Integrate makeup naturally with studio lighting.",
-  "MÁSCARAS": "Precision face swap. Luxury ornate mask from reference image. Preserve user's eyes, nose, and mouth structure perfectly.",
-  "VESTIDOS": "Professional face swap into luxury dress. Maintain original body posture and facial features. High resolution."
+  "MAQUILLAJE": "High-end fashion editorial, artistic crystal makeup, neon fuchsia glow. Exact replica of the reference design, precise details, identical pattern, luxury textures, 8k, sharp focus.",
+  "MÁSCARAS": "Luxury ornate mask, identical pattern to asset, exact replica, precise metal and jewel details, cinematic deep purple lighting, hyper-realistic, haute couture, mysterious, 8k.",
+  "VESTIDOS": "Luxury evening dress, identical fabric pattern, exact replica of the design, precise embroidery details, lila purple aesthetics, vogue editorial style, ultra realistic, expensive textures, 8k."
 };
 
 interface ResultState {
@@ -443,16 +443,15 @@ export const IALab = () => {
               <h2 className="text-xl font-serif italic text-white mb-2 drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]">Tu Transformación Nova ✨</h2>
               <p className="text-[10px] text-lilac-neon uppercase tracking-widest mb-8">3 visiones · 3 tecnologías</p>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full mb-8">
-                <ResultCard result={resultCanvas} label="Mix Digital" emoji="🎨" delay={0.1} downloadName="mix-digital" />
-                <ResultCard result={resultPollinations} label="Visión Nova" emoji="✨" delay={0.2} downloadName="vision-nova" />
-                <ResultCard result={resultReplicate} label="Nova Real" emoji="🤖" gradient delay={0.3} downloadName="nova-real" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl mb-8">
+                {/* ResultCard de Mix Digital desactivado temporalmente */}
+                <ResultCard result={resultPollinations} label="Visión Nova" emoji="✨" delay={0.1} downloadName="vision-nova" />
+                <ResultCard result={resultReplicate} label="Nova Real" emoji="🤖" gradient delay={0.2} downloadName="nova-real" />
               </div>
 
               <div className="flex flex-wrap gap-4 justify-center mb-6 text-[9px] uppercase tracking-widest text-white/40">
-                <span>🎨 Mix Digital — tu foto + plantilla</span>
-                <span>✨ Visión Nova — IA generativa FLUX</span>
-                <span>🤖 Nova Real — IA img2img Replicate</span>
+                <span>✨ Visión Nova — IA generativa FLUX (Fiel al diseño)</span>
+                <span>🤖 Nova Real — IA Premium FaceSwap</span>
               </div>
               <button
                 onClick={handleClose}

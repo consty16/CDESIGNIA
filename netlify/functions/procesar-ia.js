@@ -8,18 +8,15 @@ exports.handler = async (event) => {
     const TOKEN = process.env.REPLICATE_API_TOKEN;
 
     if (!TOKEN) {
-      return { statusCode: 500, body: JSON.stringify({ error: "No se encontró REPLICATE_API_TOKEN en Netlify." }) };
+      return { statusCode: 500, body: JSON.stringify({ error: "No se encontró REPLICATE_API_TOKEN." }) };
     }
 
-    // Limpiar el base64 de la foto del usuario (quitar prefijo data:image/...;base64,)
+    // Usamos el Base64 LIMPIO (sin prefijo) tal como pidió el usuario
     const cleanUserImage = image.replace(/^data:image\/\w+;base64,/, "");
+    // El template ya viene como URL absoluta desde el frontend
+    const targetImageUrl = template;
 
-    // Detectar si el template es una URL o base64
-    const targetImageUrl = template.startsWith('http') 
-      ? template 
-      : template.replace(/^data:image\/\w+;base64,/, "");
-      
-    // ── Paso 1: crear la predicción en Replicate (lucataco/faceswap) ──
+    // ── Paso 1: Crear predicción (lucataco/faceswap - Versión Estable) ──
     const createResponse = await fetch("https://api.replicate.com/v1/predictions", {
       method: "POST",
       headers: {
@@ -28,35 +25,26 @@ exports.handler = async (event) => {
         "Prefer": "wait"
       },
       body: JSON.stringify({
-        version: "9a42989d3132e4d293816edb5da2235e9f8260d3d3d6313174f4b23b378eb8", 
+        version: "9a42373a1e3463b3989c9733cc951fdb69b2cd37ca473136b13cf8640822588e", 
         input: {
           target_image: targetImageUrl,
-          swap_image: cleanUserImage,
-          source_image: cleanUserImage
+          swap_image: cleanUserImage
         }
       })
     });
 
     if (!createResponse.ok) {
       const err = await createResponse.json().catch(() => ({}));
-      console.error("Replicate error:", createResponse.status, JSON.stringify(err));
       return {
         statusCode: createResponse.status,
-        body: JSON.stringify({ 
-          error: err.detail || err.error || "Error al crear predicción en Replicate",
-          details: err
-        })
+        body: JSON.stringify({ error: err.detail || "Error en Replicate" })
       };
     }
 
     const prediction = await createResponse.json();
-    console.log("REPLICATE RESPONSE:", JSON.stringify(prediction));
 
-    // Si el resultado ya viene (Prefer: wait), devolverlo
     if (prediction.status === "succeeded" && prediction.output) {
       const imageUrl = Array.isArray(prediction.output) ? prediction.output[0] : prediction.output;
-
-      // Descargar la imagen y devolverla como base64
       const imgResponse = await fetch(imageUrl);
       const buffer = await imgResponse.arrayBuffer();
       const base64 = Buffer.from(buffer).toString("base64");
@@ -68,17 +56,12 @@ exports.handler = async (event) => {
       };
     }
 
-    // Si está en proceso, hacer polling
     if (prediction.id) {
-      for (let i = 0; i < 30; i++) {
+      for (let i = 0; i < 20; i++) {
         await new Promise(r => setTimeout(r, 2000));
-// ...
-
-
         const pollResponse = await fetch(`https://api.replicate.com/v1/predictions/${prediction.id}`, {
           headers: { Authorization: `Bearer ${TOKEN}` }
         });
-
         const result = await pollResponse.json();
 
         if (result.status === "succeeded" && result.output) {
@@ -86,38 +69,18 @@ exports.handler = async (event) => {
           const imgResponse = await fetch(imageUrl);
           const buffer = await imgResponse.arrayBuffer();
           const base64 = Buffer.from(buffer).toString("base64");
-
-          return {
-            statusCode: 200,
-            headers: { "Content-Type": "text/plain" },
-            body: base64
-          };
+          return { statusCode: 200, headers: { "Content-Type": "text/plain" }, body: base64 };
         }
-
         if (result.status === "failed") {
-          return {
-            statusCode: 500,
-            body: JSON.stringify({ error: result.error || "Replicate falló" })
-          };
+          return { statusCode: 500, body: JSON.stringify({ error: "Fallo en el servidor de IA" }) };
         }
       }
-
-      return {
-        statusCode: 503,
-        body: JSON.stringify({ error: "Timeout esperando resultado de Replicate" })
-      };
+      return { statusCode: 503, body: JSON.stringify({ error: "Timeout" }) };
     }
 
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: "Respuesta inesperada de Replicate" })
-    };
+    return { statusCode: 500, body: JSON.stringify({ error: "Error inesperado" }) };
 
   } catch (error) {
-    console.error("Error general:", error.message);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: error.message })
-    };
+    return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
   }
 };
