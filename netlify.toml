@@ -3,6 +3,12 @@
   functions = "netlify/functions"
   publish = "dist"
 
+[functions]
+  node_bundler = "esbuild"
+
+[functions."procesar-ia"]
+  timeout = 26
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
