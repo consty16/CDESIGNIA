@@ -11,15 +11,15 @@ exports.handler = async (event) => {
       return { statusCode: 500, body: JSON.stringify({ error: "No se encontró REPLICATE_API_TOKEN en Netlify." }) };
     }
 
+    // Limpiar el base64 de la foto del usuario (quitar prefijo data:image/...;base64,)
+    const cleanUserImage = image.replace(/^data:image\/\w+;base64,/, "");
+
     // Detectar si el template es una URL o base64
     const targetImageUrl = template.startsWith('http') 
       ? template 
-      : `data:image/jpeg;base64,${template}`;
+      : template.replace(/^data:image\/\w+;base64,/, "");
       
-    const userImageUrl = `data:image/jpeg;base64,${image}`;
-
     // ── Paso 1: crear la predicción en Replicate (lucataco/faceswap) ──
-    // Nota: Usamos swap_image y source_image para asegurar compatibilidad con la versión exacta
     const createResponse = await fetch("https://api.replicate.com/v1/predictions", {
       method: "POST",
       headers: {
@@ -31,8 +31,8 @@ exports.handler = async (event) => {
         version: "9a42989d3132e4d293816edb5da2235e9f8260d3d3d6313174f4b23b378eb8", 
         input: {
           target_image: targetImageUrl,
-          swap_image: userImageUrl,
-          source_image: userImageUrl
+          swap_image: cleanUserImage,
+          source_image: cleanUserImage
         }
       })
     });
@@ -50,6 +50,7 @@ exports.handler = async (event) => {
     }
 
     const prediction = await createResponse.json();
+    console.log("REPLICATE RESPONSE:", JSON.stringify(prediction));
 
     // Si el resultado ya viene (Prefer: wait), devolverlo
     if (prediction.status === "succeeded" && prediction.output) {
@@ -69,8 +70,10 @@ exports.handler = async (event) => {
 
     // Si está en proceso, hacer polling
     if (prediction.id) {
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 30; i++) {
         await new Promise(r => setTimeout(r, 2000));
+// ...
+
 
         const pollResponse = await fetch(`https://api.replicate.com/v1/predictions/${prediction.id}`, {
           headers: { Authorization: `Bearer ${TOKEN}` }
