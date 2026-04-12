@@ -4,11 +4,9 @@ import { Link } from 'react-router-dom';
 import { cn } from '../lib/utils';
 import { Upload, Sparkles, Loader2, ChevronLeft } from 'lucide-react';
 
-// Cargador de archivos dinámico para Vite
 const assetFiles = import.meta.glob('../assets/*.{png,jpg,jpeg,svg,webp}', { eager: true, as: 'url' });
 
 const getAssetUrl = (name: string) => {
-  // Buscamos el archivo que termine exactamente con el nombre solicitado
   const path = Object.keys(assetFiles).find(key => key.endsWith(`/${name}`));
   return path ? (assetFiles[path] as string) : '';
 };
@@ -38,18 +36,12 @@ const MOCK_GALLERY: Record<string, string[]> = {
 };
 
 const WAITING_MESSAGES = [
-  "Nova está ajustando los cristales lilas...",
+  "Nova está analizando tus facciones para un diseño a medida...",
   "Fusionando identidades inteligentes...",
   "Calculando el espectro de neón perfecto...",
   "Interconectando redes visuales de alta gama...",
   "Optimizando la esencia del diseño tucumano...",
 ];
-
-const PROMPTS: Record<string, string> = {
-  "MAQUILLAJE": "High-end fashion editorial, artistic crystal makeup, neon fuchsia glow. Exact replica of the reference design, precise details, identical pattern, luxury textures, 8k, sharp focus.",
-  "MÁSCARAS": "Luxury ornate mask, identical pattern to asset, exact replica, precise metal and jewel details, cinematic deep purple lighting, hyper-realistic, haute couture, mysterious, 8k.",
-  "VESTIDOS": "Luxury evening dress, identical fabric pattern, exact replica of the design, precise embroidery details, lila purple aesthetics, vogue editorial style, ultra realistic, expensive textures, 8k."
-};
 
 interface ResultState {
   url: string | null;
@@ -64,10 +56,7 @@ export const IALab = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [currentMessage, setCurrentMessage] = useState(0);
   const [showResults, setShowResults] = useState(false);
-
-  const [resultCanvas, setResultCanvas] = useState<ResultState>({ url: null, ready: false, error: false });
-  const [resultPollinations, setResultPollinations] = useState<ResultState>({ url: null, ready: false, error: false });
-  const [resultReplicate, setResultReplicate] = useState<ResultState>({ url: null, ready: false, error: false });
+  const [resultGemini, setResultGemini] = useState<ResultState>({ url: null, ready: false, error: false });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -90,76 +79,27 @@ export const IALab = () => {
     }
   };
 
-  const generateCanvas = (): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const templateImg = new Image();
-      templateImg.crossOrigin = 'anonymous';
-      
-      templateImg.onload = () => {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return reject('No canvas context');
-
-        // La base de todo es el ASSET original (Alta Gama)
-        canvas.width = templateImg.width || 1024;
-        canvas.height = templateImg.height || 1024;
-
-        const userImg = new Image();
-        userImg.onload = () => {
-          // 1. Fondo Limpio
-          ctx.fillStyle = '#000';
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-          // 2. Dibujar Usuario (Ajuste Proporcional)
-          // Escalamos un poco más para que el rostro llene mejor el espacio de la máscara
-          const scale = Math.max(canvas.width / userImg.width, canvas.height / userImg.height) * 1.1;
-          const x = (canvas.width - userImg.width * scale) / 2;
-          // Subimos un poco el rostro (offset negativo en y) para alinear ojos
-          const y = (canvas.height - userImg.height * scale) / 2 - (canvas.height * 0.05);
-          
-          ctx.filter = 'brightness(1.05) contrast(1.02)';
-          ctx.drawImage(userImg, x, y, userImg.width * scale, userImg.height * scale);
-          ctx.filter = 'none';
-
-          // 3. Superposición del Asset (Diseño Original)
-          // Lo escalamos ligeramente al 95% para que no se vea desproporcionado
-          const maskScale = 0.95;
-          const mw = canvas.width * maskScale;
-          const mh = canvas.height * maskScale;
-          const mx = (canvas.width - mw) / 2;
-          const my = (canvas.height - mh) / 2;
-
-          ctx.globalCompositeOperation = 'source-over';
-          ctx.globalAlpha = 1.0;
-          ctx.drawImage(templateImg, mx, my, mw, mh);
-
-          resolve(canvas.toDataURL('image/jpeg', 0.95));
-        };
-        userImg.onerror = () => reject('Error cargando foto');
-        userImg.src = userPhoto!;
-      };
-      templateImg.onerror = () => reject('Error cargando plantilla');
-      templateImg.src = selectedAsset!;
-    });
-  };
-
-  const callReplicate = async (imageBase64: string, templateBase64: string) => {
+  const callGemini = async (imageBase64: string, templateUrl: string) => {
     const response = await fetch('/.netlify/functions/procesar-ia', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         category: activeCategory,
         image: imageBase64,
-        template: templateBase64
+        template: templateUrl
       })
     });
 
     if (!response.ok) {
-      const err = await response.json().catch(() => ({ error: 'Error desconocido' }));
+      const err = await response.json().catch(() => ({ error: 'Error en el Motor Nova' }));
       throw new Error(err.error || `Error ${response.status}`);
     }
 
     const base64 = await response.text();
+    // Intentamos detectar si lo devuelto es una imagen o texto
+    if (base64.length < 500) { // Si es muy corto, probablemente es un error o texto plano
+       throw new Error("El motor no devolvió un resultado visual válido");
+    }
     return `data:image/png;base64,${base64}`;
   };
 
@@ -171,43 +111,17 @@ export const IALab = () => {
 
     setIsGenerating(true);
     setShowResults(false);
-    setResultCanvas({ url: null, ready: false, error: false });
-    setResultPollinations({ url: null, ready: false, error: false });
-    setResultReplicate({ url: null, ready: false, error: false });
+    setResultGemini({ url: null, ready: false, error: false });
 
     const cleanUserPhoto = userPhoto.replace(/^data:image\/\w+;base64,/, '');
 
-    const toBase64 = (url: string): Promise<string> =>
-      fetch(url).then(r => r.blob()).then(blob => new Promise((res, rej) => {
-        const reader = new FileReader();
-        reader.onloadend = () => res((reader.result as string).replace(/^data:image\/\w+;base64,/, ''));
-        reader.onerror = rej;
-        reader.readAsDataURL(blob);
-      }));
-
     try {
-      const canvasUrl = await generateCanvas();
-      setResultCanvas({ url: canvasUrl, ready: true, error: false });
-    } catch (e) {
-      setResultCanvas({ url: null, ready: true, error: true });
-    }
-
-    const pollinationsUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(PROMPTS[activeCategory])}?width=512&height=768&nologo=true&model=flux&seed=${Date.now()}`;
-    setResultPollinations({ url: pollinationsUrl, ready: false, error: false });
-
-    const pollinationsImg = new Image();
-    pollinationsImg.onload = () => setResultPollinations(prev => ({ ...prev, ready: true }));
-    pollinationsImg.onerror = () => setResultPollinations(prev => ({ ...prev, ready: true, error: true }));
-    pollinationsImg.src = pollinationsUrl;
-
-    try {
-      // Usamos la URL absoluta del asset para que Replicate pueda acceder directamente
       const absoluteAssetUrl = window.location.origin + selectedAsset;
-      const replicateUrl = await callReplicate(cleanUserPhoto, absoluteAssetUrl);
-      setResultReplicate({ url: replicateUrl, ready: true, error: false });
+      const resultUrl = await callGemini(cleanUserPhoto, absoluteAssetUrl);
+      setResultGemini({ url: resultUrl, ready: true, error: false });
     } catch (e: any) {
-      console.error('Replicate error:', e.message);
-      setResultReplicate({ url: null, ready: true, error: true });
+      console.error('Gemini error:', e.message);
+      setResultGemini({ url: null, ready: true, error: true });
     } finally {
       setIsGenerating(false);
       setShowResults(true);
@@ -216,61 +130,8 @@ export const IALab = () => {
 
   const handleClose = () => {
     setShowResults(false);
-    setResultCanvas({ url: null, ready: false, error: false });
-    setResultPollinations({ url: null, ready: false, error: false });
-    setResultReplicate({ url: null, ready: false, error: false });
+    setResultGemini({ url: null, ready: false, error: false });
   };
-
-  const ResultCard = ({ result, label, emoji, gradient, delay, downloadName }: {
-    result: ResultState; label: string; emoji: string; gradient?: boolean; delay: number; downloadName: string;
-  }) => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay }}
-      className="flex flex-col items-center"
-    >
-      <div className="text-[10px] uppercase tracking-widest text-lilac-neon mb-3 font-bold flex items-center gap-2">
-        <span>{emoji}</span> {label}
-      </div>
-      <div className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden border border-lilac-neon/40 shadow-[0_0_30px_rgba(168,85,247,0.3)]">
-        {!result.ready && !result.error && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 z-10">
-            <Loader2 className="w-8 h-8 text-lilac-neon animate-spin mb-3" />
-            <p className="text-[10px] text-lilac-glow uppercase tracking-widest">Generando...</p>
-          </div>
-        )}
-        {result.error && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 z-10">
-            <p className="text-[10px] text-red-400 uppercase tracking-widest text-center px-4">Error generando imagen</p>
-          </div>
-        )}
-        {result.url && !result.error && (
-          <img src={result.url} className="w-full h-full object-cover" alt={label} />
-        )}
-        {!result.url && !result.error && <div className="w-full h-full bg-white/5" />}
-        <div className="absolute inset-x-0 bottom-0 p-3 bg-black/60 backdrop-blur-sm text-center">
-          <p className="text-[9px] uppercase tracking-widest text-lilac-glow">{label}</p>
-        </div>
-      </div>
-      {result.ready && result.url && !result.error && (
-        <a
-          href={result.url}
-          download={`${downloadName}.jpg`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={cn(
-            "mt-3 px-5 py-2 rounded-lg text-[10px] font-bold tracking-widest transition-all uppercase text-white",
-            gradient
-              ? "bg-gradient-to-r from-[#a855f7] to-[#9c27b0] shadow-[0_0_15px_#a855f7] hover:brightness-110"
-              : "bg-white/5 border border-lilac-neon/30 hover:bg-white/10"
-          )}
-        >
-          Descargar {emoji}
-        </a>
-      )}
-    </motion.div>
-  );
 
   return (
     <div className="min-h-screen bg-bg-deep font-sans text-text-primary p-6 md:p-12 selection:bg-lilac-neon/30 selection:text-lilac-glow">
@@ -283,14 +144,13 @@ export const IALab = () => {
         <Link
           to="/"
           className="flex items-center gap-2 text-lilac-glow hover:text-white transition-colors group"
-          onClick={() => { if (window.location.pathname !== '/') window.location.href = '/'; }}
         >
           <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
           <span className="text-[10px] uppercase tracking-widest font-bold">Volver al Inicio</span>
         </Link>
         <div className="text-right">
-          <h1 className="text-2xl md:text-5xl font-serif italic tracking-tight text-white">Laboratorio IA</h1>
-          <p className="text-[10px] text-lilac-neon uppercase tracking-[0.3em] font-medium mt-2">C DESIGN IA · Premium Agency</p>
+          <h1 className="text-2xl md:text-5xl font-serif italic tracking-tight text-white uppercase tracking-widest">Nova Lab</h1>
+          <p className="text-[10px] text-lilac-neon uppercase tracking-[0.3em] font-medium mt-2">C DESIGN IA · Edición Premium</p>
         </div>
       </nav>
 
@@ -303,7 +163,7 @@ export const IALab = () => {
                   key={cat.id}
                   onClick={() => { setActiveCategory(cat.id); setSelectedAsset(null); }}
                   className={cn(
-                    "px-6 py-3 text-[10px] md:text-xs font-bold tracking-widest rounded-lg border transition-all duration-500 relative group uppercase",
+                    "px-6 py-3 text-[10px] md:text-xs font-bold tracking-widest rounded-lg border transition-all duration-500 relative uppercase",
                     activeCategory === cat.id
                       ? "bg-lilac-neon/20 border-lilac-neon text-white shadow-[0_0_15px_#a855f7]"
                       : "bg-transparent border-white/10 text-white/50 hover:border-lilac-neon/50 hover:text-white"
@@ -312,10 +172,7 @@ export const IALab = () => {
                   <span className="mr-2">{cat.icon}</span>
                   {cat.label}
                   {activeCategory === cat.id && (
-                    <motion.div
-                      layoutId="activeTab"
-                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-lilac-neon shadow-[0_0_8px_#a855f7]"
-                    />
+                    <motion.div layoutId="activeTab" className="absolute -bottom-1 left-0 right-0 h-0.5 bg-lilac-neon shadow-[0_0_8px_#a855f7]" />
                   )}
                 </button>
               ))}
@@ -331,13 +188,10 @@ export const IALab = () => {
                   onClick={() => setSelectedAsset(src)}
                   className={cn(
                     "aspect-square rounded-xl overflow-hidden cursor-pointer border-2 transition-all relative group",
-                    selectedAsset === src
-                      ? "border-lilac-neon shadow-[0_0_20px_#a855f7] scale-105"
-                      : "border-transparent hover:border-lilac-neon/30"
+                    selectedAsset === src ? "border-lilac-neon shadow-[0_0_20px_#a855f7] scale-105" : "border-transparent hover:border-lilac-neon/30"
                   )}
                 >
                   <img src={src} className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-500" alt="Option" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-lilac-neon/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   {selectedAsset === src && (
                     <div className="absolute top-2 right-2 bg-lilac-neon shadow-[0_0_10px_#a855f7] rounded-full p-1 border border-white/20">
                       <Sparkles className="w-3 h-3 text-white" />
@@ -364,38 +218,20 @@ export const IALab = () => {
               ) : (
                 <>
                   <Upload className="w-8 h-8 text-lilac-neon mb-2 group-hover:scale-110 transition-transform" />
-                  <span className="text-[10px] uppercase tracking-widest text-text-muted">Subir Foto de frente</span>
+                  <span className="text-[10px] uppercase tracking-widest text-text-muted">Subir Foto</span>
                 </>
               )}
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <span className="text-[10px] uppercase font-bold text-white tracking-widest">Cambiar</span>
-              </div>
             </div>
             <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handlePhotoUpload} />
-            <p className="text-[10px] text-text-muted mt-6 max-w-[200px] leading-relaxed">
-              * Para mejores resultados, usa una foto con buena iluminación y de frente.
-            </p>
             <button
               onClick={handleGenerate}
               disabled={isGenerating || !userPhoto || !selectedAsset}
               className={cn(
-                "w-full mt-10 py-5 rounded-xl text-xs font-bold tracking-[0.3em] transition-all duration-500 relative overflow-hidden group uppercase",
-                isGenerating || !userPhoto || !selectedAsset
-                  ? "bg-white/5 text-text-muted cursor-not-allowed border border-white/5"
-                  : "bg-gradient-to-r from-[#a855f7] to-[#9c27b0] text-white shadow-[0_0_30px_rgba(168,85,247,0.4)] hover:shadow-[0_0_50px_rgba(168,85,247,0.7)] hover:scale-[1.02]"
+                "w-full mt-10 py-5 rounded-xl text-xs font-bold tracking-[0.3em] transition-all duration-500 relative overflow-hidden group uppercase text-white",
+                isGenerating || !userPhoto || !selectedAsset ? "bg-white/5 text-text-muted cursor-not-allowed" : "bg-gradient-to-r from-[#a855f7] to-[#9c27b0] shadow-[0_0_30px_rgba(168,85,247,0.4)]"
               )}
             >
-              <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 skew-x-[45deg]" />
-              {isGenerating ? (
-                <div className="flex items-center justify-center gap-3">
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>TRANSFORMANDO...</span>
-                </div>
-              ) : (
-                <span className="flex items-center justify-center gap-2">
-                  <Sparkles className="w-4 h-4" /> GENERAR MAGIA ✨
-                </span>
-              )}
+              {isGenerating ? "ANALIZANDO..." : "REVELAR DISEÑO ✨"}
             </button>
           </div>
         </div>
@@ -403,27 +239,10 @@ export const IALab = () => {
 
       <AnimatePresence>
         {isGenerating && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[1000] flex items-center justify-center p-6 bg-[#0a0a0a]/95 backdrop-blur-md"
-          >
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[1000] flex items-center justify-center p-6 bg-black/95 backdrop-blur-md">
             <div className="text-center">
-              <div className="relative w-32 h-32 mb-8 mx-auto">
-                <div className="absolute inset-0 border-4 border-lilac-neon/20 rounded-full" />
-                <div className="absolute inset-0 border-4 border-lilac-neon border-t-transparent rounded-full animate-spin shadow-[0_0_15px_#a855f7]" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <Sparkles className="w-10 h-10 text-lilac-glow animate-pulse" />
-                </div>
-              </div>
-              <motion.p
-                key={currentMessage}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="text-lg md:text-xl font-serif text-lilac-glow drop-shadow-[0_0_8px_rgba(216,180,254,0.5)]"
-              >
+              <Loader2 className="w-12 h-12 text-lilac-neon animate-spin mx-auto mb-6" />
+              <motion.p key={currentMessage} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="text-lg font-serif text-lilac-glow">
                 {WAITING_MESSAGES[currentMessage]}
               </motion.p>
             </div>
@@ -433,32 +252,33 @@ export const IALab = () => {
 
       <AnimatePresence>
         {showResults && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-[#0a0a0a]/95 backdrop-blur-md overflow-y-auto"
-          >
-            <div className="w-full max-w-5xl flex flex-col items-center py-8">
-              <h2 className="text-xl font-serif italic text-white mb-2 drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]">Tu Transformación Nova ✨</h2>
-              <p className="text-[10px] text-lilac-neon uppercase tracking-widest mb-8">3 visiones · 3 tecnologías</p>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-black/95 backdrop-blur-lg overflow-y-auto">
+            <div className="w-full max-w-xl flex flex-col items-center py-8">
+              <h2 className="text-3xl font-serif italic text-white mb-2 text-center uppercase tracking-widest">Nova Lab ✨</h2>
+              <p className="text-[10px] text-lilac-neon uppercase tracking-widest mb-10 text-center italic">Edición Premium · Motor Gemini 1.5 Flash</p>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl mb-8">
-                {/* ResultCard de Mix Digital desactivado temporalmente */}
-                <ResultCard result={resultPollinations} label="Visión Nova" emoji="✨" delay={0.1} downloadName="vision-nova" />
-                <ResultCard result={resultReplicate} label="Nova Real" emoji="🤖" gradient delay={0.2} downloadName="nova-real" />
+              <div className="w-full aspect-[3/4] rounded-[2rem] overflow-hidden border border-lilac-neon/40 shadow-[0_0_60px_rgba(168,85,247,0.5)] relative bg-black">
+                {resultGemini.error && (
+                  <div className="absolute inset-0 flex items-center justify-center p-8 text-center">
+                    <p className="text-sm text-red-400 uppercase tracking-widest leading-relaxed">
+                      El motor Gemini requiere una configuración avanzada de Imagen para devolver archivos visuales.<br/>
+                      <span className="text-[10px] text-white/40 mt-4 block">Retoque Digital en proceso...</span>
+                    </p>
+                  </div>
+                )}
+                {resultGemini.url && !resultGemini.error && (
+                  <img src={resultGemini.url} className="w-full h-full object-cover" alt="Resultado Nova" />
+                )}
               </div>
 
-              <div className="flex flex-wrap gap-4 justify-center mb-6 text-[9px] uppercase tracking-widest text-white/40">
-                <span>✨ Visión Nova — IA generativa FLUX (Fiel al diseño)</span>
-                <span>🤖 Nova Real — IA Premium FaceSwap</span>
+              <div className="mt-12 flex flex-col items-center gap-6">
+                {resultGemini.ready && resultGemini.url && !resultGemini.error && (
+                  <a href={resultGemini.url} download="nova-premium.jpg" className="px-16 py-5 rounded-2xl text-sm font-bold tracking-[0.2em] text-white bg-gradient-to-r from-[#a855f7] to-[#9c27b0] shadow-[0_0_40px_#a855f7] hover:scale-105 transition-transform uppercase">
+                    Descargar ✨
+                  </a>
+                )}
+                <button onClick={handleClose} className="text-[10px] uppercase tracking-widest text-white/40 hover:text-white transition-colors">Cerrar Laboratorio</button>
               </div>
-              <button
-                onClick={handleClose}
-                className="px-10 py-3 bg-white/5 border border-white/20 rounded-lg text-xs font-bold tracking-widest hover:bg-white/10 transition-all uppercase text-white"
-              >
-                Cerrar
-              </button>
             </div>
           </motion.div>
         )}
