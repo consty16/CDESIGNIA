@@ -6,35 +6,33 @@ export const handler = async (event) => {
   try {
     const { prompt: userPrompt, template: assetUrl } = JSON.parse(event.body);
     const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-    const HF_TOKEN = process.env.HF_TOKEN;
 
     if (!GEMINI_API_KEY) {
-      return { statusCode: 500, body: JSON.stringify({ error: "GEMINI_API_KEY no configurada." }) };
+      return { statusCode: 500, body: JSON.stringify({ error: "GEMINI_API_KEY no configurada en el entorno." }) };
     }
 
-    // 1. Gemini: Optimizador de Prompt Creativo
+    // 1. Gemini: Optimizador de Prompt (Prompt Engineering Automático)
     const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
     
-    // El prompt de sistema para Gemini
-    const systemPrompt = `Actúa como un motor de generación de imágenes de moda ultra-realista y experto en prompts de Stable Diffusion / Flux.
-    Tu tarea es crear un PROMPT MAESTRO basado en una referencia de estilo (imagen) y el deseo del usuario.
+    const systemPrompt = `Actúa como un Diseñador Jefe de Moda Digital (Haute Couture).
+    Tu misión es traducir el deseo del usuario y la referencia de estilo en un PROMPT MAESTRO en INGLÉS para un motor de generación FLUX.
     
-    ESTILO SELECCIONADO: La imagen adjunta es la referencia estética primordial.
-    DESCRIPCIÓN DEL USUARIO: "${userPrompt}"
+    REFERENCIA DE ESTILO: La imagen adjunta es la base estética.
+    DESEO DEL USUARIO: "${userPrompt}"
     
-    REGLAS:
-    - Combina armoniosamente los elementos visuales de la referencia con la idea del usuario.
-    - El resultado debe ser fotorrealista, iluminación de estudio profesional, calidad 8k, cinematográfico.
-    - Incluye detalles técnicos: "ultra-detailed", "textures of silk/metal", "vogue editorial style", "high fashion photography".
+    ESTRUCTURA DEL PROMPT:
+    - Describe a una modelo profesional luciendo el diseño.
+    - Usa términos como: "8k ultra-high resolution", "editorial high fashion photography", "Vogue style", "cinematic lighting", "intricate fabric textures".
+    - El prompt DEBE estar en INGLÉS.
     
-    RESPONDE EXCLUSIVAMENTE CON UN JSON:
+    RESPONDE EXCLUSIVAMENTE CON ESTE JSON:
     {
-      "refined_prompt": "El prompt final en inglés optimizado para generación de imagen...",
-      "advice": "Un consejo de estilo en español sobre esta combinación...",
-      "tags": ["tag1", "tag2", "tag3"]
+      "refined_prompt": "Prompt maestro detallado en inglés...",
+      "advice": "Breve consejo de estilo en español sobre esta visión...",
+      "tags": ["luxury", "editorial", "digital-fashion"]
     }`;
 
-    // Descargar el asset para que Gemini lo vea
+    // Descargar el asset para referencia
     const assetResponse = await fetch(assetUrl);
     const assetBuffer = await assetResponse.arrayBuffer();
     const assetBase64 = Buffer.from(assetBuffer).toString("base64");
@@ -55,59 +53,35 @@ export const handler = async (event) => {
       body: JSON.stringify(geminiPayload)
     });
 
-    if (!geminiRes.ok) throw new Error("Gemini Prompt Optimization Failed");
+    if (!geminiRes.ok) throw new Error("Error en la optimización creativa (Gemini)");
     
     const geminiData = await geminiRes.json();
     const creativeData = JSON.parse(geminiData.candidates[0].content.parts[0].text);
 
-    // 2. Hugging Face: Generación de Imagen (Motor de Creación)
-    // Si no hay HF_TOKEN, devolvemos un error informativo o usamos un modelo público si es posible
-    if (!HF_TOKEN) {
-      return { 
-        statusCode: 500, 
-        body: JSON.stringify({ error: "HF_TOKEN no configurado para generación de imágenes." }) 
-      };
-    }
+    // 2. Pollinations AI: Motor de Imagen de Respaldo (Rápido y fiable)
+    const seed = Math.floor(Math.random() * 1000000);
+    const pollinationsUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(creativeData.refined_prompt)}?width=1024&height=1024&nologo=true&seed=${seed}&model=flux`;
 
-    const modelId = "black-forest-labs/FLUX.1-schnell"; // Modelo ultra-rápido y de alta calidad
-    const hfUrl = `https://api-inference.huggingface.co/models/${modelId}`;
+    // 3. Conversión a Base64 para asegurar Descarga Local
+    const imageRes = await fetch(pollinationsUrl);
+    if (!imageRes.ok) throw new Error("Fallo en la generación de imagen final");
     
-    const hfResponse = await fetch(hfUrl, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${HF_TOKEN}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        inputs: creativeData.refined_prompt,
-        parameters: {
-          width: 1024,
-          height: 1024,
-        }
-      })
-    });
-
-    if (!hfResponse.ok) {
-      console.error("HF Error:", await hfResponse.text());
-      throw new Error("Hugging Face Image Generation Failed");
-    }
-
-    const imageBuffer = await hfResponse.arrayBuffer();
+    const imageBuffer = await imageRes.arrayBuffer();
     const imageBase64 = Buffer.from(imageBuffer).toString("base64");
-    const imageUrl = `data:image/jpeg;base64,${imageBase64}`;
+    const finalUrl = `data:image/jpeg;base64,${imageBase64}`;
 
     return {
       statusCode: 200,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        imageUrl,
+        imageUrl: finalUrl,
         advice: creativeData.advice,
         tags: creativeData.tags
       })
     };
 
   } catch (error) {
-    console.error("Nova Lab Error:", error.message);
+    console.error("Nova Lab Critical Error:", error.message);
     return { 
       statusCode: 500, 
       body: JSON.stringify({ error: error.message }) 

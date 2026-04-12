@@ -226,8 +226,12 @@ export const IALab = () => {
                   </div>
                 )}
                 {result.error && (
-                  <div className="absolute inset-0 flex items-center justify-center p-8 text-center bg-black/80">
-                    <p className="text-xs text-red-400 uppercase tracking-widest">Error en la generación creativa</p>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-black/80 backdrop-blur-md">
+                    <p className="text-xs text-lilac-neon uppercase tracking-[0.2em] mb-4">Aviso de Nova</p>
+                    <p className="text-sm text-white/80 uppercase tracking-widest font-light leading-relaxed">
+                      Nova está ajustando los detalles finales,<br/>intenta de nuevo.
+                    </p>
+                    <button onClick={() => setShowResults(false)} className="mt-8 px-6 py-2 border border-white/10 rounded-full text-[10px] uppercase tracking-widest hover:bg-white/5 transition-colors">Volver a intentar</button>
                   </div>
                 )}
               </div>
