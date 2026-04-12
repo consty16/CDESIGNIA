@@ -77,29 +77,30 @@ export const IALab = () => {
     setResult({ url: null, advice: null, tags: [], ready: false, error: false });
 
     try {
-      const absoluteAssetUrl = window.location.origin + selectedAsset;
+      const categoryStyles: Record<string, string> = {
+        'MÁSCARAS': 'wearing an ornate venetian mask, masquerade ball, mysterious, dramatic lighting',
+        'MAQUILLAJE': 'artistic editorial makeup, beauty campaign, high fashion, neon glow',
+        'VESTIDOS': 'wearing luxury evening gown, haute couture, runway fashion, studio lighting'
+      };
 
-      const response = await fetch('/.netlify/functions/procesar-ia', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          prompt: userPrompt, 
-          template: absoluteAssetUrl 
-        })
-      });
+      const fullPrompt = `${userPrompt}, ${categoryStyles[activeCategory]}, ultra realistic, 8k, editorial photography, lila purple aesthetics, C DESIGN IA editorial`;
 
-      if (!response.ok) throw new Error('Nova Generation Failed');
-      const data = await response.json();
+      const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(fullPrompt)}?width=768&height=768&nologo=true&model=flux&seed=${Date.now()}`;
 
       setResult({
-        url: data.imageUrl,
-        advice: data.advice,
-        tags: data.tags,
+        url: imageUrl,
+        advice: `Nova ha fusionado tu visión "${userPrompt}" con la estética ${activeCategory.toLowerCase()} para crear esta pieza única de alta costura digital.`,
+        tags: [activeCategory.toLowerCase(), 'nova-ia', 'editorial', 'c-design-ia', 'flux'],
         ready: true,
         error: false
       });
-      
-      setShowResults(true); 
+
+      setShowResults(true);
+
+      // Precargar imagen
+      const img = new Image();
+      img.src = imageUrl;
+
     } catch (e: any) {
       console.error('Nova Lab Error:', e);
       setResult(prev => ({ ...prev, ready: true, error: true }));
