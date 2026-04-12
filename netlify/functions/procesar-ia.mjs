@@ -1,5 +1,3 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
 export const handler = async (event) => {
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, body: "Método no permitido" };
@@ -10,67 +8,70 @@ export const handler = async (event) => {
     const API_KEY = process.env.GEMINI_API_KEY;
 
     if (!API_KEY) {
-      return { 
-        statusCode: 500, 
-        body: JSON.stringify({ error: "GEMINI_API_KEY no configurada." }) 
-      };
+      return { statusCode: 500, body: JSON.stringify({ error: "GEMINI_API_KEY no configurada." }) };
     }
 
-    const genAI = new GoogleGenerativeAI(API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-    const prompt = `Analiza la foto del usuario y detecta la posición de los ojos y la boca. 
-    Devuelve las coordenadas NORMALIZADAS de 0 a 100 (donde 0 es arriba/izquierda y 100 es abajo/derecha).
-    
-    RESPONDE ÚNICAMENTE CON ESTE FORMATO JSON:
-    {
-      "landmarks": {
-        "left_eye": {"x": 50, "y": 40},
-        "right_eye": {"x": 60, "y": 40},
-        "mouth": {"x": 55, "y": 60}
-      },
-      "advice": "Consejo editorial de moda...",
-      "tags": ["estilo", "nova"]
-    }`;
-
+    // Descargar asset
     const assetResponse = await fetch(template);
+    if (!assetResponse.ok) throw new Error("No se pudo cargar el asset");
     const assetBuffer = await assetResponse.arrayBuffer();
+    const assetBase64 = Buffer.from(assetBuffer).toString("base64");
 
-    // Usando los campos exactos solicitados por el usuario
-    const result = await model.generateContent([
-      prompt,
-      {
-        inline_data: {
-          data: image,
-          mime_type: "image/jpeg",
-        },
-      },
-      {
-        inline_data: {
-          data: Buffer.from(assetBuffer).toString("base64"),
-          mime_type: "image/png",
-        },
-      },
-    ]);
+    const prompt = `Analiza la foto del usuario y detecta landmarks faciales.
+Coordenadas de 0 a 100 (porcentaje del ancho/alto).
 
-    const response = await result.response;
-    let text = response.text();
-    
-    // Limpieza robusta de Markdown
+RESPONDE SOLO JSON PURO sin markdown:
+{
+  "landmarks": {
+    "left_eye": {"x": 35, "y": 38},
+    "right_eye": {"x": 65, "y": 38},
+    "mouth": {"x": 50, "y": 62}
+  },
+  "advice": "Consejo de estilo personalizado...",
+  "tags": ["haute-couture", "editorial"]
+}`;
+
+    // ✅ API REST directa — sin dependencias
+    const geminiResponse = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{
+            parts: [
+              { text: prompt },
+              { inline_data: { mime_type: "image/jpeg", data: image } },
+              { inline_data: { mime_type: "image/png", data: assetBase64 } }
+            ]
+          }]
+        })
+      }
+    );
+
+    if (!geminiResponse.ok) {
+      const err = await geminiResponse.json();
+      throw new Error(err.error?.message || "Error Gemini API");
+    }
+
+    const geminiData = await geminiResponse.json();
+    let text = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || "";
     text = text.replace(/```json|```/g, "").trim();
+
     const analysis = JSON.parse(text);
 
     return {
       statusCode: 200,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(analysis)
+      body: JSON.stringify({
+        landmarks: analysis.landmarks,
+        advice: analysis.advice,
+        tags: analysis.tags
+      })
     };
 
   } catch (error) {
-    console.error("Backend Error:", error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: error.message })
-    };
+    console.error("Error:", error.message);
+    return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
   }
 };
