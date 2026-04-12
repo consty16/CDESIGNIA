@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { Link } from 'react-router-dom';
 import { cn } from '../lib/utils';
 import { Upload, Sparkles, Loader2, ChevronLeft, Image as ImageIcon } from 'lucide-react';
 
@@ -114,10 +115,22 @@ export const IALab = () => {
       </div>
 
       <nav className="relative z-10 mb-12 flex justify-between items-center">
-        <a href="/" className="flex items-center gap-2 text-lilac-glow hover:text-white transition-colors group">
+        <Link 
+          to="/" 
+          className="flex items-center gap-2 text-lilac-glow hover:text-white transition-colors group"
+          onClick={(e) => {
+            // Aseguramos la navegación forzada si el router no responde como se espera
+            if (window.location.pathname === '/') {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+              // Si no estamos en la raíz y queremos ir a index.html en una multi-page app
+              window.location.href = '/';
+            }
+          }}
+        >
           <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
           <span className="text-[10px] uppercase tracking-widest font-bold">Volver al Inicio</span>
-        </a>
+        </Link>
         <div className="text-right">
           <h1 className="text-2xl md:text-5xl font-serif italic tracking-tight text-white">Laboratorio IA</h1>
           <p className="text-[10px] text-lilac-neon uppercase tracking-[0.3em] font-medium mt-2">C DESIGN IA · Premium Agency</p>
