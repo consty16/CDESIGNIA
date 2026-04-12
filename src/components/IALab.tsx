@@ -46,30 +46,20 @@ export const IALab = () => {
       const stylePreset = 'high-end fashion editorial, cinematic lighting, ultra-realistic, 8k, purple and lila neon accents, C DESIGN LAB luxury aesthetic';
       const fullPrompt = `${userPrompt}, ${stylePreset}`;
       const randomSeed = Math.floor(Math.random() * 1000000);
-      const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(fullPrompt)}?width=1080&height=1350&nologo=true&model=flux&seed=${randomSeed}`;
-
-      // Pre-cargar la imagen para asegurar que esté lista antes de mostrarla
-      const img = new Image();
-      img.src = imageUrl;
       
-      img.onload = () => {
-        setResult({
-          url: imageUrl,
-          advice: `C DESIGN LAB ha sintetizado tu visión "${userPrompt}" bajo nuestra estética luxury para crear esta pieza exclusiva.`,
-          tags: ['c-design-lab', 'luxury', 'editorial', 'haute-couture', '8k'],
-          ready: true,
-          error: false
-        });
-        setShowResults(true);
-        setIsGenerating(false);
-      };
+      // Usamos el endpoint estable de Pollinations sin forzar un modelo específico si falla
+      const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(fullPrompt)}?width=1080&height=1350&nologo=true&seed=${randomSeed}`;
 
-      img.onerror = () => {
-        setResult(prev => ({ ...prev, ready: true, error: true }));
-        setShowResults(true);
-        setIsGenerating(false);
-      };
+      setResult({
+        url: imageUrl,
+        advice: `C DESIGN LAB ha sintetizado tu visión "${userPrompt}" bajo nuestra estética luxury para crear esta pieza exclusiva.`,
+        tags: ['c-design-lab', 'luxury', 'editorial', 'haute-couture', '8k'],
+        ready: true,
+        error: false
+      });
 
+      setShowResults(true);
+      // No cerramos isGenerating aquí, lo haremos cuando la imagen cargue en el modal o falle
     } catch (e: any) {
       console.error('C Design Lab Error:', e);
       setResult(prev => ({ ...prev, ready: true, error: true }));
@@ -154,24 +144,43 @@ export const IALab = () => {
               </div>
 
               {/* Contenedor de resultado h-auto */}
-              <div className="w-full rounded-[2.5rem] border border-lilac-neon/30 shadow-[0_0_80px_rgba(168,85,247,0.2)] overflow-hidden bg-black/50 h-auto">
+              <div className="w-full rounded-[2.5rem] border border-lilac-neon/30 shadow-[0_0_80px_rgba(168,85,247,0.2)] overflow-hidden bg-black/50 h-auto relative min-h-[400px] flex items-center justify-center">
                 {result.url && (
                   <motion.img
                     initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
+                    animate={{ opacity: isGenerating ? 0 : 1, scale: isGenerating ? 0.95 : 1 }}
                     src={result.url}
+                    onLoad={() => setIsGenerating(false)}
+                    onError={() => {
+                      setResult(prev => ({ ...prev, error: true }));
+                      setIsGenerating(false);
+                    }}
                     className="w-full h-auto object-contain"
                     alt="C DESIGN LAB Result"
                   />
                 )}
-                {!result.url && !result.error && (
-                  <div className="flex items-center justify-center min-h-[400px]">
-                    <Loader2 className="w-12 h-12 text-lilac-neon animate-spin" />
+                
+                {isGenerating && (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-md z-10">
+                    <Loader2 className="w-12 h-12 text-lilac-neon animate-spin mb-4" />
+                    <p className="text-[10px] text-white/40 uppercase tracking-[0.4em] animate-pulse">Finalizando Obra...</p>
                   </div>
                 )}
+
                 {result.error && (
-                  <div className="flex items-center justify-center min-h-[400px] p-12 text-center">
-                    <p className="text-xs text-red-400 uppercase tracking-[0.3em]">Error en el proceso creativo. Intentá de nuevo.</p>
+                  <div className="flex flex-col items-center justify-center p-12 text-center gap-4">
+                    <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center mb-2">
+                       <span className="text-2xl">⚠️</span>
+                    </div>
+                    <p className="text-xs text-red-400 uppercase tracking-[0.3em] max-w-xs leading-relaxed">
+                      El servidor de alta costura no responde. <br/> Intentá con una descripción más corta o probá de nuevo.
+                    </p>
+                    <button 
+                      onClick={handleGenerate}
+                      className="mt-4 px-6 py-2 border border-white/10 rounded-full text-[9px] text-white/40 uppercase tracking-widest hover:bg-white/5 transition-colors"
+                    >
+                      Reintentar Generación
+                    </button>
                   </div>
                 )}
               </div>
