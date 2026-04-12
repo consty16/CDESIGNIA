@@ -11,17 +11,11 @@ exports.handler = async (event) => {
       return { statusCode: 500, body: JSON.stringify({ error: "No se encontró REPLICATE_API_TOKEN en Netlify." }) };
     }
 
-    const PROMPTS = {
-      "MAQUILLAJE": "Photorealistic face swap. High-end fashion editorial. Keep user's facial identity 100% intact. Integrate makeup naturally with studio lighting.",
-      "MÁSCARAS": "Precision face swap. Luxury ornate mask from reference image. Preserve user's eyes, nose, and mouth structure perfectly.",
-      "VESTIDOS": "Professional face swap into luxury dress. Maintain original body posture and facial features. High resolution."
-    };
-
-    const prompt = PROMPTS[category] || PROMPTS["MÁSCARAS"];
     const targetImageUrl = `data:image/jpeg;base64,${template}`;
-    const swapImageUrl = `data:image/jpeg;base64,${image}`;
+    const userImageUrl = `data:image/jpeg;base64,${image}`;
 
     // ── Paso 1: crear la predicción en Replicate (lucataco/faceswap) ──
+    // Nota: Usamos swap_image y source_image para asegurar compatibilidad con la versión exacta
     const createResponse = await fetch("https://api.replicate.com/v1/predictions", {
       method: "POST",
       headers: {
@@ -33,8 +27,8 @@ exports.handler = async (event) => {
         version: "9a42989d3132e4d293816edb5da2235e9f8260d3d3d6313174f4b23b378eb8", 
         input: {
           target_image: targetImageUrl,
-          source_image: swapImageUrl,
-          prompt: prompt
+          swap_image: userImageUrl,
+          source_image: userImageUrl
         }
       })
     });
@@ -44,7 +38,10 @@ exports.handler = async (event) => {
       console.error("Replicate error:", createResponse.status, JSON.stringify(err));
       return {
         statusCode: createResponse.status,
-        body: JSON.stringify({ error: err.detail || "Error al crear predicción en Replicate" })
+        body: JSON.stringify({ 
+          error: err.detail || err.error || "Error al crear predicción en Replicate",
+          details: err
+        })
       };
     }
 
