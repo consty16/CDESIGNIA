@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+// Usamos el fetch nativo de Node.js 18+ disponible en Netlify
 
 /**
  * Motor central de C DESIGN IA.
@@ -10,7 +10,7 @@ exports.handler = async (event) => {
   }
 
   try {
-    const { image, template, category } = JSON.parse(event.body);
+    const { category, image, template } = JSON.parse(event.body);
     const TOKEN = process.env.HF_TOKEN;
 
     if (!TOKEN) {
@@ -35,7 +35,6 @@ exports.handler = async (event) => {
 
     const cleanImage = image.replace(/^data:image\/\w+;base64,/, "");
     
-    // Usamos un modelo más estándar y potente que soporte Image-to-Image por API
     const MODEL_ID = "stabilityai/stable-diffusion-xl-base-1.0";
 
     const response = await fetch(`https://api-inference.huggingface.co/models/${MODEL_ID}`, {
@@ -49,27 +48,37 @@ exports.handler = async (event) => {
         parameters: {
           prompt: PROMPTS[category],
           negative_prompt: "low quality, blurry, distorted, bad anatomy, nudity",
-          strength: 0.5 // Mantiene rasgos del usuario pero aplica el estilo
+          strength: 0.5,
+          wait_for_model: true // Crucial para evitar el error de "loading"
         }
       }),
     });
 
     if (!response.ok) {
-      const err = await response.text();
-      console.error("HF Error:", err);
-      // Si falla SDXL, intentamos con v1.5 como fallback
-      if (response.status === 503 || response.status === 404) {
+      const errorData = await response.json().catch(() => ({ error: "Error desconocido" }));
+      const errorMsg = errorData.error || response.statusText;
+      console.error("HF Error:", errorMsg);
+
+      // Fallback a v1.5
+      if (response.status === 503 || response.status === 404 || response.status === 500) {
           const fallbackResponse = await fetch("https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5", {
               headers: { Authorization: `Bearer ${TOKEN}`, "Content-Type": "application/json" },
               method: "POST",
-              body: JSON.stringify({ inputs: cleanImage, parameters: { prompt: PROMPTS[category], strength: 0.6 } })
+              body: JSON.stringify({ 
+                inputs: cleanImage, 
+                parameters: { 
+                  prompt: PROMPTS[category], 
+                  strength: 0.6,
+                  wait_for_model: true
+                } 
+              })
           });
           if (fallbackResponse.ok) {
               const buffer = await fallbackResponse.arrayBuffer();
               return { statusCode: 200, headers: { "Content-Type": "text/plain" }, body: Buffer.from(buffer).toString('base64') };
           }
       }
-      return { statusCode: response.status, body: `Error HuggingFace: ${err}` };
+      return { statusCode: response.status, body: `Error HuggingFace (${response.status}): ${errorMsg}` };
     }
 
     const buffer = await response.arrayBuffer();
@@ -82,6 +91,7 @@ exports.handler = async (event) => {
     };
 
   } catch (error) {
-    return { statusCode: 500, body: "Error interno: " + error.message };
+    console.error("Error en la función:", error);
+    return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
   }
 };

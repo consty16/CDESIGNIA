@@ -104,17 +104,27 @@ export const IALab = () => {
         }),
       });
 
+      if (response.status === 404) {
+        throw new Error("No se pudo encontrar la función de IA. Si estás en modo desarrollo local, asegúrate de estar usando 'netlify dev' en lugar de 'npm run dev'.");
+      }
+
       const responseText = await response.text();
 
       if (!response.ok) {
         console.error("Error en la respuesta de la IA:", responseText);
-        throw new Error(responseText || "La IA no pudo procesar la imagen");
+        throw new Error(responseText || `Error (${response.status}): La IA no pudo procesar la imagen`);
       }
 
       setResultImage(`data:image/png;base64,${responseText}`);
     } catch (error: any) {
       console.error("Error generating magic:", error);
-      alert("Error en el Laboratorio: " + error.message);
+      
+      // Mensaje amigable para el usuario
+      const displayError = error.message.includes("Failed to fetch") 
+        ? "No se pudo conectar con el servidor de IA. Verifica tu conexión o si el sitio está desplegado."
+        : error.message;
+
+      alert("Aviso del Laboratorio: " + displayError);
       setResultImage(selectedAsset);
     } finally {
       setIsGenerating(false);
