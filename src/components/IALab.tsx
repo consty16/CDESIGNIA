@@ -302,4 +302,4 @@ export const IALab = () => {
 
     </div>
   );
-};
+}; //cambio para cuenta pro
