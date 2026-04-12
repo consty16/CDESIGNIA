@@ -134,17 +134,17 @@ export const IALab = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[2000] flex items-center justify-center p-4 md:p-8 bg-black/95 backdrop-blur-3xl overflow-y-auto"
+            className="fixed inset-0 z-[2000] flex items-center justify-center p-4 md:p-6 bg-black/95 backdrop-blur-3xl overflow-y-auto"
           >
-            <div className="w-full max-w-2xl flex flex-col items-center py-12 gap-8">
+            <div className="w-full max-w-lg flex flex-col items-center py-8 gap-6">
 
               <div className="text-center">
-                <h2 className="text-2xl md:text-3xl font-serif italic text-white uppercase tracking-[0.2em]">C DESIGN LAB ✨</h2>
-                <p className="text-[10px] text-lilac-neon uppercase tracking-[0.5em] mt-3 italic">Digital Fashion Masterpiece</p>
+                <h2 className="text-xl md:text-2xl font-serif italic text-white uppercase tracking-[0.2em]">C DESIGN LAB ✨</h2>
+                <p className="text-[9px] text-lilac-neon uppercase tracking-[0.5em] mt-2 italic">Masterpiece</p>
               </div>
 
-              {/* Contenedor de resultado h-auto */}
-              <div className="w-full rounded-[2.5rem] border border-lilac-neon/30 shadow-[0_0_80px_rgba(168,85,247,0.2)] overflow-hidden bg-black/50 h-auto relative min-h-[400px] flex items-center justify-center">
+              {/* Contenedor de resultado reducido y con max-height */}
+              <div className="w-full max-w-[420px] rounded-[2rem] border border-lilac-neon/30 shadow-[0_0_60px_rgba(168,85,247,0.15)] overflow-hidden bg-black/50 relative aspect-[4/5] flex items-center justify-center mx-auto">
                 {result.url && (
                   <motion.img
                     initial={{ opacity: 0, scale: 0.95 }}
@@ -155,66 +155,61 @@ export const IALab = () => {
                       setResult(prev => ({ ...prev, error: true }));
                       setIsGenerating(false);
                     }}
-                    className="w-full h-auto object-contain"
+                    className="w-full h-full object-contain"
                     alt="C DESIGN LAB Result"
                   />
                 )}
                 
                 {isGenerating && (
                   <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-md z-10">
-                    <Loader2 className="w-12 h-12 text-lilac-neon animate-spin mb-4" />
-                    <p className="text-[10px] text-white/40 uppercase tracking-[0.4em] animate-pulse">Finalizando Obra...</p>
+                    <Loader2 className="w-10 h-10 text-lilac-neon animate-spin mb-3" />
+                    <p className="text-[8px] text-white/40 uppercase tracking-[0.4em] animate-pulse">Diseñando...</p>
                   </div>
                 )}
 
                 {result.error && (
-                  <div className="flex flex-col items-center justify-center p-12 text-center gap-4">
-                    <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center mb-2">
-                       <span className="text-2xl">⚠️</span>
-                    </div>
-                    <p className="text-xs text-red-400 uppercase tracking-[0.3em] max-w-xs leading-relaxed">
-                      El servidor de alta costura no responde. <br/> Intentá con una descripción más corta o probá de nuevo.
+                  <div className="flex flex-col items-center justify-center p-8 text-center gap-3">
+                    <span className="text-xl mb-2">⚠️</span>
+                    <p className="text-[10px] text-red-400 uppercase tracking-[0.2em] leading-relaxed">
+                      Error en conexión.
                     </p>
                     <button 
                       onClick={handleGenerate}
-                      className="mt-4 px-6 py-2 border border-white/10 rounded-full text-[9px] text-white/40 uppercase tracking-widest hover:bg-white/5 transition-colors"
+                      className="px-4 py-1.5 border border-white/10 rounded-full text-[8px] text-white/40 uppercase tracking-widest hover:bg-white/5 transition-colors"
                     >
-                      Reintentar Generación
+                      Reintentar
                     </button>
                   </div>
                 )}
               </div>
 
               {/* Advice */}
-              {result.advice && (
-                <div className="w-full backdrop-blur-2xl bg-white/[0.03] border border-white/10 p-8 rounded-[2rem] relative">
-                  <div className="absolute top-6 right-8 opacity-20">
-                    <Sparkles className="w-5 h-5 text-lilac-neon" />
-                  </div>
-                  <h3 className="text-[9px] uppercase tracking-[0.5em] text-white/30 font-bold mb-4">Designer's Note</h3>
-                  <p className="text-base font-serif text-white/80 leading-relaxed italic">"{result.advice}"</p>
+              {result.advice && !isGenerating && !result.error && (
+                <div className="w-full max-w-[420px] backdrop-blur-2xl bg-white/[0.03] border border-white/10 p-5 rounded-2xl relative">
+                  <h3 className="text-[8px] uppercase tracking-[0.4em] text-white/30 font-bold mb-2">Designer's Note</h3>
+                  <p className="text-xs font-serif text-white/80 leading-relaxed italic">"{result.advice}"</p>
                 </div>
               )}
 
               {/* Botones */}
-              <div className="flex flex-col gap-4 w-full">
-                {result.url && (
+              <div className="flex flex-col gap-3 w-full max-w-[420px]">
+                {result.url && !isGenerating && !result.error && (
                   <motion.a
-                    initial={{ y: 20, opacity: 0 }}
+                    initial={{ y: 10, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     href={result.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full py-6 rounded-2xl font-bold text-[11px] text-white bg-lilac-neon shadow-[0_0_40px_rgba(168,85,247,0.4)] hover:brightness-110 active:scale-[0.98] transition-all uppercase tracking-[0.4em] flex items-center justify-center gap-3"
+                    className="w-full py-4 rounded-xl font-bold text-[10px] text-white bg-lilac-neon shadow-[0_0_30px_rgba(168,85,247,0.3)] hover:brightness-110 active:scale-[0.98] transition-all uppercase tracking-[0.4em] flex items-center justify-center gap-3"
                   >
-                    <Download className="w-4 h-4" /> DESCARGAR OBRA
+                    <Download className="w-3.5 h-3.5" /> DESCARGAR
                   </motion.a>
                 )}
                 <button
                   onClick={() => setShowResults(false)}
-                  className="text-[10px] text-white/30 uppercase tracking-[0.5em] hover:text-white transition-colors py-4 text-center"
+                  className="text-[9px] text-white/20 uppercase tracking-[0.5em] hover:text-white transition-colors py-2 text-center"
                 >
-                  Continuar Creando
+                  Regresar
                 </button>
               </div>
 
