@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { cn } from '../lib/utils';
-import { Upload, Sparkles, Loader2, ChevronLeft, Download } from 'lucide-react';
+import { Sparkles, Loader2, ChevronLeft, Download, Send } from 'lucide-react';
 
 const assetFiles = import.meta.glob('../assets/*.{png,jpg,jpeg,svg,webp}', { eager: true, as: 'url' });
 
@@ -36,10 +36,10 @@ const MOCK_GALLERY: Record<string, string[]> = {
 };
 
 const WAITING_MESSAGES = [
-  "Nova está analizando tus facciones...",
-  "Detectando arquitectura facial Gemini...",
-  "Sincronizando diseño de alta costura...",
-  "Renderizando edición premium...",
+  "Nova está conceptualizando tu idea...",
+  "Sintetizando texturas de alta costura...",
+  "Gemini está diseñando tu visión...",
+  "Renderizando obra maestra 8K...",
 ];
 
 interface GeminiResult {
@@ -53,13 +53,11 @@ interface GeminiResult {
 export const IALab = () => {
   const [activeCategory, setActiveCategory] = useState('MÁSCARAS');
   const [selectedAsset, setSelectedAsset] = useState<string | null>(null);
-  const [userPhoto, setUserPhoto] = useState<string | null>(null);
+  const [userPrompt, setUserPrompt] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [currentMessage, setCurrentMessage] = useState(0);
   const [showResults, setShowResults] = useState(false);
   const [result, setResult] = useState<GeminiResult>({ url: null, advice: null, tags: [], ready: false, error: false });
-
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     let interval: any;
@@ -71,103 +69,30 @@ export const IALab = () => {
     return () => clearInterval(interval);
   }, [isGenerating]);
 
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (ev) => setUserPhoto(ev.target?.result as string);
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const renderFinalImage = async (userImgBase64: string, assetUrl: string, landmarks: any): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const userImg = new Image();
-      const assetImg = new Image();
-      assetImg.crossOrigin = 'anonymous';
-
-      let loaded = 0;
-      const onImageLoad = () => {
-        if (++loaded === 2) {
-          try {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            if (!ctx) return reject('Canvas context not found');
-            
-            // Usar dimensiones reales de la imagen del usuario
-            canvas.width = userImg.width;
-            canvas.height = userImg.height;
-
-            // 1. Dibujar foto del usuario como fondo
-            ctx.drawImage(userImg, 0, 0);
-
-            // 2. Lógica de Dibujo con Landmarks de Gemini
-            if (landmarks && landmarks.left_eye && landmarks.right_eye) {
-              const lx = (landmarks.left_eye.x / 100) * canvas.width;
-              const ly = (landmarks.left_eye.y / 100) * canvas.height;
-              const rx = (landmarks.right_eye.x / 100) * canvas.width;
-              const ry = (landmarks.right_eye.y / 100) * canvas.height;
-              
-              const centerX = (lx + rx) / 2;
-              const centerY = (ly + ry) / 2;
-              const eyeDist = Math.sqrt(Math.pow(rx - lx, 2) + Math.pow(ry - ly, 2));
-              const angle = Math.atan2(ry - ly, rx - lx);
-              
-              ctx.save();
-              ctx.translate(centerX, centerY);
-              ctx.rotate(angle);
-              
-              // Los ojos suelen estar a 1/3 del ancho total de la cara (aprox 3x distancia entre ojos)
-              const maskWidth = eyeDist * 3.8; 
-              const ratio = assetImg.height / assetImg.width;
-              const maskHeight = maskWidth * ratio;
-              
-              // Dibujar máscara centrada (y ajustada ligeramente hacia arriba/abajo según sea necesario)
-              ctx.drawImage(assetImg, -maskWidth/2, -maskHeight/1.8, maskWidth, maskHeight);
-              ctx.restore();
-            }
-
-            resolve(canvas.toDataURL('image/jpeg', 0.95));
-          } catch (e) {
-            reject(e);
-          }
-        }
-      };
-
-      userImg.onload = onImageLoad;
-      assetImg.onload = onImageLoad;
-      userImg.onerror = () => reject('Error al cargar la imagen del usuario');
-      assetImg.onerror = () => reject('Error al cargar la máscara');
-      userImg.src = userImgBase64;
-      assetImg.src = assetUrl;
-    });
-  };
-
   const handleGenerate = async () => {
-    if (!userPhoto || !selectedAsset) return;
+    if (!selectedAsset || !userPrompt.trim()) return;
 
     setIsGenerating(true);
     setShowResults(false);
     setResult({ url: null, advice: null, tags: [], ready: false, error: false });
 
     try {
-      const cleanUserPhoto = userPhoto.replace(/^data:image\/\w+;base64,/, '');
       const absoluteAssetUrl = window.location.origin + selectedAsset;
 
       const response = await fetch('/.netlify/functions/procesar-ia', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ image: cleanUserPhoto, template: absoluteAssetUrl })
+        body: JSON.stringify({ 
+          prompt: userPrompt, 
+          template: absoluteAssetUrl 
+        })
       });
 
-      if (!response.ok) throw new Error('Gemini Pipeline Error');
+      if (!response.ok) throw new Error('Nova Generation Failed');
       const data = await response.json();
 
-      // renderFinalImage: Iniciar composición visual apenas llega la data de Gemini
-      const finalUrl = await renderFinalImage(userPhoto, absoluteAssetUrl, data.landmarks);
-
       setResult({
-        url: finalUrl,
+        url: data.imageUrl,
         advice: data.advice,
         tags: data.tags,
         ready: true,
@@ -200,13 +125,14 @@ export const IALab = () => {
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10">
         <div className="lg:col-span-8 space-y-8">
           <div className="backdrop-blur-2xl bg-white/5 border border-white/10 rounded-[2.5rem] p-8 md:p-10 shadow-2xl">
+            <h3 className="text-[10px] font-bold text-lilac-glow mb-6 uppercase tracking-[0.3em]">1. Selecciona tu Referencia de Estilo</h3>
             <div className="flex gap-4 mb-10 overflow-x-auto pb-2 scrollbar-hide">
               {CATEGORIES.map((cat) => (
                 <button
                   key={cat.id}
                   onClick={() => { setActiveCategory(cat.id); setSelectedAsset(null); }}
                   className={cn(
-                    "px-8 py-3 text-[10px] font-bold rounded-xl border transition-all duration-500 uppercase tracking-widest",
+                    "px-8 py-3 text-[10px] font-bold rounded-xl border transition-all duration-500 uppercase tracking-widest shrink-0",
                     activeCategory === cat.id 
                       ? "bg-lilac-neon border-lilac-neon text-white shadow-[0_0_20px_#a855f7]" 
                       : "bg-transparent border-white/5 text-white/30 hover:border-white/20 hover:text-white"
@@ -241,33 +167,33 @@ export const IALab = () => {
         </div>
 
         <div className="lg:col-span-4 flex flex-col gap-8">
-          <div className="backdrop-blur-2xl bg-white/5 border border-white/10 rounded-[2.5rem] p-10 flex flex-col items-center shadow-2xl relative group overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-lilac-neon/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-            <h3 className="text-xs font-bold text-lilac-glow mb-8 uppercase tracking-[0.3em] relative z-10">Tu Perfil</h3>
-            <div
-              onClick={() => fileInputRef.current?.click()}
-              className={cn(
-                "w-48 h-48 rounded-full border-2 border-dashed border-white/10 flex items-center justify-center cursor-pointer overflow-hidden relative z-10 transition-all duration-700 hover:scale-105",
-                userPhoto && "border-solid border-lilac-neon shadow-[0_0_20px_#a855f7]"
-              )}
-            >
-              {userPhoto ? (
-                <img src={userPhoto} className="w-full h-full object-cover" alt="User" />
-              ) : (
-                <div className="text-center group-hover:scale-110 transition-transform">
-                  <Upload className="w-8 h-8 text-white/20 mx-auto mb-2" />
-                  <span className="text-[10px] uppercase tracking-widest text-white/40">Sube tu foto</span>
-                </div>
-              )}
-            </div>
-            <input type="file" ref={fileInputRef} className="hidden" onChange={handlePhotoUpload} />
+          <div className="backdrop-blur-2xl bg-white/5 border border-white/10 rounded-[2.5rem] p-10 shadow-2xl relative group overflow-hidden">
+            <h3 className="text-[10px] font-bold text-lilac-glow mb-8 uppercase tracking-[0.3em]">2. Describe tu Visión</h3>
+            
+            <textarea
+              value={userPrompt}
+              onChange={(e) => setUserPrompt(e.target.value)}
+              placeholder="Ej: Una modelo en una pasarela futurista de neón, usando este diseño con acabados de cristal y seda plateada..."
+              className="w-full h-48 bg-white/5 border border-white/10 rounded-2xl p-6 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-lilac-neon transition-colors resize-none mb-8 font-light leading-relaxed"
+            />
+
             <button
               onClick={handleGenerate}
-              disabled={isGenerating || !userPhoto || !selectedAsset}
-              className="w-full mt-12 py-5 rounded-2xl text-[10px] font-bold tracking-[0.3em] text-white bg-gradient-to-r from-lilac-neon to-purple-700 disabled:opacity-20 hover:brightness-110 active:scale-95 transition-all uppercase shadow-xl relative z-10"
+              disabled={isGenerating || !selectedAsset || !userPrompt.trim()}
+              className="w-full py-5 rounded-2xl text-[10px] font-bold tracking-[0.3em] text-white bg-gradient-to-r from-lilac-neon to-purple-700 disabled:opacity-20 hover:brightness-110 active:scale-95 transition-all uppercase shadow-xl relative z-10 flex items-center justify-center gap-3"
             >
-              {isGenerating ? <Loader2 className="animate-spin mx-auto w-5 h-5" /> : "FUSIONAR CON GEMINI ✨"}
+              {isGenerating ? (
+                <Loader2 className="animate-spin w-5 h-5" />
+              ) : (
+                <>
+                  <Send className="w-4 h-4" /> GENERAR CON NOVA IA ✨
+                </>
+              )}
             </button>
+
+            <p className="mt-6 text-[9px] text-white/30 text-center uppercase tracking-widest leading-loose">
+              Nova combinará tu descripción con la estética del diseño seleccionado para crear una pieza única.
+            </p>
           </div>
         </div>
       </div>
@@ -282,7 +208,7 @@ export const IALab = () => {
           >
             <div className="w-full max-w-xl flex flex-col items-center py-10">
               <h2 className="text-3xl font-serif italic text-white mb-2 text-center uppercase tracking-widest drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">Nova Vision ✨</h2>
-              <p className="text-[10px] text-lilac-neon uppercase tracking-[0.4em] mb-10 text-center italic">Edición Digital Premium</p>
+              <p className="text-[10px] text-lilac-neon uppercase tracking-[0.4em] mb-10 text-center italic">Digital Fashion Creation</p>
 
               <div className="w-full aspect-square rounded-[2rem] overflow-hidden border border-lilac-neon shadow-[0_0_60px_rgba(168,85,247,0.4)] relative bg-black group">
                 {result.url && (
@@ -291,7 +217,7 @@ export const IALab = () => {
                     animate={{ scale: 1, opacity: 1 }} 
                     src={result.url} 
                     className="w-full h-full object-cover" 
-                    alt="Resultado Nova" 
+                    alt="Nova Creative Design" 
                   />
                 )}
                 {!result.url && !result.error && (
@@ -301,7 +227,7 @@ export const IALab = () => {
                 )}
                 {result.error && (
                   <div className="absolute inset-0 flex items-center justify-center p-8 text-center bg-black/80">
-                    <p className="text-xs text-red-400 uppercase tracking-widest">Error en el renderizado inteligente</p>
+                    <p className="text-xs text-red-400 uppercase tracking-widest">Error en la generación creativa</p>
                   </div>
                 )}
               </div>
@@ -313,7 +239,7 @@ export const IALab = () => {
                   </div>
                   <h3 className="text-[9px] uppercase tracking-[0.4em] text-white/40 font-bold mb-4">Análisis del Diseñador</h3>
                   <p className="text-xl font-serif text-white/90 leading-relaxed italic">
-                    "{result.advice || 'Gemini está sintetizando tu estilo...'}"
+                    "{result.advice || 'Nova está analizando la composición...'}"
                   </p>
                 </div>
 

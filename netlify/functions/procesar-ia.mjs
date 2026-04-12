@@ -4,110 +4,112 @@ export const handler = async (event) => {
   }
 
   try {
-    const { image, template } = JSON.parse(event.body);
-    const API_KEY = process.env.GEMINI_API_KEY;
+    const { prompt: userPrompt, template: assetUrl } = JSON.parse(event.body);
+    const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+    const HF_TOKEN = process.env.HF_TOKEN;
 
-    if (!API_KEY) {
-      console.error("CRITICAL: GEMINI_API_KEY is missing");
-      return { 
-        statusCode: 500, 
-        body: JSON.stringify({ error: "API Key de Gemini no configurada en el servidor." }) 
-      };
+    if (!GEMINI_API_KEY) {
+      return { statusCode: 500, body: JSON.stringify({ error: "GEMINI_API_KEY no configurada." }) };
     }
 
-    // 1. Descargar asset (máscara/vestido)
-    let assetBase64 = "";
-    try {
-      const assetResponse = await fetch(template);
-      if (!assetResponse.ok) throw new Error(`Status ${assetResponse.status}`);
-      const assetBuffer = await assetResponse.arrayBuffer();
-      assetBase64 = Buffer.from(assetBuffer).toString("base64");
-    } catch (e) {
-      console.error("Error al cargar asset:", e.message);
-      return { 
-        statusCode: 500, 
-        body: JSON.stringify({ error: `Error al descargar el recurso: ${e.message}` }) 
-      };
-    }
-
-    const prompt = `Analiza la imagen del usuario para detectar landmarks faciales precisos.
-    NECESITO LAS COORDENADAS exactas de los ojos (centro de la pupila) en formato 0-100 relativo al ancho y alto.
+    // 1. Gemini: Optimizador de Prompt Creativo
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
     
-    RESPONDE ÚNICAMENTE CON ESTE FORMATO JSON (sin texto adicional ni markdown):
+    // El prompt de sistema para Gemini
+    const systemPrompt = `Actúa como un motor de generación de imágenes de moda ultra-realista y experto en prompts de Stable Diffusion / Flux.
+    Tu tarea es crear un PROMPT MAESTRO basado en una referencia de estilo (imagen) y el deseo del usuario.
+    
+    ESTILO SELECCIONADO: La imagen adjunta es la referencia estética primordial.
+    DESCRIPCIÓN DEL USUARIO: "${userPrompt}"
+    
+    REGLAS:
+    - Combina armoniosamente los elementos visuales de la referencia con la idea del usuario.
+    - El resultado debe ser fotorrealista, iluminación de estudio profesional, calidad 8k, cinematográfico.
+    - Incluye detalles técnicos: "ultra-detailed", "textures of silk/metal", "vogue editorial style", "high fashion photography".
+    
+    RESPONDE EXCLUSIVAMENTE CON UN JSON:
     {
-      "landmarks": {
-        "left_eye": {"x": 35, "y": 38},
-        "right_eye": {"x": 65, "y": 38},
-        "mouth": {"x": 50, "y": 62}
-      },
-      "advice": "Breve consejo de estilo premium basado en sus facciones...",
-      "tags": ["estilo-vanguardista", "elegancia-digital"]
+      "refined_prompt": "El prompt final en inglés optimizado para generación de imagen...",
+      "advice": "Un consejo de estilo en español sobre esta combinación...",
+      "tags": ["tag1", "tag2", "tag3"]
     }`;
 
-    // 2. Llamada a Gemini con configuraciones de seguridad relajadas para permitir análisis facial
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
-    
+    // Descargar el asset para que Gemini lo vea
+    const assetResponse = await fetch(assetUrl);
+    const assetBuffer = await assetResponse.arrayBuffer();
+    const assetBase64 = Buffer.from(assetBuffer).toString("base64");
+
     const geminiPayload = {
       contents: [{
         parts: [
-          { text: prompt },
-          { inline_data: { mime_type: "image/jpeg", data: image } }
+          { text: systemPrompt },
+          { inline_data: { mime_type: "image/png", data: assetBase64 } }
         ]
       }],
-      safetySettings: [
-        { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
-        { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
-        { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
-        { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }
-      ],
-      generationConfig: {
-        response_mime_type: "application/json"
-      }
+      generationConfig: { response_mime_type: "application/json" }
     };
 
-    const geminiResponse = await fetch(geminiUrl, {
+    const geminiRes = await fetch(geminiUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(geminiPayload)
     });
 
-    if (!geminiResponse.ok) {
-      const errorData = await geminiResponse.json();
-      console.error("Gemini API Error Detail:", JSON.stringify(errorData));
-      throw new Error(errorData.error?.message || "Fallo en la comunicación con la IA");
-    }
+    if (!geminiRes.ok) throw new Error("Gemini Prompt Optimization Failed");
+    
+    const geminiData = await geminiRes.json();
+    const creativeData = JSON.parse(geminiData.candidates[0].content.parts[0].text);
 
-    const geminiData = await geminiResponse.json();
-    let resultText = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || "";
-
-    // Limpieza robusta de JSON
-    try {
-      const jsonMatch = resultText.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        resultText = jsonMatch[0];
-      }
-      
-      const analysis = JSON.parse(resultText);
-
-      return {
-        statusCode: 200,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          landmarks: analysis.landmarks,
-          advice: analysis.advice,
-          tags: analysis.tags
-        })
+    // 2. Hugging Face: Generación de Imagen (Motor de Creación)
+    // Si no hay HF_TOKEN, devolvemos un error informativo o usamos un modelo público si es posible
+    if (!HF_TOKEN) {
+      return { 
+        statusCode: 500, 
+        body: JSON.stringify({ error: "HF_TOKEN no configurado para generación de imágenes." }) 
       };
-    } catch (e) {
-      console.error("Error parseando JSON de Gemini:", resultText);
-      throw new Error("La IA devolvió un formato de datos ilegible.");
     }
+
+    const modelId = "black-forest-labs/FLUX.1-schnell"; // Modelo ultra-rápido y de alta calidad
+    const hfUrl = `https://api-inference.huggingface.co/models/${modelId}`;
+    
+    const hfResponse = await fetch(hfUrl, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${HF_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        inputs: creativeData.refined_prompt,
+        parameters: {
+          width: 1024,
+          height: 1024,
+        }
+      })
+    });
+
+    if (!hfResponse.ok) {
+      console.error("HF Error:", await hfResponse.text());
+      throw new Error("Hugging Face Image Generation Failed");
+    }
+
+    const imageBuffer = await hfResponse.arrayBuffer();
+    const imageBase64 = Buffer.from(imageBuffer).toString("base64");
+    const imageUrl = `data:image/jpeg;base64,${imageBase64}`;
+
+    return {
+      statusCode: 200,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        imageUrl,
+        advice: creativeData.advice,
+        tags: creativeData.tags
+      })
+    };
 
   } catch (error) {
-    console.error("Function Error:", error.message);
+    console.error("Nova Lab Error:", error.message);
     return { 
       statusCode: 500, 
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ error: error.message }) 
     };
   }
