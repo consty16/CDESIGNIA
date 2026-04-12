@@ -37,14 +37,16 @@ const MOCK_GALLERY: Record<string, string[]> = {
 
 const WAITING_MESSAGES = [
   "Nova está analizando tus facciones para un diseño a medida...",
-  "Fusionando identidades inteligentes...",
-  "Calculando el espectro de neón perfecto...",
-  "Interconectando redes visuales de alta gama...",
-  "Optimizando la esencia del diseño tucumano...",
+  "Gemini detectando puntos de luz facial...",
+  "Sincronizando máscara con landmarks biométricos...",
+  "Generando consejo de Retoque Premium...",
+  "Renderizando visión final en alta gama...",
 ];
 
-interface ResultState {
+interface GeminiResult {
   url: string | null;
+  advice: string | null;
+  tags: string[];
   ready: boolean;
   error: boolean;
 }
@@ -56,7 +58,7 @@ export const IALab = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [currentMessage, setCurrentMessage] = useState(0);
   const [showResults, setShowResults] = useState(false);
-  const [resultGemini, setResultGemini] = useState<ResultState>({ url: null, ready: false, error: false });
+  const [result, setResult] = useState<GeminiResult>({ url: null, advice: null, tags: [], ready: false, error: false });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -79,49 +81,95 @@ export const IALab = () => {
     }
   };
 
-  const callGemini = async (imageBase64: string, templateUrl: string) => {
-    const response = await fetch('/.netlify/functions/procesar-ia', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        category: activeCategory,
-        image: imageBase64,
-        template: templateUrl
-      })
+  const renderSmartRetouch = async (userImgBase64: string, assetUrl: string, landmarks: any): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const userImg = new Image();
+      const assetImg = new Image();
+      assetImg.crossOrigin = 'anonymous';
+
+      let loaded = 0;
+      const checkLoaded = () => {
+        if (++loaded === 2) {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          if (!ctx) return reject('No ctx');
+          
+          canvas.width = 1024;
+          canvas.height = 1365; // Proporción 3:4
+
+          // 1. Dibujar Usuario (Base)
+          const scale = Math.max(canvas.width / userImg.width, canvas.height / userImg.height);
+          const x = (canvas.width - userImg.width * scale) / 2;
+          const y = (canvas.height - userImg.height * scale) / 2;
+          ctx.drawImage(userImg, x, y, userImg.width * scale, userImg.height * scale);
+
+          // 2. Dibujar Máscara Inteligente usando Landmarks
+          // Gemini nos da 0-1000. Traducimos a canvas.
+          // Estimamos centro entre ojos
+          const lx = (landmarks.left_eye.x / 1000) * canvas.width;
+          const ly = (landmarks.left_eye.y / 1000) * canvas.height;
+          const rx = (landmarks.right_eye.x / 1000) * canvas.width;
+          const ry = (landmarks.right_eye.y / 1000) * canvas.height;
+          
+          const centerX = (lx + rx) / 2;
+          const centerY = (ly + ry) / 2;
+          const dist = Math.sqrt(Math.pow(rx - lx, 2) + Math.pow(ry - ly, 2));
+          const angle = Math.atan2(ry - ly, rx - lx);
+          
+          ctx.save();
+          ctx.translate(centerX, centerY);
+          ctx.rotate(angle);
+          
+          // La máscara suele tener los ojos a una distancia específica. 
+          // Escalamos la máscara basándonos en la distancia de los ojos del usuario.
+          const maskScale = dist / (canvas.width * 0.25); // Asumiendo que los ojos en el asset están al 25% del ancho
+          ctx.drawImage(assetImg, - (canvas.width * maskScale) / 2, - (canvas.height * maskScale) / 2.2, canvas.width * maskScale, canvas.height * maskScale);
+          ctx.restore();
+
+          resolve(canvas.toDataURL('image/jpeg', 0.9));
+        }
+      };
+
+      userImg.onload = checkLoaded;
+      assetImg.onload = checkLoaded;
+      userImg.src = userImgBase64;
+      assetImg.src = assetUrl;
     });
-
-    if (!response.ok) {
-      const err = await response.json().catch(() => ({ error: 'Error en el Motor Nova' }));
-      throw new Error(err.error || `Error ${response.status}`);
-    }
-
-    const base64 = await response.text();
-    // Intentamos detectar si lo devuelto es una imagen o texto
-    if (base64.length < 500) { // Si es muy corto, probablemente es un error o texto plano
-       throw new Error("El motor no devolvió un resultado visual válido");
-    }
-    return `data:image/png;base64,${base64}`;
   };
 
   const handleGenerate = async () => {
-    if (!userPhoto || !selectedAsset) {
-      alert('Por favor sube tu foto y selecciona un estilo.');
-      return;
-    }
+    if (!userPhoto || !selectedAsset) return;
 
     setIsGenerating(true);
     setShowResults(false);
-    setResultGemini({ url: null, ready: false, error: false });
-
-    const cleanUserPhoto = userPhoto.replace(/^data:image\/\w+;base64,/, '');
+    setResult({ url: null, advice: null, tags: [], ready: false, error: false });
 
     try {
+      const cleanUserPhoto = userPhoto.replace(/^data:image\/\w+;base64,/, '');
       const absoluteAssetUrl = window.location.origin + selectedAsset;
-      const resultUrl = await callGemini(cleanUserPhoto, absoluteAssetUrl);
-      setResultGemini({ url: resultUrl, ready: true, error: false });
+
+      const response = await fetch('/.netlify/functions/procesar-ia', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ category: activeCategory, image: cleanUserPhoto, template: absoluteAssetUrl })
+      });
+
+      if (!response.ok) throw new Error('Error en Motor Gemini');
+      const data = await response.json();
+
+      // Renderizamos localmente con la inteligencia de Gemini
+      const finalUrl = await renderSmartRetouch(userPhoto, absoluteAssetUrl, data.landmarks);
+
+      setResult({
+        url: finalUrl,
+        advice: data.advice,
+        tags: data.tags,
+        ready: true,
+        error: false
+      });
     } catch (e: any) {
-      console.error('Gemini error:', e.message);
-      setResultGemini({ url: null, ready: true, error: true });
+      console.error(e);
+      setResult(prev => ({ ...prev, ready: true, error: true }));
     } finally {
       setIsGenerating(false);
       setShowResults(true);
@@ -130,7 +178,7 @@ export const IALab = () => {
 
   const handleClose = () => {
     setShowResults(false);
-    setResultGemini({ url: null, ready: false, error: false });
+    setResult({ url: null, advice: null, tags: [], ready: false, error: false });
   };
 
   return (
@@ -141,16 +189,13 @@ export const IALab = () => {
       </div>
 
       <nav className="relative z-10 mb-12 flex justify-between items-center">
-        <Link
-          to="/"
-          className="flex items-center gap-2 text-lilac-glow hover:text-white transition-colors group"
-        >
+        <Link to="/" className="flex items-center gap-2 text-lilac-glow hover:text-white transition-colors group">
           <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
           <span className="text-[10px] uppercase tracking-widest font-bold">Volver al Inicio</span>
         </Link>
         <div className="text-right">
           <h1 className="text-2xl md:text-5xl font-serif italic tracking-tight text-white uppercase tracking-widest">Nova Lab</h1>
-          <p className="text-[10px] text-lilac-neon uppercase tracking-[0.3em] font-medium mt-2">C DESIGN IA · Edición Premium</p>
+          <p className="text-[10px] text-lilac-neon uppercase tracking-[0.3em] font-medium mt-2">C DESIGN IA · Poder Gemini 1.5</p>
         </div>
       </nav>
 
@@ -164,9 +209,7 @@ export const IALab = () => {
                   onClick={() => { setActiveCategory(cat.id); setSelectedAsset(null); }}
                   className={cn(
                     "px-6 py-3 text-[10px] md:text-xs font-bold tracking-widest rounded-lg border transition-all duration-500 relative uppercase",
-                    activeCategory === cat.id
-                      ? "bg-lilac-neon/20 border-lilac-neon text-white shadow-[0_0_15px_#a855f7]"
-                      : "bg-transparent border-white/10 text-white/50 hover:border-lilac-neon/50 hover:text-white"
+                    activeCategory === cat.id ? "bg-lilac-neon/20 border-lilac-neon text-white shadow-[0_0_15px_#a855f7]" : "bg-transparent border-white/10 text-white/50 hover:border-lilac-neon/50 hover:text-white"
                   )}
                 >
                   <span className="mr-2">{cat.icon}</span>
@@ -253,31 +296,37 @@ export const IALab = () => {
       <AnimatePresence>
         {showResults && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-black/95 backdrop-blur-lg overflow-y-auto">
-            <div className="w-full max-w-xl flex flex-col items-center py-8">
-              <h2 className="text-3xl font-serif italic text-white mb-2 text-center uppercase tracking-widest">Nova Lab ✨</h2>
-              <p className="text-[10px] text-lilac-neon uppercase tracking-widest mb-10 text-center italic">Edición Premium · Motor Gemini 1.5 Flash</p>
-
-              <div className="w-full aspect-[3/4] rounded-[2rem] overflow-hidden border border-lilac-neon/40 shadow-[0_0_60px_rgba(168,85,247,0.5)] relative bg-black">
-                {resultGemini.error && (
-                  <div className="absolute inset-0 flex items-center justify-center p-8 text-center">
-                    <p className="text-sm text-red-400 uppercase tracking-widest leading-relaxed">
-                      El motor Gemini requiere una configuración avanzada de Imagen para devolver archivos visuales.<br/>
-                      <span className="text-[10px] text-white/40 mt-4 block">Retoque Digital en proceso...</span>
-                    </p>
-                  </div>
-                )}
-                {resultGemini.url && !resultGemini.error && (
-                  <img src={resultGemini.url} className="w-full h-full object-cover" alt="Resultado Nova" />
-                )}
+            <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-8 py-8 items-center font-sans">
+              <div className="flex flex-col items-center">
+                <h2 className="text-3xl font-serif italic text-white mb-2 text-center uppercase tracking-widest">Nova Lab ✨</h2>
+                <div className="w-full aspect-[3/4] rounded-[2rem] overflow-hidden border border-lilac-neon/40 shadow-[0_0_60px_rgba(168,85,247,0.5)] relative bg-black">
+                  {result.url && <img src={result.url} className="w-full h-full object-cover" alt="Resultado Nova" />}
+                  {result.error && <p className="p-8 text-center text-red-400">Error en el renderizado</p>}
+                </div>
               </div>
 
-              <div className="mt-12 flex flex-col items-center gap-6">
-                {resultGemini.ready && resultGemini.url && !resultGemini.error && (
-                  <a href={resultGemini.url} download="nova-premium.jpg" className="px-16 py-5 rounded-2xl text-sm font-bold tracking-[0.2em] text-white bg-gradient-to-r from-[#a855f7] to-[#9c27b0] shadow-[0_0_40px_#a855f7] hover:scale-105 transition-transform uppercase">
-                    Descargar ✨
-                  </a>
-                )}
-                <button onClick={handleClose} className="text-[10px] uppercase tracking-widest text-white/40 hover:text-white transition-colors">Cerrar Laboratorio</button>
+              <div className="space-y-6 text-left">
+                <div className="backdrop-blur-xl bg-white/5 border border-lilac-neon/20 p-6 rounded-2xl">
+                  <h3 className="text-[10px] uppercase tracking-widest text-lilac-neon font-bold mb-4">Nova Stylist Advice</h3>
+                  <p className="text-sm text-lilac-glow leading-relaxed italic">"{result.advice}"</p>
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  {result.tags.map((tag, i) => (
+                    <span key={i} className="px-3 py-1 bg-lilac-neon/10 border border-lilac-neon/30 rounded-full text-[8px] uppercase tracking-widest text-lilac-glow">
+                      # {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="pt-8 flex flex-col gap-4">
+                   {result.url && (
+                    <a href={result.url} download="nova-premium.jpg" className="w-full py-4 rounded-xl text-center text-xs font-bold tracking-[0.2em] text-white bg-gradient-to-r from-[#a855f7] to-[#9c27b0] shadow-[0_0_30px_#a855f7] hover:scale-105 transition-transform uppercase">
+                      Descargar Retoque ✨
+                    </a>
+                  )}
+                  <button onClick={handleClose} className="text-[10px] uppercase tracking-widest text-white/40 hover:text-white transition-all text-center">Cerrar Laboratorio</button>
+                </div>
               </div>
             </div>
           </motion.div>
