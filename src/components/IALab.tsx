@@ -45,27 +45,35 @@ export const IALab = () => {
     try {
       const stylePreset = 'high-end fashion editorial, cinematic lighting, ultra-realistic, 8k, purple and lila neon accents, C DESIGN LAB luxury aesthetic';
       const fullPrompt = `${userPrompt}, ${stylePreset}`;
+      const randomSeed = Math.floor(Math.random() * 1000000);
+      const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(fullPrompt)}?width=1080&height=1350&nologo=true&model=flux&seed=${randomSeed}`;
 
-      const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(fullPrompt)}?width=1080&height=1350&nologo=true&model=flux&seed=${Date.now()}`;
-
-      setResult({
-        url: imageUrl,
-        advice: `C DESIGN LAB ha sintetizado tu visión "${userPrompt}" bajo nuestra estética luxury para crear esta pieza exclusiva.`,
-        tags: ['c-design-lab', 'luxury', 'editorial', 'haute-couture', '8k'],
-        ready: true,
-        error: false
-      });
-
-      setShowResults(true);
-
+      // Pre-cargar la imagen para asegurar que esté lista antes de mostrarla
       const img = new Image();
       img.src = imageUrl;
+      
+      img.onload = () => {
+        setResult({
+          url: imageUrl,
+          advice: `C DESIGN LAB ha sintetizado tu visión "${userPrompt}" bajo nuestra estética luxury para crear esta pieza exclusiva.`,
+          tags: ['c-design-lab', 'luxury', 'editorial', 'haute-couture', '8k'],
+          ready: true,
+          error: false
+        });
+        setShowResults(true);
+        setIsGenerating(false);
+      };
+
+      img.onerror = () => {
+        setResult(prev => ({ ...prev, ready: true, error: true }));
+        setShowResults(true);
+        setIsGenerating(false);
+      };
 
     } catch (e: any) {
       console.error('C Design Lab Error:', e);
       setResult(prev => ({ ...prev, ready: true, error: true }));
       setShowResults(true);
-    } finally {
       setIsGenerating(false);
     }
   };
