@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { cn } from '../lib/utils';
-import { Upload, Sparkles, Loader2, ChevronLeft } from 'lucide-react';
+import { Upload, Sparkles, Loader2, ChevronLeft, Download } from 'lucide-react';
 
 const assetFiles = import.meta.glob('../assets/*.{png,jpg,jpeg,svg,webp}', { eager: true, as: 'url' });
 
@@ -37,8 +37,8 @@ const MOCK_GALLERY: Record<string, string[]> = {
 
 const WAITING_MESSAGES = [
   "Nova está analizando tus facciones...",
-  "Calculando puntos de anclaje biométricos...",
-  "Sincronizando diseño con Gemini...",
+  "Detectando arquitectura facial Gemini...",
+  "Sincronizando diseño de alta costura...",
   "Renderizando edición premium...",
 ];
 
@@ -89,45 +89,47 @@ export const IALab = () => {
       let loaded = 0;
       const checkLoaded = () => {
         if (++loaded === 2) {
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-          if (!ctx) return reject('No ctx');
-          
-          canvas.width = 1024;
-          canvas.height = 1024;
+          try {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return reject('No ctx');
+            
+            canvas.width = 1024;
+            canvas.height = 1024;
 
-          // 1. Dibujar Foto Usuario Escalada
-          const scale = Math.max(canvas.width / userImg.width, canvas.height / userImg.height);
-          const x = (canvas.width - userImg.width * scale) / 2;
-          const y = (canvas.height - userImg.height * scale) / 2;
-          ctx.drawImage(userImg, x, y, userImg.width * scale, userImg.height * scale);
+            // 1. Dibujar Foto Usuario (Base)
+            const scale = Math.max(canvas.width / userImg.width, canvas.height / userImg.height);
+            const x = (canvas.width - userImg.width * scale) / 2;
+            const y = (canvas.height - userImg.height * scale) / 2;
+            ctx.drawImage(userImg, x, y, userImg.width * scale, userImg.height * scale);
 
-          // 2. Posicionamiento Inteligente (Coordenadas 0-100)
-          // Calculamos el centro de los ojos
-          const lx = (landmarks.left_eye.x / 100) * canvas.width;
-          const ly = (landmarks.left_eye.y / 100) * canvas.height;
-          const rx = (landmarks.right_eye.x / 100) * canvas.width;
-          const ry = (landmarks.right_eye.y / 100) * canvas.height;
-          
-          const centerX = (lx + rx) / 2;
-          const centerY = (ly + ry) / 2;
-          const eyeDist = Math.sqrt(Math.pow(rx - lx, 2) + Math.pow(ry - ly, 2));
-          const angle = Math.atan2(ry - ly, rx - lx);
-          
-          ctx.save();
-          ctx.translate(centerX, centerY);
-          ctx.rotate(angle);
-          
-          // Escalamos la máscara proporcionalmente a la distancia de los ojos
-          // El asset original suele tener una distancia ocular 'standard' a escala 1:1
-          const maskScale = eyeDist / (canvas.width * 0.28); 
-          const mw = assetImg.width * maskScale;
-          const mh = assetImg.height * maskScale;
-          
-          ctx.drawImage(assetImg, -mw/2, -mh/2.2, mw, mh);
-          ctx.restore();
+            // 2. Render de Máscara Inteligente (Anclada a Gemini)
+            const lx = ((landmarks.left_eye.x || 50) / 100) * canvas.width;
+            const ly = ((landmarks.left_eye.y || 40) / 100) * canvas.height;
+            const rx = ((landmarks.right_eye.x || 60) / 100) * canvas.width;
+            const ry = ((landmarks.right_eye.y || 40) / 100) * canvas.height;
+            
+            const centerX = (lx + rx) / 2;
+            const centerY = (ly + ry) / 2;
+            const eyeDist = Math.sqrt(Math.pow(rx - lx, 2) + Math.pow(ry - ly, 2));
+            const angle = Math.atan2(ry - ly, rx - lx);
+            
+            ctx.save();
+            ctx.translate(centerX, centerY);
+            ctx.rotate(angle);
+            
+            // Proporción áurea de la máscara
+            const maskScale = (eyeDist / (canvas.width * 0.28)) || 1.0; 
+            const mw = assetImg.width * maskScale;
+            const mh = assetImg.height * maskScale;
+            
+            ctx.drawImage(assetImg, -mw/2, -mh/2.2, mw, mh);
+            ctx.restore();
 
-          resolve(canvas.toDataURL('image/jpeg', 0.9));
+            resolve(canvas.toDataURL('image/jpeg', 0.95));
+          } catch (e) {
+            reject(e);
+          }
         }
       };
 
@@ -157,9 +159,10 @@ export const IALab = () => {
         body: JSON.stringify({ image: cleanUserPhoto, template: absoluteAssetUrl })
       });
 
-      if (!response.ok) throw new Error('Gemini Error');
+      if (!response.ok) throw new Error('Gemini Pipeline Error');
       const data = await response.json();
 
+      // Generar Imagen Final antes de mostrar resultados
       const finalUrl = await renderSmartRetouch(userPhoto, absoluteAssetUrl, data.landmarks);
 
       setResult({
@@ -169,82 +172,102 @@ export const IALab = () => {
         ready: true,
         error: false
       });
+      
+      setShowResults(true); // Solo mostramos cuando el renderizado del canvas terminó
     } catch (e: any) {
-      console.error(e);
+      console.error('Nova Lab Error:', e);
       setResult(prev => ({ ...prev, ready: true, error: true }));
+      setShowResults(true);
     } finally {
       setIsGenerating(false);
-      setShowResults(true);
     }
   };
 
   return (
-    <div className="min-h-screen bg-bg-deep font-sans text-text-primary p-6 md:p-12">
-      <nav className="relative z-10 mb-12 flex justify-between items-center">
+    <div className="min-h-screen bg-bg-deep font-sans text-text-primary p-6 md:p-12 overflow-x-hidden">
+      <nav className="relative z-10 mb-12 flex justify-between items-center max-w-7xl mx-auto">
         <Link to="/" className="flex items-center gap-2 text-lilac-glow hover:text-white transition-colors group">
           <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-          <span className="text-[10px] uppercase tracking-widest font-bold">Volver</span>
+          <span className="text-[10px] uppercase tracking-[0.3em] font-bold">Back</span>
         </Link>
         <div className="text-right">
-          <h1 className="text-2xl md:text-5xl font-serif italic text-white uppercase tracking-widest">Nova Lab</h1>
-          <p className="text-[10px] text-lilac-neon mt-2 uppercase tracking-widest">C DESIGN IA · Premium</p>
+          <h1 className="text-3xl md:text-6xl font-serif italic text-white uppercase tracking-tighter">Nova Lab</h1>
+          <p className="text-[10px] text-lilac-neon mt-2 uppercase tracking-[0.5em] font-medium">C DESIGN IA · Premium Edition</p>
         </div>
       </nav>
 
-      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-10">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10">
         <div className="lg:col-span-8 space-y-8">
-          <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-6 shadow-2xl">
-            <div className="flex gap-4 mb-8 overflow-x-auto pb-2">
+          <div className="backdrop-blur-2xl bg-white/5 border border-white/10 rounded-[2.5rem] p-8 md:p-10 shadow-[0_0_50px_rgba(0,0,0,0.3)]">
+            <div className="flex gap-6 mb-12 overflow-x-auto pb-4 scrollbar-hide">
               {CATEGORIES.map((cat) => (
                 <button
                   key={cat.id}
                   onClick={() => { setActiveCategory(cat.id); setSelectedAsset(null); }}
                   className={cn(
-                    "px-6 py-3 text-[10px] font-bold rounded-lg border transition-all uppercase whitespace-nowrap",
-                    activeCategory === cat.id ? "bg-lilac-neon/20 border-lilac-neon text-white" : "bg-transparent border-white/10 text-white/50"
+                    "px-8 py-4 text-xs font-bold rounded-2xl border transition-all duration-500 uppercase whitespace-nowrap tracking-widest",
+                    activeCategory === cat.id 
+                      ? "bg-lilac-neon border-lilac-neon text-white shadow-[0_0_20px_rgba(168,85,247,0.4)] scale-105" 
+                      : "bg-transparent border-white/5 text-white/30 hover:border-white/20 hover:text-white"
                   )}
                 >
-                  {cat.label}
+                  <span className="mr-3">{cat.icon}</span>{cat.label}
                 </button>
               ))}
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
               {MOCK_GALLERY[activeCategory].map((src, i) => (
-                <div
+                <motion.div
                   key={i}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => setSelectedAsset(src)}
                   className={cn(
-                    "aspect-square rounded-xl overflow-hidden cursor-pointer border-2 transition-all",
-                    selectedAsset === src ? "border-lilac-neon scale-105" : "border-transparent"
+                    "aspect-square rounded-3xl overflow-hidden cursor-pointer border-2 transition-all duration-500 relative group",
+                    selectedAsset === src ? "border-lilac-neon shadow-[0_0_25px_rgba(168,85,247,0.5)]" : "border-white/5 hover:border-white/20"
                   )}
                 >
-                  <img src={src} className="w-full h-full object-cover" alt="Asset" />
-                </div>
+                  <img src={src} className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-700" alt="Asset" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  {selectedAsset === src && (
+                    <div className="absolute top-3 right-3 bg-lilac-neon rounded-full p-1.5 shadow-lg">
+                      <Sparkles className="w-4 h-4 text-white" />
+                    </div>
+                  )}
+                </motion.div>
               ))}
             </div>
           </div>
         </div>
 
-        <div className="lg:col-span-4 flex flex-col gap-8">
-          <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-8 flex flex-col items-center">
-            <h3 className="text-xs font-bold text-lilac-glow mb-6 uppercase tracking-widest">Tu Foto</h3>
+        <div className="lg:col-span-4 flex flex-col gap-10">
+          <div className="backdrop-blur-2xl bg-white/5 border border-white/10 rounded-[2.5rem] p-10 flex flex-col items-center shadow-2xl relative overflow-hidden group">
+            <div className="absolute inset-0 bg-gradient-to-br from-lilac-neon/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+            <h3 className="text-xs font-bold text-lilac-glow mb-8 uppercase tracking-[0.3em] relative z-10">Portrait Profile</h3>
             <div
               onClick={() => fileInputRef.current?.click()}
               className={cn(
-                "w-48 h-48 rounded-full border-2 border-dashed border-white/20 flex items-center justify-center cursor-pointer overflow-hidden relative",
-                userPhoto && "border-solid border-lilac-neon"
+                "w-56 h-56 rounded-full border-2 border-dashed border-white/10 flex items-center justify-center cursor-pointer overflow-hidden relative z-10 transition-all duration-700 hover:scale-105",
+                userPhoto && "border-solid border-lilac-neon shadow-[0_0_30px_rgba(168,85,247,0.3)]"
               )}
             >
-              {userPhoto ? <img src={userPhoto} className="w-full h-full object-cover" /> : <Upload className="w-8 h-8 text-white/20" />}
+              {userPhoto ? (
+                <img src={userPhoto} className="w-full h-full object-cover" />
+              ) : (
+                <div className="text-center group-hover:scale-110 transition-transform">
+                  <Upload className="w-10 h-10 text-white/20 mx-auto mb-3" />
+                  <span className="text-[10px] uppercase tracking-widest text-white/40">Upload Frontal Photo</span>
+                </div>
+              )}
             </div>
             <input type="file" ref={fileInputRef} className="hidden" onChange={handlePhotoUpload} />
             <button
               onClick={handleGenerate}
               disabled={isGenerating || !userPhoto || !selectedAsset}
-              className="w-full mt-10 py-5 rounded-xl text-xs font-bold tracking-widest text-white bg-gradient-to-r from-lilac-neon to-purple-600 disabled:opacity-30 transition-all uppercase"
+              className="w-full mt-12 py-6 rounded-2xl text-[10px] font-bold tracking-[0.4em] text-white bg-gradient-to-r from-lilac-neon via-purple-600 to-indigo-700 disabled:opacity-20 hover:brightness-110 active:scale-95 transition-all uppercase shadow-xl relative z-10"
             >
-              {isGenerating ? <Loader2 className="animate-spin mx-auto w-5 h-5" /> : "Fusionar con Gemini ✨"}
+              {isGenerating ? <Loader2 className="animate-spin mx-auto w-5 h-5" /> : "FUSE WITH GEMINI ✨"}
             </button>
           </div>
         </div>
@@ -252,34 +275,74 @@ export const IALab = () => {
 
       <AnimatePresence>
         {showResults && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md overflow-y-auto">
-            <div className="w-full max-w-xl flex flex-col items-center py-10">
-              <div className="w-full aspect-square rounded-3xl overflow-hidden border border-lilac-neon shadow-2xl relative bg-black">
-                {result.url && <img src={result.url} className="w-full h-full object-cover" />}
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }} 
+            className="fixed inset-0 z-[2000] flex items-center justify-center p-6 bg-black/95 backdrop-blur-2xl overflow-y-auto"
+          >
+            <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+              <div className="flex flex-col items-center gap-6">
+                <div className="w-full aspect-square rounded-[3rem] overflow-hidden border border-lilac-neon shadow-[0_0_70px_rgba(168,85,247,0.4)] relative bg-black group">
+                  {result.url && (
+                    <motion.img 
+                      initial={{ scale: 1.1, opacity: 0 }} 
+                      animate={{ scale: 1, opacity: 1 }} 
+                      src={result.url} 
+                      className="w-full h-full object-cover" 
+                      alt="Resultado Nova" 
+                    />
+                  )}
+                  {!result.url && !result.error && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <Loader2 className="w-12 h-12 text-lilac-neon animate-spin" />
+                    </div>
+                  )}
+                </div>
+                
+                {result.url && (
+                  <motion.a 
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    href={result.url} 
+                    download="nova-premium-design.jpg" 
+                    className="flex items-center gap-3 px-12 py-5 rounded-2xl font-bold text-xs text-white bg-lilac-neon hover:bg-lilac-glow shadow-[0_0_30px_rgba(168,85,247,0.5)] transition-all uppercase tracking-[0.2em] relative z-[2010]"
+                  >
+                    <Download className="w-5 h-5" /> Download Result
+                  </motion.a>
+                )}
               </div>
 
-              <div className="mt-8 text-center space-y-6 max-w-md">
-                <div className="backdrop-blur-xl bg-white/5 border border-white/10 p-6 rounded-2xl relative">
-                  <Sparkles className="absolute -top-3 -left-3 w-6 h-6 text-lilac-neon" />
-                  <p className="text-sm text-lilac-glow italic leading-relaxed">
-                    "{result.advice || 'Generando consejo personalizado...'}"
+              <div className="flex flex-col gap-8 text-left h-full justify-center">
+                <div className="space-y-4">
+                  <h2 className="text-4xl md:text-6xl font-serif italic text-white leading-none">Nova Vision</h2>
+                  <p className="text-[10px] text-lilac-neon uppercase tracking-[0.6em] font-medium">Digital Editorial Edition</p>
+                </div>
+
+                <div className="backdrop-blur-3xl bg-white/5 border border-white/10 p-10 rounded-[2.5rem] relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 p-6 opacity-20 group-hover:opacity-100 transition-opacity">
+                    <Sparkles className="w-8 h-8 text-lilac-neon" />
+                  </div>
+                  <h3 className="text-[10px] underline decoration-lilac-neon/50 underline-offset-8 uppercase tracking-[0.3em] text-white/50 font-bold mb-8">AI Designer Analysis</h3>
+                  <p className="text-xl md:text-2xl font-serif text-lilac-glow leading-relaxed italic drop-shadow-sm">
+                    "{result.advice || 'Gemini está sintetizando tu estilo...'}"
                   </p>
                 </div>
 
-                <div className="flex flex-wrap gap-2 justify-center">
+                <div className="flex flex-wrap gap-3">
                   {result.tags.map((tag, i) => (
-                    <span key={i} className="px-3 py-1 bg-white/5 rounded-full text-[9px] uppercase tracking-widest text-white/40">#{tag}</span>
+                    <span key={i} className="px-5 py-2 bg-white/5 border border-white/10 rounded-full text-[9px] font-bold uppercase tracking-widest text-white/40 hover:text-lilac-neon transition-colors cursor-default">
+                      # {tag}
+                    </span>
                   ))}
                 </div>
 
-                <div className="flex flex-col gap-4">
-                  {result.url && (
-                    <a href={result.url} download="nova-ia.jpg" className="w-full py-4 rounded-xl font-bold text-xs text-white bg-lilac-neon uppercase tracking-widest">
-                      Descargar Resultado
-                    </a>
-                  )}
-                  <button onClick={() => setShowResults(false)} className="text-[10px] text-white/30 uppercase tracking-widest">Cerrar</button>
-                </div>
+                <button 
+                  onClick={() => setShowResults(false)} 
+                  className="w-fit text-[10px] text-white/20 hover:text-white uppercase tracking-[0.4em] transition-all border-b border-white/0 hover:border-white/20 pb-1"
+                >
+                  DISMISS LABORATORY
+                </button>
               </div>
             </div>
           </motion.div>
@@ -288,10 +351,15 @@ export const IALab = () => {
 
       <AnimatePresence>
         {isGenerating && (
-          <div className="fixed inset-0 z-[1100] flex items-center justify-center bg-black/80 backdrop-blur-sm">
-             <div className="text-center">
-                <Loader2 className="w-12 h-12 text-lilac-neon animate-spin mx-auto mb-6" />
-                <p className="text-lg font-serif text-lilac-glow animate-pulse">{WAITING_MESSAGES[currentMessage]}</p>
+          <div className="fixed inset-0 z-[3000] flex items-center justify-center bg-black/90 backdrop-blur-xl">
+             <div className="text-center space-y-8">
+                <div className="relative w-24 h-24 mx-auto">
+                    <Loader2 className="w-24 h-24 text-lilac-neon animate-spin" />
+                    <Sparkles className="absolute inset-0 m-auto w-8 h-8 text-lilac-glow animate-pulse" />
+                </div>
+                <p className="text-2xl font-serif italic text-lilac-glow animate-pulse tracking-wide">
+                    {WAITING_MESSAGES[currentMessage]}
+                </p>
              </div>
           </div>
         )}
