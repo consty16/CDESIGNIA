@@ -97,7 +97,7 @@ export const IALab = () => {
             canvas.width = 1024;
             canvas.height = 1024;
 
-            // 1. Dibujar Foto Usuario (Base)
+            // 1. Dibujar Usuario (Base)
             const scale = Math.max(canvas.width / userImg.width, canvas.height / userImg.height);
             const x = (canvas.width - userImg.width * scale) / 2;
             const y = (canvas.height - userImg.height * scale) / 2;
@@ -118,7 +118,7 @@ export const IALab = () => {
             ctx.translate(centerX, centerY);
             ctx.rotate(angle);
             
-            // Proporción áurea de la máscara
+            // Proporción de la máscara
             const maskScale = (eyeDist / (canvas.width * 0.28)) || 1.0; 
             const mw = assetImg.width * maskScale;
             const mh = assetImg.height * maskScale;
@@ -162,7 +162,7 @@ export const IALab = () => {
       if (!response.ok) throw new Error('Gemini Pipeline Error');
       const data = await response.json();
 
-      // Generar Imagen Final antes de mostrar resultados
+      // Renderización forzada y automática tras recibir la data
       const finalUrl = await renderSmartRetouch(userPhoto, absoluteAssetUrl, data.landmarks);
 
       setResult({
@@ -173,7 +173,7 @@ export const IALab = () => {
         error: false
       });
       
-      setShowResults(true); // Solo mostramos cuando el renderizado del canvas terminó
+      setShowResults(true); 
     } catch (e: any) {
       console.error('Nova Lab Error:', e);
       setResult(prev => ({ ...prev, ready: true, error: true }));
@@ -188,51 +188,49 @@ export const IALab = () => {
       <nav className="relative z-10 mb-12 flex justify-between items-center max-w-7xl mx-auto">
         <Link to="/" className="flex items-center gap-2 text-lilac-glow hover:text-white transition-colors group">
           <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-          <span className="text-[10px] uppercase tracking-[0.3em] font-bold">Back</span>
+          <span className="text-[10px] uppercase tracking-widest font-bold">Volver</span>
         </Link>
         <div className="text-right">
           <h1 className="text-3xl md:text-6xl font-serif italic text-white uppercase tracking-tighter">Nova Lab</h1>
-          <p className="text-[10px] text-lilac-neon mt-2 uppercase tracking-[0.5em] font-medium">C DESIGN IA · Premium Edition</p>
+          <p className="text-[10px] text-lilac-neon mt-2 uppercase tracking-widest font-medium">C DESIGN IA · Premium Edition</p>
         </div>
       </nav>
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10">
         <div className="lg:col-span-8 space-y-8">
-          <div className="backdrop-blur-2xl bg-white/5 border border-white/10 rounded-[2.5rem] p-8 md:p-10 shadow-[0_0_50px_rgba(0,0,0,0.3)]">
-            <div className="flex gap-6 mb-12 overflow-x-auto pb-4 scrollbar-hide">
+          <div className="backdrop-blur-2xl bg-white/5 border border-white/10 rounded-[2.5rem] p-8 md:p-10 shadow-2xl">
+            <div className="flex gap-4 mb-10 overflow-x-auto pb-2 scrollbar-hide">
               {CATEGORIES.map((cat) => (
                 <button
                   key={cat.id}
                   onClick={() => { setActiveCategory(cat.id); setSelectedAsset(null); }}
                   className={cn(
-                    "px-8 py-4 text-xs font-bold rounded-2xl border transition-all duration-500 uppercase whitespace-nowrap tracking-widest",
+                    "px-8 py-3 text-[10px] font-bold rounded-xl border transition-all duration-500 uppercase tracking-widest",
                     activeCategory === cat.id 
-                      ? "bg-lilac-neon border-lilac-neon text-white shadow-[0_0_20px_rgba(168,85,247,0.4)] scale-105" 
+                      ? "bg-lilac-neon border-lilac-neon text-white shadow-[0_0_20px_#a855f7]" 
                       : "bg-transparent border-white/5 text-white/30 hover:border-white/20 hover:text-white"
                   )}
                 >
-                  <span className="mr-3">{cat.icon}</span>{cat.label}
+                  <span className="mr-2">{cat.icon}</span>{cat.label}
                 </button>
               ))}
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {MOCK_GALLERY[activeCategory].map((src, i) => (
                 <motion.div
                   key={i}
                   whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
                   onClick={() => setSelectedAsset(src)}
                   className={cn(
-                    "aspect-square rounded-3xl overflow-hidden cursor-pointer border-2 transition-all duration-500 relative group",
-                    selectedAsset === src ? "border-lilac-neon shadow-[0_0_25px_rgba(168,85,247,0.5)]" : "border-white/5 hover:border-white/20"
+                    "aspect-square rounded-3xl overflow-hidden cursor-pointer border-2 transition-all relative group",
+                    selectedAsset === src ? "border-lilac-neon shadow-[0_0_25px_#a855f7]" : "border-white/5 hover:border-white/20"
                   )}
                 >
-                  <img src={src} className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-700" alt="Asset" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <img src={src} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Asset" />
                   {selectedAsset === src && (
-                    <div className="absolute top-3 right-3 bg-lilac-neon rounded-full p-1.5 shadow-lg">
-                      <Sparkles className="w-4 h-4 text-white" />
+                    <div className="absolute top-2 right-2 bg-lilac-neon rounded-full p-1.5 border border-white/20">
+                      <Sparkles className="w-3 h-3 text-white" />
                     </div>
                   )}
                 </motion.div>
@@ -241,23 +239,23 @@ export const IALab = () => {
           </div>
         </div>
 
-        <div className="lg:col-span-4 flex flex-col gap-10">
-          <div className="backdrop-blur-2xl bg-white/5 border border-white/10 rounded-[2.5rem] p-10 flex flex-col items-center shadow-2xl relative overflow-hidden group">
+        <div className="lg:col-span-4 flex flex-col gap-8">
+          <div className="backdrop-blur-2xl bg-white/5 border border-white/10 rounded-[2.5rem] p-10 flex flex-col items-center shadow-2xl relative group overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-lilac-neon/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-            <h3 className="text-xs font-bold text-lilac-glow mb-8 uppercase tracking-[0.3em] relative z-10">Portrait Profile</h3>
+            <h3 className="text-xs font-bold text-lilac-glow mb-8 uppercase tracking-[0.3em] relative z-10">Tu Perfil</h3>
             <div
               onClick={() => fileInputRef.current?.click()}
               className={cn(
-                "w-56 h-56 rounded-full border-2 border-dashed border-white/10 flex items-center justify-center cursor-pointer overflow-hidden relative z-10 transition-all duration-700 hover:scale-105",
-                userPhoto && "border-solid border-lilac-neon shadow-[0_0_30px_rgba(168,85,247,0.3)]"
+                "w-48 h-48 rounded-full border-2 border-dashed border-white/10 flex items-center justify-center cursor-pointer overflow-hidden relative z-10 transition-all duration-700 hover:scale-105",
+                userPhoto && "border-solid border-lilac-neon shadow-[0_0_20px_#a855f7]"
               )}
             >
               {userPhoto ? (
-                <img src={userPhoto} className="w-full h-full object-cover" />
+                <img src={userPhoto} className="w-full h-full object-cover" alt="User" />
               ) : (
                 <div className="text-center group-hover:scale-110 transition-transform">
-                  <Upload className="w-10 h-10 text-white/20 mx-auto mb-3" />
-                  <span className="text-[10px] uppercase tracking-widest text-white/40">Upload Frontal Photo</span>
+                  <Upload className="w-8 h-8 text-white/20 mx-auto mb-2" />
+                  <span className="text-[10px] uppercase tracking-widest text-white/40">Sube tu foto</span>
                 </div>
               )}
             </div>
@@ -265,9 +263,9 @@ export const IALab = () => {
             <button
               onClick={handleGenerate}
               disabled={isGenerating || !userPhoto || !selectedAsset}
-              className="w-full mt-12 py-6 rounded-2xl text-[10px] font-bold tracking-[0.4em] text-white bg-gradient-to-r from-lilac-neon via-purple-600 to-indigo-700 disabled:opacity-20 hover:brightness-110 active:scale-95 transition-all uppercase shadow-xl relative z-10"
+              className="w-full mt-12 py-5 rounded-2xl text-[10px] font-bold tracking-[0.3em] text-white bg-gradient-to-r from-lilac-neon to-purple-700 disabled:opacity-20 hover:brightness-110 active:scale-95 transition-all uppercase shadow-xl relative z-10"
             >
-              {isGenerating ? <Loader2 className="animate-spin mx-auto w-5 h-5" /> : "FUSE WITH GEMINI ✨"}
+              {isGenerating ? <Loader2 className="animate-spin mx-auto w-5 h-5" /> : "FUSIONAR CON GEMINI ✨"}
             </button>
           </div>
         </div>
@@ -281,68 +279,65 @@ export const IALab = () => {
             exit={{ opacity: 0 }} 
             className="fixed inset-0 z-[2000] flex items-center justify-center p-6 bg-black/95 backdrop-blur-2xl overflow-y-auto"
           >
-            <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-              <div className="flex flex-col items-center gap-6">
-                <div className="w-full aspect-square rounded-[3rem] overflow-hidden border border-lilac-neon shadow-[0_0_70px_rgba(168,85,247,0.4)] relative bg-black group">
-                  {result.url && (
-                    <motion.img 
-                      initial={{ scale: 1.1, opacity: 0 }} 
-                      animate={{ scale: 1, opacity: 1 }} 
-                      src={result.url} 
-                      className="w-full h-full object-cover" 
-                      alt="Resultado Nova" 
-                    />
-                  )}
-                  {!result.url && !result.error && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <Loader2 className="w-12 h-12 text-lilac-neon animate-spin" />
-                    </div>
-                  )}
-                </div>
-                
+            <div className="w-full max-w-xl flex flex-col items-center py-10">
+              <h2 className="text-3xl font-serif italic text-white mb-2 text-center uppercase tracking-widest drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">Nova Vision ✨</h2>
+              <p className="text-[10px] text-lilac-neon uppercase tracking-[0.4em] mb-10 text-center italic">Edición Digital Premium</p>
+
+              <div className="w-full aspect-square rounded-[2rem] overflow-hidden border border-lilac-neon shadow-[0_0_60px_rgba(168,85,247,0.4)] relative bg-black group">
                 {result.url && (
-                  <motion.a 
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    href={result.url} 
-                    download="nova-premium-design.jpg" 
-                    className="flex items-center gap-3 px-12 py-5 rounded-2xl font-bold text-xs text-white bg-lilac-neon hover:bg-lilac-glow shadow-[0_0_30px_rgba(168,85,247,0.5)] transition-all uppercase tracking-[0.2em] relative z-[2010]"
-                  >
-                    <Download className="w-5 h-5" /> Download Result
-                  </motion.a>
+                  <motion.img 
+                    initial={{ scale: 1.1, opacity: 0 }} 
+                    animate={{ scale: 1, opacity: 1 }} 
+                    src={result.url} 
+                    className="w-full h-full object-cover" 
+                    alt="Resultado Nova" 
+                  />
+                )}
+                {!result.url && !result.error && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Loader2 className="w-10 h-10 text-lilac-neon animate-spin" />
+                  </div>
+                )}
+                {result.error && (
+                  <div className="absolute inset-0 flex items-center justify-center p-8 text-center bg-black/80">
+                    <p className="text-xs text-red-400 uppercase tracking-widest">Error en el renderizado inteligente</p>
+                  </div>
                 )}
               </div>
 
-              <div className="flex flex-col gap-8 text-left h-full justify-center">
-                <div className="space-y-4">
-                  <h2 className="text-4xl md:text-6xl font-serif italic text-white leading-none">Nova Vision</h2>
-                  <p className="text-[10px] text-lilac-neon uppercase tracking-[0.6em] font-medium">Digital Editorial Edition</p>
-                </div>
-
-                <div className="backdrop-blur-3xl bg-white/5 border border-white/10 p-10 rounded-[2.5rem] relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 p-6 opacity-20 group-hover:opacity-100 transition-opacity">
-                    <Sparkles className="w-8 h-8 text-lilac-neon" />
+              <div className="mt-10 text-center space-y-6 w-full max-w-md">
+                <div className="backdrop-blur-xl bg-white/5 border border-white/10 p-8 rounded-3xl relative overflow-hidden group shadow-xl">
+                  <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition-opacity">
+                    <Sparkles className="w-6 h-6 text-lilac-neon" />
                   </div>
-                  <h3 className="text-[10px] underline decoration-lilac-neon/50 underline-offset-8 uppercase tracking-[0.3em] text-white/50 font-bold mb-8">AI Designer Analysis</h3>
-                  <p className="text-xl md:text-2xl font-serif text-lilac-glow leading-relaxed italic drop-shadow-sm">
+                  <h3 className="text-[9px] uppercase tracking-[0.4em] text-white/40 font-bold mb-4">Análisis del Diseñador</h3>
+                  <p className="text-xl font-serif text-white/90 leading-relaxed italic">
                     "{result.advice || 'Gemini está sintetizando tu estilo...'}"
                   </p>
                 </div>
 
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-2 justify-center">
                   {result.tags.map((tag, i) => (
-                    <span key={i} className="px-5 py-2 bg-white/5 border border-white/10 rounded-full text-[9px] font-bold uppercase tracking-widest text-white/40 hover:text-lilac-neon transition-colors cursor-default">
+                    <span key={i} className="px-4 py-1.5 bg-white/5 border border-white/5 rounded-full text-[8px] uppercase tracking-[0.2em] text-white/30 hover:text-lilac-neon transition-colors">
                       # {tag}
                     </span>
                   ))}
                 </div>
 
-                <button 
-                  onClick={() => setShowResults(false)} 
-                  className="w-fit text-[10px] text-white/20 hover:text-white uppercase tracking-[0.4em] transition-all border-b border-white/0 hover:border-white/20 pb-1"
-                >
-                  DISMISS LABORATORY
-                </button>
+                <div className="flex flex-col gap-4 mt-8">
+                  {result.url && (
+                    <motion.a 
+                      initial={{ y: 10, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      href={result.url} 
+                      download="nova-design.jpg" 
+                      className="w-full py-5 rounded-2xl font-bold text-xs text-white bg-lilac-neon hover:bg-lilac-glow shadow-[0_0_30px_rgba(168,85,247,0.5)] transition-all uppercase tracking-[0.2em] flex items-center justify-center gap-3 relative z-[2010]"
+                    >
+                      <Download className="w-4 h-4" /> DESCARGAR DISEÑO
+                    </motion.a>
+                  )}
+                  <button onClick={() => setShowResults(false)} className="text-[9px] text-white/20 uppercase tracking-[0.4em] hover:text-white transition-colors">Cerrar Laboratorio</button>
+                </div>
               </div>
             </div>
           </motion.div>

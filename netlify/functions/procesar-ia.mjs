@@ -12,7 +12,7 @@ export const handler = async (event) => {
     if (!API_KEY) {
       return { 
         statusCode: 500, 
-        body: JSON.stringify({ error: "GEMINI_API_KEY no configurada en Netlify." }) 
+        body: JSON.stringify({ error: "GEMINI_API_KEY no configurada." }) 
       };
     }
 
@@ -29,48 +29,45 @@ export const handler = async (event) => {
         "right_eye": {"x": 60, "y": 40},
         "mouth": {"x": 55, "y": 60}
       },
-      "advice": "Un consejo de estilo breve y profesional...",
-      "tags": ["elegante", "nova"]
+      "advice": "Consejo editorial de moda...",
+      "tags": ["estilo", "nova"]
     }`;
 
-    // Descargar el asset (template) para que Gemini lo procese
     const assetResponse = await fetch(template);
     const assetBuffer = await assetResponse.arrayBuffer();
 
+    // Usando los campos exactos solicitados por el usuario
     const result = await model.generateContent([
       prompt,
       {
-        inlineData: {
+        inline_data: {
           data: image,
-          mimeType: "image/jpeg",
+          mime_type: "image/jpeg",
         },
       },
       {
-        inlineData: {
+        inline_data: {
           data: Buffer.from(assetBuffer).toString("base64"),
-          mimeType: "image/png",
+          mime_type: "image/png",
         },
       },
     ]);
 
     const response = await result.response;
-    // Extraer el texto y limpiar posibles bloques de código de markdown
     let text = response.text();
-    text = text.replace(/```json|```/g, "").trim();
     
+    // Limpieza robusta de Markdown
+    text = text.replace(/```json|```/g, "").trim();
     const analysis = JSON.parse(text);
 
     return {
       statusCode: 200,
-      headers: { 
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*" 
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(analysis)
     };
 
   } catch (error) {
-    console.error("Error backend:", error.message);
+    console.error("Backend Error:", error);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: error.message })
