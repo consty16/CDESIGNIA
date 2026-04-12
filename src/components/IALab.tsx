@@ -134,8 +134,8 @@ export const IALab = () => {
                   onClick={() => { setActiveCategory(cat.id); setSelectedAsset(null); }}
                   className={cn(
                     "px-8 py-3 text-[10px] font-bold rounded-xl border transition-all duration-500 uppercase tracking-widest shrink-0",
-                    activeCategory === cat.id 
-                      ? "bg-lilac-neon border-lilac-neon text-white shadow-[0_0_20px_#a855f7]" 
+                    activeCategory === cat.id
+                      ? "bg-lilac-neon border-lilac-neon text-white shadow-[0_0_20px_#a855f7]"
                       : "bg-transparent border-white/5 text-white/30 hover:border-white/20 hover:text-white"
                   )}
                 >
@@ -170,7 +170,7 @@ export const IALab = () => {
         <div className="lg:col-span-4 flex flex-col gap-8">
           <div className="backdrop-blur-2xl bg-white/5 border border-white/10 rounded-[2.5rem] p-10 shadow-2xl relative group overflow-hidden">
             <h3 className="text-[10px] font-bold text-lilac-glow mb-8 uppercase tracking-[0.3em]">2. Describe tu Visión</h3>
-            
+
             <textarea
               value={userPrompt}
               onChange={(e) => setUserPrompt(e.target.value)}
@@ -201,10 +201,10 @@ export const IALab = () => {
 
       <AnimatePresence>
         {showResults && (
-          <motion.div 
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
-            exit={{ opacity: 0 }} 
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             className="fixed inset-0 z-[2000] flex items-center justify-center p-6 bg-black/95 backdrop-blur-2xl overflow-y-auto"
           >
             <div className="w-full max-w-xl flex flex-col items-center py-10">
@@ -213,12 +213,12 @@ export const IALab = () => {
 
               <div className="w-full aspect-square rounded-[2rem] overflow-hidden border border-lilac-neon shadow-[0_0_60px_rgba(168,85,247,0.4)] relative bg-black group">
                 {result.url && (
-                  <motion.img 
-                    initial={{ scale: 1.1, opacity: 0 }} 
-                    animate={{ scale: 1, opacity: 1 }} 
-                    src={result.url} 
-                    className="w-full h-full object-cover" 
-                    alt="Nova Creative Design" 
+                  <motion.img
+                    initial={{ scale: 1.1, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    src={result.url}
+                    className="w-full h-full object-cover"
+                    alt="Nova Creative Design"
                   />
                 )}
                 {!result.url && !result.error && (
@@ -230,7 +230,7 @@ export const IALab = () => {
                   <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-black/80 backdrop-blur-md">
                     <p className="text-xs text-lilac-neon uppercase tracking-[0.2em] mb-4">Aviso de Nova</p>
                     <p className="text-sm text-white/80 uppercase tracking-widest font-light leading-relaxed">
-                      Nova está ajustando los detalles finales,<br/>intenta de nuevo.
+                      Nova está ajustando los detalles finales,<br />intenta de nuevo.
                     </p>
                     <button onClick={() => setShowResults(false)} className="mt-8 px-6 py-2 border border-white/10 rounded-full text-[10px] uppercase tracking-widest hover:bg-white/5 transition-colors">Volver a intentar</button>
                   </div>
@@ -258,11 +258,11 @@ export const IALab = () => {
 
                 <div className="flex flex-col gap-4 mt-8">
                   {result.url && (
-                    <motion.a 
+                    <motion.a
                       initial={{ y: 10, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
-                      href={result.url} 
-                      download="nova-design.jpg" 
+                      href={result.url}
+                      download="nova-design.jpg"
                       className="w-full py-5 rounded-2xl font-bold text-xs text-white bg-lilac-neon hover:bg-lilac-glow shadow-[0_0_30px_rgba(168,85,247,0.5)] transition-all uppercase tracking-[0.2em] flex items-center justify-center gap-3 relative z-[2010]"
                     >
                       <Download className="w-4 h-4" /> DESCARGAR DISEÑO
@@ -279,15 +279,15 @@ export const IALab = () => {
       <AnimatePresence>
         {isGenerating && (
           <div className="fixed inset-0 z-[3000] flex items-center justify-center bg-black/90 backdrop-blur-xl">
-             <div className="text-center space-y-8">
-                <div className="relative w-24 h-24 mx-auto">
-                    <Loader2 className="w-24 h-24 text-lilac-neon animate-spin" />
-                    <Sparkles className="absolute inset-0 m-auto w-8 h-8 text-lilac-glow animate-pulse" />
-                </div>
-                <p className="text-2xl font-serif italic text-lilac-glow animate-pulse tracking-wide">
-                    {WAITING_MESSAGES[currentMessage]}
-                </p>
-             </div>
+            <div className="text-center space-y-8">
+              <div className="relative w-24 h-24 mx-auto">
+                <Loader2 className="w-24 h-24 text-lilac-neon animate-spin" />
+                <Sparkles className="absolute inset-0 m-auto w-8 h-8 text-lilac-glow animate-pulse" />
+              </div>
+              <p className="text-2xl font-serif italic text-lilac-glow animate-pulse tracking-wide">
+                {WAITING_MESSAGES[currentMessage]}
+              </p>
+            </div>
           </div>
         )}
       </AnimatePresence>
