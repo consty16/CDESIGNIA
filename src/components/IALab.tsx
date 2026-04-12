@@ -46,9 +46,9 @@ const WAITING_MESSAGES = [
 ];
 
 const PROMPTS: Record<string, string> = {
-  "MAQUILLAJE": "Masterpiece, professional studio lighting, high fashion model with artistic crystal makeup, neon fuchsia glow, editorial photography, 8k, ultra realistic, highly detailed skin, beauty campaign, sharp focus, skin pores visible, dramatic violet rim light",
-  "MÁSCARAS": "Masterpiece, professional studio lighting, luxury fashion model wearing elegant ornate mask, deep purple cinematic lighting, hyper-realistic, haute couture, mysterious, 8k, highly detailed skin, sharp focus, cinematic atmosphere, intricate textures",
-  "VESTIDOS": "Masterpiece, professional studio lighting, elegant fashion model wearing luxury evening dress, lila purple aesthetics, vogue editorial style, ultra realistic, 8k, highly detailed skin, sharp focus, expensive fabric texture, soft bokeh background"
+  "MAQUILLAJE": "Photorealistic face swap. High-end fashion editorial. Keep user's facial identity 100% intact. Integrate makeup naturally with studio lighting.",
+  "MÁSCARAS": "Precision face swap. Luxury ornate mask from reference image. Preserve user's eyes, nose, and mouth structure perfectly.",
+  "VESTIDOS": "Professional face swap into luxury dress. Maintain original body posture and facial features. High resolution."
 };
 
 interface ResultState {
