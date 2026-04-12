@@ -11,16 +11,10 @@ exports.handler = async (event) => {
       return { statusCode: 500, body: JSON.stringify({ error: "No se encontró REPLICATE_API_TOKEN en Netlify." }) };
     }
 
-    const PROMPTS = {
-      "MAQUILLAJE": "Masterpiece, professional studio lighting, high fashion model with artistic crystal makeup, neon fuchsia glow, editorial photography, 8k, ultra realistic, highly detailed skin, beauty campaign, sharp focus, skin pores visible, dramatic violet rim light",
-      "MÁSCARAS": "Masterpiece, professional studio lighting, luxury fashion model wearing elegant ornate mask, deep purple cinematic lighting, hyper-realistic, haute couture, mysterious, 8k, highly detailed skin, sharp focus, cinematic atmosphere, intricate textures",
-      "VESTIDOS": "Masterpiece, professional studio lighting, elegant fashion model wearing luxury evening dress, lila purple aesthetics, vogue editorial style, ultra realistic, 8k, highly detailed skin, sharp focus, expensive fabric texture, soft bokeh background"
-    };
+    const targetImageUrl = `data:image/jpeg;base64,${template}`;
+    const swapImageUrl = `data:image/jpeg;base64,${image}`;
 
-    const prompt = PROMPTS[category] || PROMPTS["MÁSCARAS"];
-    const imageDataUrl = `data:image/jpeg;base64,${image}`;
-
-    // ── Paso 1: crear la predicción en Replicate ──
+    // ── Paso 1: crear la predicción en Replicate (lucataco/faceswap) ──
     const createResponse = await fetch("https://api.replicate.com/v1/predictions", {
       method: "POST",
       headers: {
@@ -29,17 +23,10 @@ exports.handler = async (event) => {
         "Prefer": "wait"
       },
       body: JSON.stringify({
-        version: "a07f252abbbd832009640b27f063ea52d87d7a23a185ca165bec23b5adc8deaf",
+        version: "9a42373a1e3463b3989c9733cc951fdb69b2cd37ca473136b13cf8640822588e", 
         input: {
-          image: imageDataUrl,
-          prompt: prompt,
-          negative_prompt: "bad quality, blurry, low resolution, distorted, extra limbs, ugly, watermark, text, grainy",
-          style: "3D", // Estilo base de alta calidad para fofr
-          instant_id_strength: 1.0,
-          denoising_strength: 0.65,
-          prompt_strength: 7,
-          scheduler: "K_EULER_ANCESTRAL",
-          num_inference_steps: 30
+          target_image: targetImageUrl,
+          swap_image: swapImageUrl
         }
       })
     });

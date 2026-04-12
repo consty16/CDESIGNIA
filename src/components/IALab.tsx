@@ -92,51 +92,45 @@ export const IALab = () => {
 
   const generateCanvas = (): Promise<string> => {
     return new Promise((resolve, reject) => {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return reject('No canvas context');
+      const templateImg = new Image();
+      templateImg.crossOrigin = 'anonymous';
+      
+      templateImg.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return reject('No canvas context');
 
-      const userImg = new Image();
-      userImg.onload = () => {
-        canvas.width = userImg.width;
-        canvas.height = userImg.height;
-        ctx.drawImage(userImg, 0, 0);
+        // La base de todo es el ASSET original (Alta Gama)
+        canvas.width = templateImg.width || 1024;
+        canvas.height = templateImg.height || 1024;
 
-        const templateImg = new Image();
-        templateImg.crossOrigin = 'anonymous';
-        templateImg.onload = () => {
-          // Limpiar y optimizar fondo
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const userImg = new Image();
+        userImg.onload = () => {
+          // 1. Fondo Limpio
+          ctx.fillStyle = '#000';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          // 2. Dibujar Usuario (Cover Logic para no deformar)
+          const scale = Math.max(canvas.width / userImg.width, canvas.height / userImg.height);
+          const x = (canvas.width - userImg.width * scale) / 2;
+          const y = (canvas.height - userImg.height * scale) / 2;
           
-          // CAPA 1: Aplicar Filtro Pro al Usuario
-          ctx.filter = 'brightness(1.02) contrast(1.05) saturate(1.1)';
-          ctx.drawImage(userImg, 0, 0);
+          ctx.filter = 'brightness(1.05) contrast(1.02)';
+          ctx.drawImage(userImg, x, y, userImg.width * scale, userImg.height * scale);
           ctx.filter = 'none';
 
-          // CAPA 2: LÓGICA DE CLIPPING MASK / SUPERPOSICIÓN PRO
-          // Si es Maquillaje, usamos un blend que se integre con la piel
-          // Si es Máscara o Vestido, usamos superposición directa (precisa si el asset tiene alpha)
-          if (activeCategory === 'MAQUILLAJE') {
-            ctx.globalCompositeOperation = 'multiply';
-            ctx.globalAlpha = 0.85;
-          } else {
-            ctx.globalCompositeOperation = 'source-over';
-            ctx.globalAlpha = 1.0;
-          }
-          
-          ctx.drawImage(templateImg, 0, 0, canvas.width, canvas.height);
-          
-          // Restaurar modo normal
+          // 3. Superposición del Asset (Diseño Original)
           ctx.globalCompositeOperation = 'source-over';
           ctx.globalAlpha = 1.0;
+          ctx.drawImage(templateImg, 0, 0, canvas.width, canvas.height);
 
           resolve(canvas.toDataURL('image/jpeg', 0.95));
         };
-        templateImg.onerror = () => reject('Error cargando plantilla');
-        templateImg.src = selectedAsset!;
+        userImg.onerror = () => reject('Error cargando foto');
+        userImg.src = userPhoto!;
       };
-      userImg.onerror = () => reject('Error cargando foto');
-      userImg.src = userPhoto!;
+      templateImg.onerror = () => reject('Error cargando plantilla');
+      templateImg.src = selectedAsset!;
     });
   };
 
