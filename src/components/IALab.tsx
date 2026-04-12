@@ -155,7 +155,7 @@ export const IALab = () => {
                     selectedAsset === src ? "border-lilac-neon shadow-[0_0_25px_#a855f7]" : "border-white/5 hover:border-white/20"
                   )}
                 >
-                  <img src={src} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Asset" />
+                  <img src={src} className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110" alt="Asset" />
                   {selectedAsset === src && (
                     <div className="absolute top-2 right-2 bg-lilac-neon rounded-full p-1.5 border border-white/20">
                       <Sparkles className="w-3 h-3 text-white" />
@@ -211,13 +211,13 @@ export const IALab = () => {
               <h2 className="text-3xl font-serif italic text-white mb-2 text-center uppercase tracking-widest drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">C DESIGN LAB ✨</h2>
               <p className="text-[10px] text-lilac-neon uppercase tracking-[0.4em] mb-10 text-center italic">Digital Fashion Creation</p>
 
-              <div className="w-full max-h-[70vh] rounded-[2rem] overflow-hidden border border-lilac-neon shadow-[0_0_60px_rgba(168,85,247,0.4)] relative bg-black/50 group flex items-center justify-center">
+              <div className="w-full max-h-[70vh] rounded-[2rem] overflow-hidden border border-lilac-neon shadow-[0_0_60px_rgba(168,85,247,0.4)] relative bg-black/50 group flex items-center justify-center p-4">
                 {result.url && (
                   <motion.img
                     initial={{ scale: 1.1, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     src={result.url}
-                    className="w-full h-full object-contain max-h-full"
+                    className="max-w-full max-h-full object-contain"
                     alt="C DESIGN LAB Result"
                   />
                 )}
