@@ -2,9 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { cn } from '../lib/utils';
-import { Upload, Sparkles, Loader2, ChevronLeft, Image as ImageIcon } from 'lucide-react';
+import { Upload, Sparkles, Loader2, ChevronLeft } from 'lucide-react';
 
-// Cargador de archivos dinámico para compatibilidad con producción (Vite)
+// Cargador de archivos dinámico para Vite
 const assetFiles = import.meta.glob('../assets/*.{png,jpg,jpeg,svg,webp}', { eager: true, as: 'url' });
 
 const getAssetUrl = (name: string) => {
@@ -45,13 +45,30 @@ const WAITING_MESSAGES = [
   "Optimizando la esencia del diseño tucumano...",
 ];
 
+const PROMPTS: Record<string, string> = {
+  "MAQUILLAJE": "high fashion model with artistic crystal makeup, neon fuchsia glow, editorial photography, 8k, ultra realistic, beauty campaign",
+  "MÁSCARAS": "luxury fashion model wearing elegant ornate mask, deep purple cinematic lighting, hyper-realistic, haute couture, mysterious",
+  "VESTIDOS": "elegant fashion model wearing luxury evening dress, lila purple aesthetics, studio lighting, vogue editorial, ultra realistic"
+};
+
+interface ResultState {
+  url: string | null;
+  ready: boolean;
+  error: boolean;
+}
+
 export const IALab = () => {
   const [activeCategory, setActiveCategory] = useState('MÁSCARAS');
   const [selectedAsset, setSelectedAsset] = useState<string | null>(null);
   const [userPhoto, setUserPhoto] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [currentMessage, setCurrentMessage] = useState(0);
-  const [resultImage, setResultImage] = useState<string | null>(null);
+  const [showResults, setShowResults] = useState(false);
+
+  const [resultCanvas, setResultCanvas] = useState<ResultState>({ url: null, ready: false, error: false });
+  const [resultPollinations, setResultPollinations] = useState<ResultState>({ url: null, ready: false, error: false });
+  const [resultReplicate, setResultReplicate] = useState<ResultState>({ url: null, ready: false, error: false });
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -68,69 +85,171 @@ export const IALab = () => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (prev) => setUserPhoto(prev.target?.result as string);
+      reader.onload = (ev) => setUserPhoto(ev.target?.result as string);
       reader.readAsDataURL(file);
     }
   };
 
+  const generateCanvas = (): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return reject('No canvas context');
+
+      const userImg = new Image();
+      userImg.onload = () => {
+        canvas.width = userImg.width;
+        canvas.height = userImg.height;
+        ctx.drawImage(userImg, 0, 0);
+
+        const templateImg = new Image();
+        templateImg.crossOrigin = 'anonymous';
+        templateImg.onload = () => {
+          const blendMap: Record<string, GlobalCompositeOperation> = {
+            'MAQUILLAJE': 'multiply',
+            'MÁSCARAS': 'overlay',
+            'VESTIDOS': 'multiply',
+          };
+          ctx.globalCompositeOperation = blendMap[activeCategory] || 'overlay';
+          ctx.globalAlpha = 0.78;
+          ctx.drawImage(templateImg, 0, 0, canvas.width, canvas.height);
+          resolve(canvas.toDataURL('image/jpeg', 0.92));
+        };
+        templateImg.onerror = () => reject('Error cargando plantilla');
+        templateImg.src = selectedAsset!;
+      };
+      userImg.onerror = () => reject('Error cargando foto');
+      userImg.src = userPhoto!;
+    });
+  };
+
+  const callReplicate = async (imageBase64: string, templateBase64: string) => {
+    const response = await fetch('/.netlify/functions/procesar-ia', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        category: activeCategory,
+        image: imageBase64,
+        template: templateBase64
+      })
+    });
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ error: 'Error desconocido' }));
+      throw new Error(err.error || `Error ${response.status}`);
+    }
+
+    const base64 = await response.text();
+    return `data:image/png;base64,${base64}`;
+  };
+
   const handleGenerate = async () => {
     if (!userPhoto || !selectedAsset) {
-      alert("Por favor sube tu foto y selecciona un estilo.");
+      alert('Por favor sube tu foto y selecciona un estilo.');
       return;
     }
 
     setIsGenerating(true);
-    setResultImage(null);
+    setShowResults(false);
+    setResultCanvas({ url: null, ready: false, error: false });
+    setResultPollinations({ url: null, ready: false, error: false });
+    setResultReplicate({ url: null, ready: false, error: false });
+
+    const cleanUserPhoto = userPhoto.replace(/^data:image\/\w+;base64,/, '');
 
     const toBase64 = (url: string): Promise<string> =>
-      fetch(url)
-        .then(response => response.blob())
-        .then(blob => new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result as string);
-          reader.onerror = reject;
-          reader.readAsDataURL(blob);
-        }));
+      fetch(url).then(r => r.blob()).then(blob => new Promise((res, rej) => {
+        const reader = new FileReader();
+        reader.onloadend = () => res((reader.result as string).replace(/^data:image\/\w+;base64,/, ''));
+        reader.onerror = rej;
+        reader.readAsDataURL(blob);
+      }));
+
+    try {
+      const canvasUrl = await generateCanvas();
+      setResultCanvas({ url: canvasUrl, ready: true, error: false });
+    } catch (e) {
+      setResultCanvas({ url: null, ready: true, error: true });
+    }
+
+    const pollinationsUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(PROMPTS[activeCategory])}?width=512&height=768&nologo=true&model=flux&seed=${Date.now()}`;
+    setResultPollinations({ url: pollinationsUrl, ready: false, error: false });
+
+    const pollinationsImg = new Image();
+    pollinationsImg.onload = () => setResultPollinations(prev => ({ ...prev, ready: true }));
+    pollinationsImg.onerror = () => setResultPollinations(prev => ({ ...prev, ready: true, error: true }));
+    pollinationsImg.src = pollinationsUrl;
 
     try {
       const templateBase64 = await toBase64(selectedAsset);
-
-      const response = await fetch("/.netlify/functions/procesar-ia", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          category: activeCategory,
-          image: userPhoto.replace(/^data:image\/\w+;base64,/, ""),
-          template: templateBase64.replace(/^data:image\/\w+;base64,/, "")
-        }),
-      });
-
-      if (response.status === 404) {
-        throw new Error("No se pudo encontrar la función de IA. Si estás en modo desarrollo local, asegúrate de estar usando 'netlify dev' en lugar de 'npm run dev'.");
-      }
-
-      const responseText = await response.text();
-
-      if (!response.ok) {
-        console.error("Error en la respuesta de la IA:", responseText);
-        throw new Error(responseText || `Error (${response.status}): La IA no pudo procesar la imagen`);
-      }
-
-      setResultImage(`data:image/png;base64,${responseText}`);
-    } catch (error: any) {
-      console.error("Error generating magic:", error);
-
-      // Mensaje amigable para el usuario
-      const displayError = error.message.includes("Failed to fetch")
-        ? "No se pudo conectar con el servidor de IA. Verifica tu conexión o si el sitio está desplegado."
-        : error.message;
-
-      alert("Aviso del Laboratorio: " + displayError);
-      setResultImage(selectedAsset);
+      const replicateUrl = await callReplicate(cleanUserPhoto, templateBase64);
+      setResultReplicate({ url: replicateUrl, ready: true, error: false });
+    } catch (e: any) {
+      console.error('Replicate error:', e.message);
+      setResultReplicate({ url: null, ready: true, error: true });
     } finally {
       setIsGenerating(false);
+      setShowResults(true);
     }
   };
+
+  const handleClose = () => {
+    setShowResults(false);
+    setResultCanvas({ url: null, ready: false, error: false });
+    setResultPollinations({ url: null, ready: false, error: false });
+    setResultReplicate({ url: null, ready: false, error: false });
+  };
+
+  const ResultCard = ({ result, label, emoji, gradient, delay, downloadName }: {
+    result: ResultState; label: string; emoji: string; gradient?: boolean; delay: number; downloadName: string;
+  }) => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay }}
+      className="flex flex-col items-center"
+    >
+      <div className="text-[10px] uppercase tracking-widest text-lilac-neon mb-3 font-bold flex items-center gap-2">
+        <span>{emoji}</span> {label}
+      </div>
+      <div className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden border border-lilac-neon/40 shadow-[0_0_30px_rgba(168,85,247,0.3)]">
+        {!result.ready && !result.error && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 z-10">
+            <Loader2 className="w-8 h-8 text-lilac-neon animate-spin mb-3" />
+            <p className="text-[10px] text-lilac-glow uppercase tracking-widest">Generando...</p>
+          </div>
+        )}
+        {result.error && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 z-10">
+            <p className="text-[10px] text-red-400 uppercase tracking-widest text-center px-4">Error generando imagen</p>
+          </div>
+        )}
+        {result.url && !result.error && (
+          <img src={result.url} className="w-full h-full object-cover" alt={label} />
+        )}
+        {!result.url && !result.error && <div className="w-full h-full bg-white/5" />}
+        <div className="absolute inset-x-0 bottom-0 p-3 bg-black/60 backdrop-blur-sm text-center">
+          <p className="text-[9px] uppercase tracking-widest text-lilac-glow">{label}</p>
+        </div>
+      </div>
+      {result.ready && result.url && !result.error && (
+        <a
+          href={result.url}
+          download={`${downloadName}.jpg`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={cn(
+            "mt-3 px-5 py-2 rounded-lg text-[10px] font-bold tracking-widest transition-all uppercase text-white",
+            gradient
+              ? "bg-gradient-to-r from-[#a855f7] to-[#9c27b0] shadow-[0_0_15px_#a855f7] hover:brightness-110"
+              : "bg-white/5 border border-lilac-neon/30 hover:bg-white/10"
+          )}
+        >
+          Descargar {emoji}
+        </a>
+      )}
+    </motion.div>
+  );
 
   return (
     <div className="min-h-screen bg-bg-deep font-sans text-text-primary p-6 md:p-12 selection:bg-lilac-neon/30 selection:text-lilac-glow">
@@ -143,15 +262,7 @@ export const IALab = () => {
         <Link
           to="/"
           className="flex items-center gap-2 text-lilac-glow hover:text-white transition-colors group"
-          onClick={(e) => {
-            // Aseguramos la navegación forzada si el router no responde como se espera
-            if (window.location.pathname === '/') {
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            } else {
-              // Si no estamos en la raíz y queremos ir a index.html en una multi-page app
-              window.location.href = '/';
-            }
-          }}
+          onClick={() => { if (window.location.pathname !== '/') window.location.href = '/'; }}
         >
           <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
           <span className="text-[10px] uppercase tracking-widest font-bold">Volver al Inicio</span>
@@ -169,10 +280,7 @@ export const IALab = () => {
               {CATEGORIES.map((cat) => (
                 <button
                   key={cat.id}
-                  onClick={() => {
-                    setActiveCategory(cat.id);
-                    setSelectedAsset(null);
-                  }}
+                  onClick={() => { setActiveCategory(cat.id); setSelectedAsset(null); }}
                   className={cn(
                     "px-6 py-3 text-[10px] md:text-xs font-bold tracking-widest rounded-lg border transition-all duration-500 relative group uppercase",
                     activeCategory === cat.id
@@ -207,7 +315,7 @@ export const IALab = () => {
                       : "border-transparent hover:border-lilac-neon/30"
                   )}
                 >
-                  <img src={src} className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-500" />
+                  <img src={src} className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-500" alt="Option" />
                   <div className="absolute inset-0 bg-gradient-to-t from-lilac-neon/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   {selectedAsset === src && (
                     <div className="absolute top-2 right-2 bg-lilac-neon shadow-[0_0_10px_#a855f7] rounded-full p-1 border border-white/20">
@@ -231,7 +339,7 @@ export const IALab = () => {
               )}
             >
               {userPhoto ? (
-                <img src={userPhoto} className="w-full h-full object-cover" />
+                <img src={userPhoto} className="w-full h-full object-cover" alt="User upload" />
               ) : (
                 <>
                   <Upload className="w-8 h-8 text-lilac-neon mb-2 group-hover:scale-110 transition-transform" />
@@ -242,13 +350,7 @@ export const IALab = () => {
                 <span className="text-[10px] uppercase font-bold text-white tracking-widest">Cambiar</span>
               </div>
             </div>
-            <input
-              type="file"
-              ref={fileInputRef}
-              className="hidden"
-              accept="image/*"
-              onChange={handlePhotoUpload}
-            />
+            <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handlePhotoUpload} />
             <p className="text-[10px] text-text-muted mt-6 max-w-[200px] leading-relaxed">
               * Para mejores resultados, usa una foto con buena iluminación y de frente.
             </p>
@@ -279,62 +381,64 @@ export const IALab = () => {
       </div>
 
       <AnimatePresence>
-        {(isGenerating || resultImage) && (
+        {isGenerating && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[1000] flex items-center justify-center p-6 bg-[#0a0a0a]/95 backdrop-blur-md"
           >
-            <div className="max-w-2xl w-full flex flex-col items-center">
-              {isGenerating ? (
-                <div className="text-center">
-                  <div className="relative w-32 h-32 mb-8 mx-auto">
-                    <div className="absolute inset-0 border-4 border-lilac-neon/20 rounded-full" />
-                    <div className="absolute inset-0 border-4 border-lilac-neon border-t-transparent rounded-full animate-spin shadow-[0_0_15px_#a855f7]" />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <Sparkles className="w-10 h-10 text-lilac-glow animate-pulse" />
-                    </div>
-                  </div>
-                  <motion.p
-                    key={currentMessage}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="text-lg md:text-xl font-serif text-lilac-glow drop-shadow-[0_0_8px_rgba(216,180,254,0.5)]"
-                  >
-                    {WAITING_MESSAGES[currentMessage]}
-                  </motion.p>
+            <div className="text-center">
+              <div className="relative w-32 h-32 mb-8 mx-auto">
+                <div className="absolute inset-0 border-4 border-lilac-neon/20 rounded-full" />
+                <div className="absolute inset-0 border-4 border-lilac-neon border-t-transparent rounded-full animate-spin shadow-[0_0_15px_#a855f7]" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Sparkles className="w-10 h-10 text-lilac-glow animate-pulse" />
                 </div>
-              ) : (
-                <motion.div
-                  initial={{ scale: 0.9, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  className="w-full flex flex-col items-center"
-                >
-                  <div className="relative aspect-square w-full max-w-md rounded-2xl overflow-hidden border border-lilac-neon shadow-[0_0_50px_rgba(168,85,247,0.4)] mb-8">
-                    <img src={resultImage!} className="w-full h-full object-cover" />
-                    <div className="absolute inset-x-0 bottom-0 p-4 bg-black/60 backdrop-blur-sm text-center">
-                      <p className="text-[10px] uppercase tracking-widest text-lilac-glow">Resultado Generado por Nova IA</p>
-                    </div>
-                  </div>
-                  <div className="flex gap-4 w-full justify-center">
-                    <button
-                      onClick={() => setResultImage(null)}
-                      className="px-8 py-3 bg-white/5 border border-white/20 rounded-lg text-xs font-bold tracking-widest hover:bg-white/10 transition-all uppercase"
-                    >
-                      CERRAR
-                    </button>
-                    <a
-                      href={resultImage!}
-                      download="magic-result.jpg"
-                      className="px-8 py-3 bg-lilac-neon text-white rounded-lg text-xs font-bold tracking-widest shadow-[0_0_15px_#a855f7] hover:brightness-110 transition-all flex items-center gap-2 uppercase"
-                    >
-                      DESCARGAR ✨
-                    </a>
-                  </div>
-                </motion.div>
-              )}
+              </div>
+              <motion.p
+                key={currentMessage}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="text-lg md:text-xl font-serif text-lilac-glow drop-shadow-[0_0_8px_rgba(216,180,254,0.5)]"
+              >
+                {WAITING_MESSAGES[currentMessage]}
+              </motion.p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showResults && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-[#0a0a0a]/95 backdrop-blur-md overflow-y-auto"
+          >
+            <div className="w-full max-w-5xl flex flex-col items-center py-8">
+              <h2 className="text-xl font-serif italic text-white mb-2 drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]">Tu Transformación Nova ✨</h2>
+              <p className="text-[10px] text-lilac-neon uppercase tracking-widest mb-8">3 visiones · 3 tecnologías</p>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full mb-8">
+                <ResultCard result={resultCanvas} label="Mix Digital" emoji="🎨" delay={0.1} downloadName="mix-digital" />
+                <ResultCard result={resultPollinations} label="Visión Nova" emoji="✨" delay={0.2} downloadName="vision-nova" />
+                <ResultCard result={resultReplicate} label="Nova Real" emoji="🤖" gradient delay={0.3} downloadName="nova-real" />
+              </div>
+
+              <div className="flex flex-wrap gap-4 justify-center mb-6 text-[9px] uppercase tracking-widest text-white/40">
+                <span>🎨 Mix Digital — tu foto + plantilla</span>
+                <span>✨ Visión Nova — IA generativa FLUX</span>
+                <span>🤖 Nova Real — IA img2img Replicate</span>
+              </div>
+              <button
+                onClick={handleClose}
+                className="px-10 py-3 bg-white/5 border border-white/20 rounded-lg text-xs font-bold tracking-widest hover:bg-white/10 transition-all uppercase text-white"
+              >
+                Cerrar
+              </button>
             </div>
           </motion.div>
         )}

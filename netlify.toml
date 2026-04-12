@@ -1,10 +1,13 @@
+[functions]
+  node_bundler = "esbuild"
+
+[functions."procesar-ia"]
+  timeout = 26
+
 [build]
   command = "npm run build"
   functions = "netlify/functions"
   publish = "dist"
-
-[functions."procesar-ia"]
-  timeout = 26
 
 [[redirects]]
   from = "/*"
