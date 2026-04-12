@@ -80,51 +80,52 @@ export const IALab = () => {
     }
   };
 
-  const renderSmartRetouch = async (userImgBase64: string, assetUrl: string, landmarks: any): Promise<string> => {
+  const renderFinalImage = async (userImgBase64: string, assetUrl: string, landmarks: any): Promise<string> => {
     return new Promise((resolve, reject) => {
       const userImg = new Image();
       const assetImg = new Image();
       assetImg.crossOrigin = 'anonymous';
 
       let loaded = 0;
-      const checkLoaded = () => {
+      const onImageLoad = () => {
         if (++loaded === 2) {
           try {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
-            if (!ctx) return reject('No ctx');
+            if (!ctx) return reject('Canvas context not found');
             
-            canvas.width = 1024;
-            canvas.height = 1024;
+            // Usar dimensiones reales de la imagen del usuario
+            canvas.width = userImg.width;
+            canvas.height = userImg.height;
 
-            // 1. Dibujar Usuario (Base)
-            const scale = Math.max(canvas.width / userImg.width, canvas.height / userImg.height);
-            const x = (canvas.width - userImg.width * scale) / 2;
-            const y = (canvas.height - userImg.height * scale) / 2;
-            ctx.drawImage(userImg, x, y, userImg.width * scale, userImg.height * scale);
+            // 1. Dibujar foto del usuario como fondo
+            ctx.drawImage(userImg, 0, 0);
 
-            // 2. Render de Máscara Inteligente (Anclada a Gemini)
-            const lx = ((landmarks.left_eye.x || 50) / 100) * canvas.width;
-            const ly = ((landmarks.left_eye.y || 40) / 100) * canvas.height;
-            const rx = ((landmarks.right_eye.x || 60) / 100) * canvas.width;
-            const ry = ((landmarks.right_eye.y || 40) / 100) * canvas.height;
-            
-            const centerX = (lx + rx) / 2;
-            const centerY = (ly + ry) / 2;
-            const eyeDist = Math.sqrt(Math.pow(rx - lx, 2) + Math.pow(ry - ly, 2));
-            const angle = Math.atan2(ry - ly, rx - lx);
-            
-            ctx.save();
-            ctx.translate(centerX, centerY);
-            ctx.rotate(angle);
-            
-            // Proporción de la máscara
-            const maskScale = (eyeDist / (canvas.width * 0.28)) || 1.0; 
-            const mw = assetImg.width * maskScale;
-            const mh = assetImg.height * maskScale;
-            
-            ctx.drawImage(assetImg, -mw/2, -mh/2.2, mw, mh);
-            ctx.restore();
+            // 2. Lógica de Dibujo con Landmarks de Gemini
+            if (landmarks && landmarks.left_eye && landmarks.right_eye) {
+              const lx = (landmarks.left_eye.x / 100) * canvas.width;
+              const ly = (landmarks.left_eye.y / 100) * canvas.height;
+              const rx = (landmarks.right_eye.x / 100) * canvas.width;
+              const ry = (landmarks.right_eye.y / 100) * canvas.height;
+              
+              const centerX = (lx + rx) / 2;
+              const centerY = (ly + ry) / 2;
+              const eyeDist = Math.sqrt(Math.pow(rx - lx, 2) + Math.pow(ry - ly, 2));
+              const angle = Math.atan2(ry - ly, rx - lx);
+              
+              ctx.save();
+              ctx.translate(centerX, centerY);
+              ctx.rotate(angle);
+              
+              // Los ojos suelen estar a 1/3 del ancho total de la cara (aprox 3x distancia entre ojos)
+              const maskWidth = eyeDist * 3.8; 
+              const ratio = assetImg.height / assetImg.width;
+              const maskHeight = maskWidth * ratio;
+              
+              // Dibujar máscara centrada (y ajustada ligeramente hacia arriba/abajo según sea necesario)
+              ctx.drawImage(assetImg, -maskWidth/2, -maskHeight/1.8, maskWidth, maskHeight);
+              ctx.restore();
+            }
 
             resolve(canvas.toDataURL('image/jpeg', 0.95));
           } catch (e) {
@@ -133,10 +134,10 @@ export const IALab = () => {
         }
       };
 
-      userImg.onload = checkLoaded;
-      assetImg.onload = checkLoaded;
-      userImg.onerror = () => reject('Error user img');
-      assetImg.onerror = () => reject('Error asset img');
+      userImg.onload = onImageLoad;
+      assetImg.onload = onImageLoad;
+      userImg.onerror = () => reject('Error al cargar la imagen del usuario');
+      assetImg.onerror = () => reject('Error al cargar la máscara');
       userImg.src = userImgBase64;
       assetImg.src = assetUrl;
     });
@@ -162,8 +163,8 @@ export const IALab = () => {
       if (!response.ok) throw new Error('Gemini Pipeline Error');
       const data = await response.json();
 
-      // Renderización forzada y automática tras recibir la data
-      const finalUrl = await renderSmartRetouch(userPhoto, absoluteAssetUrl, data.landmarks);
+      // renderFinalImage: Iniciar composición visual apenas llega la data de Gemini
+      const finalUrl = await renderFinalImage(userPhoto, absoluteAssetUrl, data.landmarks);
 
       setResult({
         url: finalUrl,
