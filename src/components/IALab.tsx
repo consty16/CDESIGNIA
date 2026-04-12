@@ -82,7 +82,7 @@ export const IALab = () => {
     setIsGenerating(true);
     setResultImage(null);
 
-    const toBase64 = (url: string): Promise<string> => 
+    const toBase64 = (url: string): Promise<string> =>
       fetch(url)
         .then(response => response.blob())
         .then(blob => new Promise((resolve, reject) => {
@@ -94,9 +94,10 @@ export const IALab = () => {
 
     try {
       const templateBase64 = await toBase64(selectedAsset);
-      
+
       const response = await fetch("/.netlify/functions/procesar-ia", {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           category: activeCategory,
           image: userPhoto.replace(/^data:image\/\w+;base64,/, ""),
@@ -118,9 +119,9 @@ export const IALab = () => {
       setResultImage(`data:image/png;base64,${responseText}`);
     } catch (error: any) {
       console.error("Error generating magic:", error);
-      
+
       // Mensaje amigable para el usuario
-      const displayError = error.message.includes("Failed to fetch") 
+      const displayError = error.message.includes("Failed to fetch")
         ? "No se pudo conectar con el servidor de IA. Verifica tu conexión o si el sitio está desplegado."
         : error.message;
 
@@ -139,8 +140,8 @@ export const IALab = () => {
       </div>
 
       <nav className="relative z-10 mb-12 flex justify-between items-center">
-        <Link 
-          to="/" 
+        <Link
+          to="/"
           className="flex items-center gap-2 text-lilac-glow hover:text-white transition-colors group"
           onClick={(e) => {
             // Aseguramos la navegación forzada si el router no responde como se espera
