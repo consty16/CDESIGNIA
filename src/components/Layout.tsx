@@ -157,7 +157,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
                 "absolute top-full left-0 pt-2 w-48 transition-all duration-300 z-50",
                 isProjectsOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible translate-y-2 pointer-events-none"
               )}>
-                <div className="w-full bg-bg-tertiary border border-lilac/20 rounded-lg overflow-hidden shadow-2xl backdrop-blur-xl">
+                <div className="w-full bg-gradient-to-br from-[#3b0f6b] to-[#240842] border border-lilac/20 rounded-lg overflow-hidden shadow-2xl backdrop-blur-xl">
                   <a
                     href="https://www.instagram.com/andromedamodamasculina/"
                     target="_blank"
