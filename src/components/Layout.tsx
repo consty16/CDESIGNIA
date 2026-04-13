@@ -38,7 +38,7 @@ export const Navbar: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOp
         <li>
           <Link
             to="/emprendedores"
-            className="text-[10px] uppercase tracking-[0.15em] text-white border border-lilac/40 px-5 py-2 hover:bg-lilac/20 transition-all rounded shadow-[0_0_15px_rgba(196,181,253,0.2)] hover:shadow-[0_0_25px_rgba(196,181,253,0.5)] bg-lilac/5 font-bold"
+            className="text-[10px] uppercase tracking-[0.15em] text-white border border-white/60 px-5 py-2 hover:brightness-125 transition-all rounded shadow-[0_0_15px_rgba(167,139,250,0.4)] hover:shadow-[0_0_25px_rgba(167,139,250,0.6)] bg-gradient-to-r from-[#5c1a5c] to-[#3a0e3a] font-bold"
           >
             ¿sos emprendedor?
           </Link>
@@ -97,25 +97,25 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
             }}
           >
             <motion.span 
-              className="block text-3xl md:text-[51px] lg:text-[51px] text-white"
+              className="block text-4xl md:text-[51px] lg:text-[72px] text-white"
               variants={{
                 hidden: { opacity: 0, y: 20 },
                 visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
               }}
             >
-              POR QUÉ EL DISEÑO
+              NO SOLO ES
             </motion.span>
             <motion.span 
-              className="block italic text-lilac text-3xl md:text-[57px] lg:text-[57px]"
+              className="block italic text-lilac text-4xl md:text-[57px] lg:text-[80px]"
               variants={{
                 hidden: { opacity: 0, y: 20 },
                 visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
               }}
             >
-              NO SOLO ES CREATIVO,
+              CREATIVO,
             </motion.span>
             <motion.span 
-              className="block text-3xl md:text-5xl lg:text-6xl"
+              className="block text-4xl md:text-[51px] lg:text-[72px] text-white"
               variants={{
                 hidden: { opacity: 0, y: 20 },
                 visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
@@ -130,13 +130,13 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
           <div className="flex flex-wrap gap-4 mb-12">
             <button
               onClick={() => onOpenOverlay('muestras')}
-              className="bg-white text-black px-10 py-3 text-xs uppercase tracking-widest font-bold hover:bg-white/90 transition-all rounded shadow-[0_0_20px_rgba(255,255,255,0.4)] hover:shadow-[0_0_30px_rgba(255,255,255,0.6)] hover:scale-105"
+              className="border border-white/40 text-white px-8 py-3 text-xs uppercase tracking-widest hover:bg-white/10 transition-all rounded shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.5)] font-bold"
             >
               Portfolio
             </button>
             <a
               href="#about"
-              className="border border-lilac/20 text-white px-8 py-3 text-xs uppercase tracking-widest hover:border-white transition-all rounded hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] font-bold"
+              className="border border-white/40 text-white px-8 py-3 text-xs uppercase tracking-widest hover:bg-white/10 transition-all rounded shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.5)] font-bold"
             >
               Quiénes somos
             </a>
@@ -299,7 +299,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
             <motion.div
               key={`${inf.id}-${idx}`}
               whileHover={{ scale: 1.05 }}
-              className="flex-shrink-0 w-[75vw] md:w-64 aspect-[3/4] bg-[#1a0b2e] rounded-xl overflow-hidden border border-white/5 relative group cursor-pointer snap-center"
+              className="flex-shrink-0 w-[75vw] md:w-64 aspect-[3/4] bg-bg-tertiary rounded-xl overflow-hidden border border-white/5 relative group cursor-pointer snap-center"
               onClick={(e) => {
                 const video = e.currentTarget.querySelector('video');
                 const playBtn = e.currentTarget.querySelector('.play-indicator');
@@ -437,7 +437,7 @@ export const FeaturedWorks: React.FC = () => {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               whileHover={{ y: -5 }}
-              className="group relative flex-shrink-0 w-[80vw] md:w-[400px] aspect-[3/4] bg-[#1a0b2e] rounded-xl overflow-hidden border border-white/5 cursor-pointer snap-center"
+              className="group relative flex-shrink-0 w-[80vw] md:w-[400px] aspect-[3/4] bg-bg-tertiary rounded-xl overflow-hidden border border-white/5 cursor-pointer snap-center"
               onClick={(e) => {
                 const video = e.currentTarget.querySelector('video');
                 const playBtn = e.currentTarget.querySelector('.play-indicator');

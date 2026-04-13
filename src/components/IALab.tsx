@@ -126,34 +126,33 @@ export const IALab = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#1a0b2e] font-sans text-white p-4 md:p-8 overflow-hidden relative">
+    <div className="min-h-screen bg-bg-tertiary font-sans text-white p-4 md:p-8 overflow-hidden relative">
       {/* Vibrant Creative Blobs */}
       <div className="absolute top-0 right-0 w-[60%] h-[60%] bg-[#5c1a5c]/20 blur-[180px] rounded-full animate-pulse z-0" />
       <div className="absolute bottom-0 left-0 w-[50%] h-[50%] bg-[#3b0f6b]/20 blur-[180px] rounded-full animate-pulse-slow z-0" />
       <div className="absolute top-[30%] left-[20%] w-[40%] h-[40%] bg-white/5 blur-[150px] rounded-full z-0" />
 
-      <nav className="relative z-10 mb-10 flex justify-between items-center max-w-5xl mx-auto">
+      <nav className="relative z-10 mb-6 flex justify-between items-center max-w-5xl mx-auto">
         <a href="/" className="flex items-center gap-2 text-white/50 hover:text-lilac transition-all group">
           <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1" />
           <span className="text-[10px] uppercase tracking-widest font-black">VOLVER</span>
         </a>
         <div className="text-right">
-          <h1 className="text-4xl md:text-6xl font-orbitron font-black text-white drop-shadow-[0_0_35px_rgba(255,255,255,0.6)] mb-1">
+          <h1 className="text-3xl md:text-5xl font-orbitron font-black text-white drop-shadow-[0_0_35px_rgba(255,255,255,0.6)] mb-1">
             C DESIGN <span className="text-lilac drop-shadow-[0_0_20px_rgba(168,85,247,0.7)]">LAB</span>
           </h1>
           <p className="text-[10px] md:text-xs text-lilac/80 uppercase tracking-[0.5em] font-bold">Digital Fashion Masterpiece</p>
         </div>
       </nav>
 
-      <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch relative z-10">
+      <div className="ia-lab-wrapper max-w-5xl mx-auto relative z-10">
         {/* Panel de Control - More Compact & Vivid */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="backdrop-blur-3xl bg-white/10 border border-white/20 rounded-3xl p-6 md:p-8 shadow-[0_0_80px_rgba(0,0,0,0.3)] flex flex-col justify-between"
+          className="glass-panel"
         >
-          <div className="space-y-6">
-          <div className="text-center space-y-2">
+          <div className="text-center space-y-2 mb-4">
             <h3 className="text-[10px] font-black text-white tracking-[0.4em] uppercase flex items-center justify-center gap-4">
               <span className="w-6 h-[1px] bg-white/20" />
               1. Tu Obra Maestra
@@ -162,12 +161,13 @@ export const IALab = () => {
             <p className="text-white/40 text-[8px] uppercase tracking-widest font-bold">IA Generative Engine</p>
           </div>
           
-          <textarea
-            value={userPrompt}
-            onChange={(e) => setUserPrompt(e.target.value)}
-            placeholder="Describe tu visión aquí..."
-            className="w-full h-[350px] bg-black/30 border border-white/10 rounded-2xl p-6 text-white text-lg placeholder-white/20 focus:ring-2 focus:ring-lilac/30 outline-none transition-all resize-none font-light leading-relaxed"
-          />
+          <div className="input-area mb-6">
+            <textarea
+              value={userPrompt}
+              onChange={(e) => setUserPrompt(e.target.value)}
+              placeholder="Describe tu visión aquí..."
+              className="w-full h-full bg-transparent border-none p-5 text-white text-base placeholder-white/30 focus:ring-0 outline-none transition-all resize-none font-light leading-snug"
+            />
           </div>
           
           <div className="space-y-4">
@@ -190,62 +190,63 @@ export const IALab = () => {
         </motion.div>
 
         {/* Panel de Resultado - Perfectly Aligned */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="backdrop-blur-3xl bg-white/10 border border-white/20 rounded-3xl p-6 md:p-8 shadow-[0_0_80px_rgba(0,0,0,0.3)] flex flex-col"
-        >
-          <div className="text-center mb-6 space-y-2">
+        <div className="glass-panel">
+          <div className="text-center space-y-2 mb-4">
             <h3 className="text-[10px] font-black text-white tracking-[0.4em] uppercase flex items-center justify-center gap-4">
               <span className="w-6 h-[1px] bg-white/20" />
-              2. El Resultado
+              2. Resultado
               <span className="w-6 h-[1px] bg-white/20" />
             </h3>
-            <p className="text-white/40 text-[8px] uppercase tracking-widest font-bold">Rendering Masterpiece</p>
+            <p className="text-white/40 text-[8px] uppercase tracking-widest font-bold">AI Render Output</p>
           </div>
 
-          <div className="flex-1 flex flex-col gap-8">
-            <div className="relative h-[350px] w-full bg-black/30 rounded-2xl overflow-hidden border border-white/10 shadow-inner group flex items-center justify-center">
-              {isGenerating || (result.url && isImageLoading) ? (
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-transparent backdrop-blur-sm z-20">
-                  <div className="w-12 h-12 border-2 border-lilac/20 border-t-lilac rounded-full animate-spin mb-4" />
-                  <p className="text-lilac/60 font-black tracking-[0.3em] animate-pulse uppercase text-[9px]">DISEÑANDO...</p>
-                </div>
-              ) : null}
-
-              {result.url ? (
+          <div id="result-container" className="image-placeholder mb-6 overflow-hidden relative">
+            {isGenerating ? (
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-bg/60 backdrop-blur-xl z-20">
+                <div className="w-16 h-16 border-4 border-lilac/30 border-t-lilac rounded-full animate-spin mb-4" />
+                <p className="text-lilac font-black tracking-[0.3em] animate-pulse uppercase text-[10px]">CREANDO...</p>
+              </div>
+            ) : result.url ? (
+              <>
+                {isImageLoading && (
+                   <p id="loading-text" style={{ color: 'rgba(255,255,255,0.5)' }} className="text-sm font-serif italic">Tu obra aparecerá aquí...</p>
+                )}
                 <motion.img
+                  id="ai-result-img"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: isImageLoading ? 0 : 1 }}
                   src={result.url}
                   alt="AI Result"
                   onLoad={() => setIsImageLoading(false)}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover rounded-[15px]"
+                  style={{ display: isImageLoading ? 'none' : 'block' }}
                 />
-              ) : !isGenerating && (
-                <div className="flex flex-col items-center justify-center p-10 text-center">
-                  <div className="w-12 h-12 rounded-full bg-lilac/5 border border-lilac/10 flex items-center justify-center mb-4">
-                    <Sparkles className="w-6 h-6 text-lilac/20" />
-                  </div>
-                  <p className="text-white/30 font-serif italic text-sm">Tu obra maestra aparecerá aquí...</p>
+              </>
+            ) : (
+              <div className="absolute inset-0 flex flex-col items-center justify-center p-10 text-center">
+                <div className="w-16 h-16 rounded-full bg-lilac/5 border border-lilac/10 flex items-center justify-center mb-4">
+                  <Wand2 className="w-8 h-8 text-lilac/20" />
                 </div>
-              )}
-            </div>
-            
-            {result.url && !isGenerating && (
+                <p className="text-lilac/30 font-serif italic text-sm">Tu obra aparecerá aquí...</p>
+              </div>
+            )}
+          </div>
+          
+          <div className="h-20 flex items-end">
+            {result.url && !isGenerating && !isImageLoading && (
               <motion.a 
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 href={result.url} 
                 target="_blank" 
                 rel="noreferrer" 
-                className="w-full py-4 rounded-xl bg-lilac text-bg-tertiary font-black text-xs tracking-[0.4em] shadow-[0_0_30px_rgba(168,85,247,0.4)] hover:bg-white hover:scale-[1.02] transition-all border border-white/20 uppercase text-center"
+                className="w-full py-4 rounded-xl bg-gradient-to-br from-[#3b0f6b] to-[#240842] text-white text-center font-black text-xs tracking-[0.4em] shadow-[0_0_30px_rgba(168,85,247,0.4)] hover:brightness-125 transition-all border border-lilac/30 uppercase"
               >
                 DESCARGAR OBRA 📥
               </motion.a>
             )}
           </div>
-        </motion.div>
+        </div>
       </div>
 
       {/* Loading Fullscreen */}
