@@ -146,22 +146,23 @@ export const IALab = () => {
             value={userPrompt}
             onChange={(e) => setUserPrompt(e.target.value)}
             placeholder="Ej: Extremely beautiful model, iridescent gown, symmetrical face, 8k..."
-            className="w-full h-36 bg-black/40 border border-white/10 rounded-xl p-5 text-sm text-white focus:border-purple-500 transition-all outline-none resize-none"
+            className="w-full h-40 bg-gradient-to-br from-[#5c1a5c] to-[#3a0e3a] border border-lilac/30 rounded-xl p-4 text-white placeholder-white/40 focus:ring-2 focus:ring-lilac focus:border-transparent outline-none transition-all resize-none mb-4 shadow-inner"
           />
           <button
             onClick={handleGenerate}
             disabled={isGenerating || !userPrompt.trim()}
-            className="w-full py-4 rounded-xl font-bold text-xs tracking-[0.3em] bg-lilac text-bg-tertiary shadow-[0_0_40px_rgba(168,85,247,0.7)] hover:bg-lilac-dim hover:scale-105 transition-all flex items-center justify-center gap-3 disabled:opacity-40 border border-white/20"
+            className="w-full py-5 rounded-xl font-bold text-sm tracking-[0.3em] bg-lilac text-bg-tertiary shadow-[0_0_40px_rgba(255,255,255,0.4)] hover:brightness-125 hover:scale-105 transition-all flex items-center justify-center gap-3 disabled:opacity-40 border-2 border-white/50"
           >
-            {isGenerating ? <Loader2 className="animate-spin" /> : <><Wand2 className="w-5 h-5" /> Experiment Progress ✨</>}
+            {isGenerating ? <Loader2 className="animate-spin" /> : <><Wand2 className="w-5 h-5" /> EXPERIMENT PROGRESS ✨</>}
           </button>
+          
           <a
-            href="https://labs.google/fx/es-419/tools/music-fx-dj"
+            href="https://musicfx.withgoogle.com/dj"
             target="_blank"
-            rel="noopener noreferrer"
-            className={`w-full py-4 rounded-xl font-bold text-xs tracking-[0.3em] border border-purple-500/40 bg-purple-950/50 shadow-lg hover:bg-purple-900/60 hover:border-purple-400 transition-all flex items-center justify-center gap-3 text-purple-300 hover:text-white ${!userPrompt.trim() ? 'opacity-40 cursor-not-allowed pointer-events-none' : ''}`}
+            rel="noreferrer"
+            className="w-full mt-4 py-5 rounded-xl font-bold text-sm tracking-[0.3em] bg-bg-tertiary text-lilac shadow-[0_0_30px_rgba(168,85,247,0.3)] hover:brightness-150 hover:text-white transition-all flex items-center justify-center gap-3 border border-lilac/30 uppercase"
           >
-            <Music2 className="w-5 h-5" /> hagamos magia MUSICAL 🎵
+            <Music className="w-5 h-5" /> hagamos magia MUSICAL 🎵
           </a>
         </div>
 
