@@ -151,7 +151,7 @@ export const IALab = () => {
           <button
             onClick={handleGenerate}
             disabled={isGenerating || !userPrompt.trim()}
-            className="w-full py-5 rounded-xl font-bold text-sm tracking-[0.3em] bg-gradient-to-br from-[#3b0f6b] to-[#240842] text-lilac shadow-[0_0_40px_rgba(168,85,247,0.7)] hover:brightness-125 hover:scale-105 transition-all flex items-center justify-center gap-3 disabled:opacity-40 border border-lilac/30"
+            className="w-full py-4 rounded-xl font-bold text-xs tracking-[0.3em] bg-lilac text-bg-tertiary shadow-[0_0_40px_rgba(168,85,247,0.7)] hover:bg-lilac-dim hover:scale-105 transition-all flex items-center justify-center gap-3 disabled:opacity-40 border border-white/20"
           >
             {isGenerating ? <Loader2 className="animate-spin" /> : <><Wand2 className="w-5 h-5" /> Experiment Progress ✨</>}
           </button>
@@ -189,7 +189,7 @@ export const IALab = () => {
                   />
                 </div>
                 <div className="space-y-4">
-                  <a href={result.url} target="_blank" rel="noreferrer" className="block w-full py-4 rounded-full bg-gradient-to-br from-[#3b0f6b] to-[#240842] text-lilac text-center font-bold text-[11px] tracking-[0.3em] shadow-[0_0_30px_rgba(168,85,247,0.5)] hover:brightness-125 transition-all border border-lilac/30">
+                  <a href={result.url} target="_blank" rel="noreferrer" className="block w-full py-3 rounded-full bg-lilac text-bg-tertiary text-center font-bold text-[10px] tracking-[0.3em] shadow-[0_0_30px_rgba(168,85,247,0.5)] hover:bg-lilac-dim transition-all">
                     GUARDAR EN MI DISPOSITIVO
                   </a>
                 </div>
