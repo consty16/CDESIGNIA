@@ -7,20 +7,23 @@
   --font-orbitron: "Orbitron", sans-serif;
   --font-urbanist: "Urbanist", sans-serif;
 
-  --color-bg-primary: #2d1b4d;
-  --color-bg-secondary: #3b2361;
-  --color-bg-tertiary: #4a2d7a;
-  --color-lilac: #d8b4fe;
-  --color-lilac-dim: #a855f7;
-  --color-text-primary: #ffffff;
-  --color-text-secondary: #e9d5ff;
-  --color-text-muted: #c084fc;
+  --color-bg: #1a1626;
+  --color-bg-deep: #1a1626;
+  --color-bg-secondary: #1a1626;
+  --color-bg-tertiary: #1a1626;
+  --color-lilac: #c4b5fd;
+  --color-lilac-neon: #a855f7;
+  --color-lilac-glow: #d8b4fe;
+  --color-lilac-dim: #a78bfa;
+  --color-text-primary: #f0eeff;
+  --color-text-secondary: #a89ec4;
+  --color-text-muted: #6b6280;
   --color-wa: #25d366;
 }
 
 @layer base {
   body {
-    @apply bg-bg-primary text-text-primary font-sans overflow-x-hidden;
+    @apply bg-bg-deep text-text-primary font-sans overflow-x-hidden;
     cursor: none;
   }
 
