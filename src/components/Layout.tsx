@@ -28,7 +28,7 @@ export const Navbar: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOp
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }
             }}
-            className="text-[10px] uppercase tracking-[0.15em] bg-lilac text-bg-tertiary px-5 py-2 hover:bg-lilac-dim transition-all rounded shadow-[0_0_25px_rgba(168,85,247,0.5)] font-bold animate-pulse-slow"
+            className="text-[12px] uppercase tracking-[0.15em] bg-gradient-to-br from-[#3b0f6b] to-[#240842] text-lilac px-6 py-2.5 hover:brightness-125 transition-all rounded shadow-[0_0_20px_rgba(168,85,247,0.4)] font-bold animate-pulse-slow border border-lilac/20"
           >
             Inicio
           </Link>
@@ -38,7 +38,7 @@ export const Navbar: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOp
         <li>
           <Link
             to="/emprendedores"
-            className="text-[10px] uppercase tracking-[0.15em] bg-lilac text-bg-tertiary px-5 py-2 hover:bg-lilac-dim transition-all rounded shadow-[0_0_25px_rgba(168,85,247,0.5)] font-bold"
+            className="text-[12px] uppercase tracking-[0.15em] bg-gradient-to-br from-[#3b0f6b] to-[#240842] text-lilac px-6 py-2.5 hover:brightness-125 transition-all rounded shadow-[0_0_20px_rgba(168,85,247,0.4)] font-bold border border-lilac/20"
           >
             ¿sos emprendedor?
           </Link>
@@ -130,7 +130,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
           <div className="flex flex-wrap gap-4 mb-12">
             <button
               onClick={() => onOpenOverlay('muestras')}
-              className="bg-lilac text-bg-tertiary w-44 h-11 text-xs uppercase tracking-widest font-bold hover:bg-lilac-dim transition-all rounded shadow-[0_0_30px_rgba(168,85,247,0.6)] hover:scale-105 flex items-center justify-center border border-white/20"
+              className="bg-gradient-to-br from-[#3b0f6b] to-[#240842] text-lilac w-48 h-12 text-[13px] uppercase tracking-widest font-bold hover:brightness-125 transition-all rounded shadow-[0_0_30px_rgba(168,85,247,0.5)] hover:scale-105 flex items-center justify-center border border-lilac/30"
             >
               Portfolio
             </button>
@@ -147,10 +147,10 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
               <button
                 onClick={() => setIsProjectsOpen(!isProjectsOpen)}
                 onMouseEnter={() => setIsProjectsOpen(true)}
-                className="bg-lilac text-bg-tertiary w-44 h-11 text-xs uppercase tracking-widest hover:bg-lilac-dim transition-all rounded shadow-[0_0_30px_rgba(168,85,247,0.6)] flex items-center justify-center gap-2 font-bold border border-white/20"
+                className="bg-gradient-to-br from-[#3b0f6b] to-[#240842] text-lilac w-48 h-12 text-[13px] uppercase tracking-widest font-bold hover:brightness-125 transition-all rounded shadow-[0_0_30px_rgba(168,85,247,0.5)] flex items-center justify-center gap-2 border border-lilac/30"
               >
                 Projects
-                <span className={cn("text-[8px] opacity-70 transition-transform", isProjectsOpen ? "rotate-180" : "")}>▼</span>
+                <span className={cn("text-[9px] opacity-70 transition-transform", isProjectsOpen ? "rotate-180" : "")}>▼</span>
               </button>
               
               <div className={cn(
@@ -189,7 +189,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
               href="/ia-lab.html"
               target="_blank"
               rel="noreferrer"
-              className="bg-lilac text-bg-tertiary w-44 h-11 text-xs uppercase tracking-widest font-bold hover:bg-lilac-dim transition-all duration-300 rounded shadow-[0_0_40px_rgba(168,85,247,0.8)] hover:shadow-[0_0_60px_rgba(168,85,247,1)] flex items-center justify-center gap-2 group border-2 border-white/30"
+              className="bg-gradient-to-br from-[#3b0f6b] to-[#240842] text-lilac w-48 h-12 text-[13px] uppercase tracking-widest font-bold hover:brightness-150 transition-all duration-300 rounded shadow-[0_0_50px_rgba(168,85,247,0.8)] flex items-center justify-center gap-2 group border-2 border-lilac/40"
             >
               <span className="group-hover:animate-pulse">¡PROBAR MAGIA!</span>
             </a>
@@ -703,13 +703,13 @@ export const Contact: React.FC = () => {
               className={cn(
                 "w-full py-4 rounded-lg text-xs uppercase tracking-[0.2em] font-bold transition-all duration-500 flex items-center justify-center gap-3",
                 isSubmitting 
-                  ? "bg-lilac/40 text-bg-tertiary/40 cursor-not-allowed" 
-                  : "bg-lilac text-bg-tertiary hover:bg-lilac-dim shadow-[0_0_40px_rgba(168,85,247,0.6)] hover:shadow-[0_0_60px_rgba(168,85,247,0.9)]"
+                  ? "bg-lilac/40 text-lilac/40 cursor-not-allowed" 
+                  : "bg-gradient-to-br from-[#3b0f6b] to-[#240842] text-lilac hover:brightness-125 shadow-[0_0_40px_rgba(168,85,247,0.6)] border border-lilac/30"
               )}
             >
               {isSubmitting ? (
                 <>
-                  <div className="w-4 h-4 border-2 border-bg-tertiary/30 border-t-bg-tertiary rounded-full animate-spin" />
+                  <div className="w-4 h-4 border-2 border-lilac/30 border-t-lilac rounded-full animate-spin" />
                   Enviando...
                 </>
               ) : (
@@ -744,9 +744,9 @@ export const Contact: React.FC = () => {
               window.open("https://mail.google.com/mail/?view=cm&fs=1&to=constanzarissop91@gmail.com", "_blank", "noreferrer");
             }
           }}
-          className="bg-lilac text-bg-tertiary px-10 py-4 text-sm uppercase tracking-widest hover:bg-lilac-dim transition-all rounded shadow-[0_0_15px_rgba(168,85,247,0.3)] flex items-center gap-3 font-bold"
+          className="bg-gradient-to-br from-[#3b0f6b] to-[#240842] text-lilac px-12 py-5 text-[14px] uppercase tracking-widest hover:brightness-125 transition-all rounded shadow-[0_0_20px_rgba(168,85,247,0.4)] flex items-center gap-3 font-bold border border-lilac/30"
         >
-          <Mail size={18} />
+          <Mail size={20} />
           <span>C DESIGN IA</span>
         </a>
       </div>
