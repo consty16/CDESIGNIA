@@ -41,7 +41,7 @@ export const IALab = () => {
       const stylePreset = "highly detailed facial features, perfect symmetrical eyes, realistic skin pores, sharp focus, 8k, fashion editorial, cinematic lighting, masterpiece, flawless face";
       const fullPrompt = `${userPrompt}, ${stylePreset}`;
       const seed = Math.floor(Math.random() * 1000000);
-      const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(fullPrompt)}?width=1080&height=1350&nologo=true&model=flux&seed=${seed}`;
+      const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(fullPrompt)}?width=1024&height=1024&nologo=true&model=flux&seed=${seed}`;
 
       setResult({
         url: imageUrl,
@@ -166,7 +166,7 @@ export const IALab = () => {
             value={userPrompt}
             onChange={(e) => setUserPrompt(e.target.value)}
             placeholder="Describe tu visión aquí..."
-            className="w-full h-32 bg-gradient-to-br from-[#5c1a5c] to-[#3a0e3a] border border-lilac/50 rounded-2xl p-5 text-white text-base placeholder-white/30 focus:ring-4 focus:ring-lilac/30 outline-none transition-all resize-none font-light leading-snug"
+            className="w-full h-[350px] bg-black/30 border border-white/10 rounded-2xl p-6 text-white text-lg placeholder-white/20 focus:ring-2 focus:ring-lilac/30 outline-none transition-all resize-none font-light leading-relaxed"
           />
           </div>
           
@@ -204,27 +204,30 @@ export const IALab = () => {
             <p className="text-white/40 text-[8px] uppercase tracking-widest font-bold">Rendering Masterpiece</p>
           </div>
 
-          <div className="flex-1 flex flex-col gap-6">
-            <div className="relative flex-1 min-h-[300px] bg-black/40 rounded-2xl overflow-hidden border border-white/10 shadow-inner group">
-              {isGenerating ? (
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-bg/60 backdrop-blur-xl z-20">
-                  <div className="w-16 h-16 border-4 border-lilac/30 border-t-lilac rounded-full animate-spin mb-4" />
-                  <p className="text-lilac font-black tracking-[0.3em] animate-pulse uppercase text-[10px]">CREANDO...</p>
+          <div className="flex-1 flex flex-col gap-8">
+            <div className="relative h-[350px] w-full bg-black/30 rounded-2xl overflow-hidden border border-white/10 shadow-inner group flex items-center justify-center">
+              {isGenerating || (result.url && isImageLoading) ? (
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-transparent backdrop-blur-sm z-20">
+                  <div className="w-12 h-12 border-2 border-lilac/20 border-t-lilac rounded-full animate-spin mb-4" />
+                  <p className="text-lilac/60 font-black tracking-[0.3em] animate-pulse uppercase text-[9px]">DISEÑANDO...</p>
                 </div>
-              ) : result.url ? (
+              ) : null}
+
+              {result.url ? (
                 <motion.img
                   initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
+                  animate={{ opacity: isImageLoading ? 0 : 1 }}
                   src={result.url}
                   alt="AI Result"
+                  onLoad={() => setIsImageLoading(false)}
                   className="w-full h-full object-cover"
                 />
-              ) : (
-                <div className="absolute inset-0 flex flex-col items-center justify-center p-10 text-center">
+              ) : !isGenerating && (
+                <div className="flex flex-col items-center justify-center p-10 text-center">
                   <div className="w-12 h-12 rounded-full bg-lilac/5 border border-lilac/10 flex items-center justify-center mb-4">
                     <Sparkles className="w-6 h-6 text-lilac/20" />
                   </div>
-                  <p className="text-lilac/30 font-serif italic text-sm">Tu diseño cobrará vida aquí...</p>
+                  <p className="text-white/30 font-serif italic text-sm">Tu obra maestra aparecerá aquí...</p>
                 </div>
               )}
             </div>
