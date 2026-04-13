@@ -171,24 +171,37 @@ export const IALab = () => {
           <AnimatePresence mode="wait">
             {showResults && (
               <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-4 max-w-[380px] w-full">
-                <div className="relative w-full h-auto rounded-2xl border border-purple-500/30 overflow-hidden bg-black flex items-center justify-center shadow-[0_0_50px_rgba(168,85,247,0.1)] min-h-[400px]">
-                  {isImageLoading && (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm z-10">
-                      <Loader2 className="w-10 h-10 text-purple-500 animate-spin mb-4" />
-                      <p className="text-[10px] text-purple-300 uppercase tracking-widest animate-pulse font-bold text-center px-4">Materializando visión de alta gama...</p>
-                    </div>
-                  )}
-                  <img 
-                    src={result.url} 
-                    className={`w-full h-auto object-contain transition-opacity duration-1000 ${isImageLoading ? 'opacity-0' : 'opacity-100'}`}
-                    alt="C DESIGN LAB Result" 
-                    onLoad={() => setIsImageLoading(false)}
-                    onError={() => {
-                        setIsImageLoading(false);
-                        setResult(prev => ({ ...prev, error: true }));
-                    }}
-                  />
+                <div className="grid grid-cols-1 gap-8">
+            <div className="relative aspect-square bg-black/40 rounded-2xl overflow-hidden border-2 border-lilac/20 shadow-2xl group">
+              {isGenerating ? (
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-bg/80 backdrop-blur-md z-10">
+                  <div className="w-20 h-20 border-4 border-lilac/30 border-t-lilac rounded-full animate-spin mb-6 shadow-[0_0_30px_rgba(168,85,247,0.4)]" />
+                  <p className="text-lilac font-black tracking-[0.3em] animate-pulse uppercase text-xs">Manifestando Arte...</p>
                 </div>
+              ) : result ? (
+                <motion.img
+                  initial={{ opacity: 0, scale: 1.1 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  src={result.url}
+                  alt="C DESIGN LAB Masterpiece"
+                  className="w-full h-full object-cover transition-all duration-1000"
+                  onLoad={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.style.opacity = '1';
+                  }}
+                />
+              ) : (
+                <div className="absolute inset-0 flex flex-col items-center justify-center p-12 text-center">
+                  <div className="w-24 h-24 rounded-full bg-lilac/5 border border-lilac/10 flex items-center justify-center mb-6">
+                    <Wand2 className="w-10 h-10 text-lilac/20" />
+                  </div>
+                  <p className="text-lilac/40 font-serif italic text-lg leading-relaxed">
+                    Tu visión aparecerá aquí después de que la IA la procese...
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
                 <div className="space-y-4">
                   <a href={result.url} target="_blank" rel="noreferrer" className="block w-full py-3 rounded-full bg-lilac text-bg-tertiary text-center font-bold text-[10px] tracking-[0.3em] shadow-[0_0_30px_rgba(168,85,247,0.5)] hover:bg-lilac-dim transition-all">
                     GUARDAR EN MI DISPOSITIVO
