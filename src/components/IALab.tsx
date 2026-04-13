@@ -61,7 +61,7 @@ export const IALab = () => {
           <span className="text-[10px] uppercase tracking-widest font-bold">Volver</span>
         </a>
         <div className="text-right">
-          <h1 className="text-3xl md:text-5xl font-serif italic uppercase tracking-tighter">C DESIGN LAB</h1>
+          <h1 className="text-3xl md:text-5xl font-serif italic uppercase tracking-tighter text-purple-300" style={{ textShadow: '0 0 10px #a855f7, 0 0 30px #a855f7, 0 0 60px #7c3aed' }}>C DESIGN LAB</h1>
           <p className="text-[9px] text-purple-500 mt-1 uppercase tracking-[0.4em]">Digital Fashion Masterpiece</p>
         </div>
       </nav>
@@ -93,7 +93,7 @@ export const IALab = () => {
           <AnimatePresence mode="wait">
             {showResults && (
               <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-4 max-w-[380px] w-full">
-                <div className="w-full h-auto min-h-[200px] rounded-2xl border border-purple-500/30 overflow-hidden bg-black flex items-center justify-center shadow-[0_0_50px_rgba(168,85,247,0.1)]">
+                <div className="w-full h-auto rounded-2xl border border-purple-500/30 overflow-hidden bg-black flex items-center justify-center shadow-[0_0_50px_rgba(168,85,247,0.1)]">
                   <img 
                     src={result.url} 
                     className="w-full h-auto object-contain"
