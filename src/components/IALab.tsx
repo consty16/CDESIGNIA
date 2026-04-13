@@ -151,7 +151,7 @@ export const IALab = () => {
           <button
             onClick={handleGenerate}
             disabled={isGenerating || !userPrompt.trim()}
-            className="w-full py-4 rounded-xl font-bold text-xs tracking-[0.3em] bg-gradient-to-r from-purple-600 to-purple-900 shadow-xl hover:brightness-125 transition-all flex items-center justify-center gap-3"
+            className="w-full py-4 rounded-xl font-bold text-xs tracking-[0.3em] bg-lilac text-bg-tertiary shadow-xl hover:bg-lilac-dim hover:scale-[1.02] transition-all flex items-center justify-center gap-3 disabled:opacity-40"
           >
             {isGenerating ? <Loader2 className="animate-spin" /> : <><Wand2 className="w-5 h-5" /> Experiment Progress ✨</>}
           </button>
@@ -189,7 +189,7 @@ export const IALab = () => {
                   />
                 </div>
                 <div className="space-y-4">
-                  <a href={result.url} target="_blank" rel="noreferrer" className="block w-full py-3 rounded-full bg-purple-600 text-center font-bold text-[10px] tracking-[0.3em] shadow-lg hover:bg-purple-500 transition-all">
+                  <a href={result.url} target="_blank" rel="noreferrer" className="block w-full py-3 rounded-full bg-lilac text-bg-tertiary text-center font-bold text-[10px] tracking-[0.3em] shadow-lg hover:bg-lilac-dim transition-all">
                     GUARDAR EN MI DISPOSITIVO
                   </a>
                 </div>

@@ -28,7 +28,7 @@ export const Navbar: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOp
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }
             }}
-            className="text-[10px] uppercase tracking-[0.15em] text-white border border-white/40 px-5 py-2 hover:bg-white/20 transition-all rounded shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.6)] font-bold"
+            className="text-[10px] uppercase tracking-[0.15em] bg-lilac text-bg-tertiary px-5 py-2 hover:bg-lilac-dim transition-all rounded shadow-[0_0_15px_rgba(255,255,255,0.2)] font-bold"
           >
             Inicio
           </Link>
@@ -38,7 +38,7 @@ export const Navbar: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOp
         <li>
           <Link
             to="/emprendedores"
-            className="text-[10px] uppercase tracking-[0.15em] text-white border border-lilac/40 px-5 py-2 hover:bg-lilac/20 transition-all rounded shadow-[0_0_15px_rgba(196,181,253,0.2)] hover:shadow-[0_0_25px_rgba(196,181,253,0.5)] bg-lilac/5 font-bold"
+            className="text-[10px] uppercase tracking-[0.15em] bg-lilac text-bg-tertiary px-5 py-2 hover:bg-lilac-dim transition-all rounded shadow-[0_0_15px_rgba(196,181,253,0.2)] font-bold"
           >
             ¿sos emprendedor?
           </Link>
@@ -130,13 +130,13 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
           <div className="flex flex-wrap gap-4 mb-12">
             <button
               onClick={() => onOpenOverlay('muestras')}
-              className="bg-white text-black w-44 h-11 text-xs uppercase tracking-widest font-bold hover:bg-white/90 transition-all rounded shadow-[0_0_20px_rgba(255,255,255,0.4)] hover:shadow-[0_0_30px_rgba(255,255,255,0.6)] hover:scale-105 flex items-center justify-center"
+              className="bg-lilac text-bg-tertiary w-44 h-11 text-xs uppercase tracking-widest font-bold hover:bg-lilac-dim transition-all rounded shadow-[0_0_20px_rgba(168,85,247,0.3)] hover:scale-105 flex items-center justify-center"
             >
               Portfolio
             </button>
             <a
               href="#about"
-              className="border border-lilac/20 text-white w-44 h-11 text-xs uppercase tracking-widest hover:border-white transition-all rounded hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] font-bold flex items-center justify-center"
+              className="bg-lilac text-bg-tertiary w-44 h-11 text-xs uppercase tracking-widest hover:bg-lilac-dim transition-all rounded shadow-[0_0_20px_rgba(168,85,247,0.2)] font-bold flex items-center justify-center"
             >
               Quiénes somos
             </a>
@@ -147,10 +147,10 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
               <button
                 onClick={() => setIsProjectsOpen(!isProjectsOpen)}
                 onMouseEnter={() => setIsProjectsOpen(true)}
-                className="border border-white/40 text-white w-44 h-11 text-xs uppercase tracking-widest hover:bg-white/10 transition-all rounded shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.5)] flex items-center justify-center gap-2 font-bold"
+                className="bg-lilac text-bg-tertiary w-44 h-11 text-xs uppercase tracking-widest hover:bg-lilac-dim transition-all rounded shadow-[0_0_15px_rgba(168,85,247,0.2)] flex items-center justify-center gap-2 font-bold"
               >
                 Projects
-                <span className={cn("text-[8px] opacity-50 transition-transform", isProjectsOpen ? "rotate-180" : "")}>▼</span>
+                <span className={cn("text-[8px] opacity-70 transition-transform", isProjectsOpen ? "rotate-180" : "")}>▼</span>
               </button>
               
               <div className={cn(
@@ -189,7 +189,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
               href="/ia-lab.html"
               target="_blank"
               rel="noreferrer"
-              className="border border-lilac-neon text-lilac-glow w-44 h-11 text-xs uppercase tracking-widest font-bold hover:bg-lilac-neon hover:text-white transition-all duration-300 rounded shadow-[0_0_10px_rgba(168,85,247,0.3)] hover:shadow-[0_0_25px_rgba(168,85,247,0.8)] flex items-center justify-center gap-2 group"
+              className="bg-lilac text-bg-tertiary w-44 h-11 text-xs uppercase tracking-widest font-bold hover:bg-lilac-dim transition-all duration-300 rounded shadow-[0_0_10px_rgba(168,85,247,0.3)] hover:shadow-[0_0_25px_rgba(168,85,247,0.8)] flex items-center justify-center gap-2 group"
             >
               <span className="group-hover:animate-pulse">¡PROBAR MAGIA!</span>
             </a>
@@ -744,9 +744,9 @@ export const Contact: React.FC = () => {
               window.open("https://mail.google.com/mail/?view=cm&fs=1&to=constanzarissop91@gmail.com", "_blank", "noreferrer");
             }
           }}
-          className="text-white border border-white/40 px-10 py-4 text-sm uppercase tracking-widest hover:bg-white/10 transition-all rounded shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)] hover:border-white flex items-center gap-3 font-bold"
+          className="bg-lilac text-bg-tertiary px-10 py-4 text-sm uppercase tracking-widest hover:bg-lilac-dim transition-all rounded shadow-[0_0_15px_rgba(168,85,247,0.3)] flex items-center gap-3 font-bold"
         >
-          <Mail size={18} className="drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]" />
+          <Mail size={18} />
           <span>C DESIGN IA</span>
         </a>
       </div>
