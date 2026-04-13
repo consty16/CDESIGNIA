@@ -13,10 +13,10 @@ export const IALab = () => {
   const [userPrompt, setUserPrompt] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [currentMessage, setCurrentMessage] = useState(0);
-  const [showResults, setShowResults] = useState(false);
   const [result, setResult] = useState({ url: '', advice: '', ready: false, error: false });
   const [isComposingMusic, setIsComposingMusic] = useState(false);
   const [musicResult, setMusicResult] = useState('');
+  const [isImageLoading, setIsImageLoading] = useState(true);
 
   useEffect(() => {
     let interval: any;
@@ -32,6 +32,7 @@ export const IALab = () => {
     if (!userPrompt.trim()) return;
     setIsGenerating(true);
     setShowResults(false);
+    setIsImageLoading(true);
     
     try {
       // PROMPT MAESTRO: Forzamos realismo y simetría total
@@ -98,7 +99,17 @@ export const IALab = () => {
       const parts = data?.candidates?.[0]?.content?.parts || [];
       const textPart = parts.find((p: any) => p.text && !p.thought);
       const text = textPart?.text || parts[parts.length - 1]?.text || 'No se pudo generar la composición.';
-      setMusicResult(text.trim());
+      const cleanText = text.trim();
+      setMusicResult(cleanText);
+
+      // WOW FACTOR: Voz de lujo leyendo la partitura
+      if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        utterance.lang = 'es-ES';
+        utterance.rate = 0.85; // Un poco más lento para que suene poético
+        utterance.pitch = 1.1;
+        window.speechSynthesis.speak(utterance);
+      }
     } catch (error) {
       console.error('Error en Gemini Music:', error);
       setMusicResult('Error al conectar con la IA musical. Verificá tu API Key.');
@@ -158,11 +169,22 @@ export const IALab = () => {
           <AnimatePresence mode="wait">
             {showResults && (
               <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-4 max-w-[380px] w-full">
-                <div className="w-full h-auto rounded-2xl border border-purple-500/30 overflow-hidden bg-black flex items-center justify-center shadow-[0_0_50px_rgba(168,85,247,0.1)]">
+                <div className="relative w-full h-auto rounded-2xl border border-purple-500/30 overflow-hidden bg-black flex items-center justify-center shadow-[0_0_50px_rgba(168,85,247,0.1)] min-h-[400px]">
+                  {isImageLoading && (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm z-10">
+                      <Loader2 className="w-10 h-10 text-purple-500 animate-spin mb-4" />
+                      <p className="text-[10px] text-purple-300 uppercase tracking-widest animate-pulse font-bold text-center px-4">Materializando visión de alta gama...</p>
+                    </div>
+                  )}
                   <img 
                     src={result.url} 
-                    className="w-full h-auto object-contain"
+                    className={`w-full h-auto object-contain transition-opacity duration-1000 ${isImageLoading ? 'opacity-0' : 'opacity-100'}`}
                     alt="C DESIGN LAB Result" 
+                    onLoad={() => setIsImageLoading(false)}
+                    onError={() => {
+                        setIsImageLoading(false);
+                        setResult(prev => ({ ...prev, error: true }));
+                    }}
                   />
                 </div>
                 {musicResult && (
