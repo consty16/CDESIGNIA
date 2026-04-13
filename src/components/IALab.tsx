@@ -145,13 +145,14 @@ export const IALab = () => {
         </div>
       </nav>
 
-      <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+      <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch relative z-10">
         {/* Panel de Control - More Compact & Vivid */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="backdrop-blur-3xl bg-white/10 border border-white/20 rounded-3xl p-6 md:p-8 shadow-[0_0_80px_rgba(0,0,0,0.3)] space-y-6"
+          className="backdrop-blur-3xl bg-white/10 border border-white/20 rounded-3xl p-6 md:p-8 shadow-[0_0_80px_rgba(0,0,0,0.3)] flex flex-col justify-between"
         >
+          <div className="space-y-6">
           <div className="text-center space-y-2">
             <h3 className="text-[10px] font-black text-white tracking-[0.4em] uppercase flex items-center justify-center gap-4">
               <span className="w-6 h-[1px] bg-white/20" />
@@ -167,6 +168,7 @@ export const IALab = () => {
             placeholder="Describe tu visión aquí..."
             className="w-full h-32 bg-gradient-to-br from-[#5c1a5c] to-[#3a0e3a] border border-lilac/50 rounded-2xl p-5 text-white text-base placeholder-white/30 focus:ring-4 focus:ring-lilac/30 outline-none transition-all resize-none font-light leading-snug"
           />
+          </div>
           
           <div className="space-y-4">
             <button
@@ -188,44 +190,59 @@ export const IALab = () => {
         </motion.div>
 
         {/* Panel de Resultado - Perfectly Aligned */}
-        <div className="flex flex-col gap-6">
-          <div className="relative aspect-square bg-black/40 rounded-3xl overflow-hidden border-2 border-white/10 shadow-2xl group">
-            {isGenerating ? (
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-bg/60 backdrop-blur-xl z-20">
-                <div className="w-16 h-16 border-4 border-lilac/30 border-t-lilac rounded-full animate-spin mb-4" />
-                <p className="text-lilac font-black tracking-[0.3em] animate-pulse uppercase text-[10px]">CREANDO...</p>
-              </div>
-            ) : result ? (
-              <motion.img
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                src={result.url}
-                alt="AI Result"
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <div className="absolute inset-0 flex flex-col items-center justify-center p-10 text-center">
-                <div className="w-16 h-16 rounded-full bg-lilac/5 border border-lilac/10 flex items-center justify-center mb-4">
-                  <Wand2 className="w-8 h-8 text-lilac/20" />
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="backdrop-blur-3xl bg-white/10 border border-white/20 rounded-3xl p-6 md:p-8 shadow-[0_0_80px_rgba(0,0,0,0.3)] flex flex-col"
+        >
+          <div className="text-center mb-6 space-y-2">
+            <h3 className="text-[10px] font-black text-white tracking-[0.4em] uppercase flex items-center justify-center gap-4">
+              <span className="w-6 h-[1px] bg-white/20" />
+              2. El Resultado
+              <span className="w-6 h-[1px] bg-white/20" />
+            </h3>
+            <p className="text-white/40 text-[8px] uppercase tracking-widest font-bold">Rendering Masterpiece</p>
+          </div>
+
+          <div className="flex-1 flex flex-col gap-6">
+            <div className="relative flex-1 min-h-[300px] bg-black/40 rounded-2xl overflow-hidden border border-white/10 shadow-inner group">
+              {isGenerating ? (
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-bg/60 backdrop-blur-xl z-20">
+                  <div className="w-16 h-16 border-4 border-lilac/30 border-t-lilac rounded-full animate-spin mb-4" />
+                  <p className="text-lilac font-black tracking-[0.3em] animate-pulse uppercase text-[10px]">CREANDO...</p>
                 </div>
-                <p className="text-lilac/30 font-serif italic text-sm">El arte aparecerá aquí...</p>
-              </div>
+              ) : result.url ? (
+                <motion.img
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  src={result.url}
+                  alt="AI Result"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="absolute inset-0 flex flex-col items-center justify-center p-10 text-center">
+                  <div className="w-12 h-12 rounded-full bg-lilac/5 border border-lilac/10 flex items-center justify-center mb-4">
+                    <Sparkles className="w-6 h-6 text-lilac/20" />
+                  </div>
+                  <p className="text-lilac/30 font-serif italic text-sm">Tu diseño cobrará vida aquí...</p>
+                </div>
+              )}
+            </div>
+            
+            {result.url && !isGenerating && (
+              <motion.a 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                href={result.url} 
+                target="_blank" 
+                rel="noreferrer" 
+                className="w-full py-4 rounded-xl bg-lilac text-bg-tertiary font-black text-xs tracking-[0.4em] shadow-[0_0_30px_rgba(168,85,247,0.4)] hover:bg-white hover:scale-[1.02] transition-all border border-white/20 uppercase text-center"
+              >
+                DESCARGAR OBRA 📥
+              </motion.a>
             )}
           </div>
-          
-          {result && !isGenerating && (
-            <motion.a 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              href={result.url} 
-              target="_blank" 
-              rel="noreferrer" 
-              className="w-full py-4 rounded-xl bg-gradient-to-br from-[#3b0f6b] to-[#240842] text-white text-center font-black text-xs tracking-[0.4em] shadow-[0_0_30px_rgba(168,85,247,0.4)] hover:brightness-125 transition-all border border-lilac/30 uppercase"
-            >
-              DESCARGAR OBRA 📥
-            </motion.a>
-          )}
-        </div>
+        </motion.div>
       </div>
 
       {/* Loading Fullscreen */}
