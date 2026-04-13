@@ -13,6 +13,7 @@ export const IALab = () => {
   const [userPrompt, setUserPrompt] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [currentMessage, setCurrentMessage] = useState(0);
+  const [showResults, setShowResults] = useState(false);
   const [result, setResult] = useState({ url: '', advice: '', ready: false, error: false });
   const [isImageLoading, setIsImageLoading] = useState(true);
 
