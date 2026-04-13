@@ -25,7 +25,7 @@ export const Overlay: React.FC<OverlayProps> = ({ isOpen, onClose, title, childr
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="relative z-10 w-full max-w-4xl max-h-[85vh] bg-white/5 backdrop-blur-2xl border border-white/10 shadow-2xl flex flex-col overflow-hidden rounded-2xl"
+            className="relative z-10 w-full max-w-4xl max-h-[85vh] bg-gradient-to-br from-[#3b0f6b] to-[#240842] border border-white/10 shadow-2xl flex flex-col overflow-hidden rounded-2xl"
           >
             <div className="p-4 md:p-6 border-b border-white/5 flex items-center justify-between sticky top-0 bg-white/5 backdrop-blur-xl z-20">
               <h2 className="font-serif text-xl md:text-2xl font-light text-text-primary">{title}</h2>
