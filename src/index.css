@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap');
 @import "tailwindcss";
 
-@theme {
+:root {
   --font-serif: "Cormorant Garamond", Georgia, serif;
   --font-sans: "DM Sans", system-ui, sans-serif;
   --font-orbitron: "Orbitron", sans-serif;
@@ -23,7 +23,10 @@
 
 @layer base {
   body {
-    @apply bg-bg-deep text-text-primary font-sans overflow-x-hidden;
+    background-color: var(--color-bg-deep);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
     cursor: none;
   }
 
@@ -68,7 +71,11 @@
   }
 
   .chat-dot {
-    @apply w-1.5 h-1.5 rounded-full bg-green-400;
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 9999px;
+    background-color: var(--color-wa, #25d366);
+    background-color: #4ade80; /* matches bg-green-400 */
     animation: pdot 2s infinite;
   }
 
