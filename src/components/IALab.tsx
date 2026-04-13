@@ -58,70 +58,23 @@ export const IALab = () => {
     }
   };
 
-  const handleMusicMagic = async () => {
-    if (!userPrompt.trim()) return;
-    setIsComposingMusic(true);
-    setMusicResult('');
-
+  const handleDownload = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!result.url || isGenerating || isImageLoading) return;
     try {
-      const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-      if (!apiKey || apiKey === 'MY_GEMINI_API_KEY') {
-        setMusicResult('API Key no configurada. Agregá VITE_GEMINI_API_KEY en las variables de entorno.');
-        return;
-      }
-
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{
-              parts: [{
-                text: `Basado en este concepto visual: '${userPrompt}', describí en una sola frase corta, poética y de alta gama cómo suena su banda sonora. Usá términos de instrumentos y ambiente de lujo. En español.`
-              }]
-            }],
-            generationConfig: {
-              maxOutputTokens: 150,
-              temperature: 0.9
-            }
-          })
-        }
-      );
-
-      const data = await response.json();
-      console.log('Gemini Music Response:', JSON.stringify(data, null, 2));
-
-      if (data.error) {
-        setMusicResult(`Error de API: ${data.error.message}`);
-        return;
-      }
-
-      // Buscar el texto en cualquier posición de parts (compatibilidad con modelos thinking)
-      const parts = data?.candidates?.[0]?.content?.parts || [];
-      const textPart = parts.find((p: any) => p.text && !p.thought);
-      const text = textPart?.text || parts[parts.length - 1]?.text || 'No se pudo generar la composición.';
-      const cleanText = text.trim();
-      setMusicResult(cleanText);
-
-      // WOW FACTOR: Música de ambiente + Voz de lujo
-      if (audioRef.current) {
-        audioRef.current.play().catch(e => console.log('Audio playback blocked by browser', e));
-      }
-
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel(); // Parar cualquier voz anterior
-        const utterance = new SpeechSynthesisUtterance(cleanText);
-        utterance.lang = 'es-ES';
-        utterance.rate = 0.9;
-        utterance.volume = 1;
-        window.speechSynthesis.speak(utterance);
-      }
+      const response = await fetch(result.url);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = url;
+      a.download = `C_DESIGN_LAB_ObraMaestra_${Date.now()}.png`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Error en Gemini Music:', error);
-      setMusicResult('Error al conectar con la IA musical. Verificá tu API Key.');
-    } finally {
-      setIsComposingMusic(false);
+      window.open(result.url, '_blank');
     }
   };
 
@@ -132,16 +85,27 @@ export const IALab = () => {
       <div className="absolute bottom-0 left-0 w-[50%] h-[50%] bg-[#3b0f6b]/20 blur-[180px] rounded-full animate-pulse-slow z-0" />
       <div className="absolute top-[30%] left-[20%] w-[40%] h-[40%] bg-white/5 blur-[150px] rounded-full z-0" />
 
-      <nav className="relative z-10 mb-6 flex justify-between items-center max-w-5xl mx-auto">
-        <a href="/" className="flex items-center gap-2 text-white/50 hover:text-lilac transition-all group">
+      <nav className="relative z-10 mb-10 flex items-center justify-center max-w-5xl mx-auto">
+        <a href="/" className="absolute left-0 top-1/2 -translate-y-1/2 flex items-center gap-2 text-white/50 hover:text-lilac transition-all group">
           <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1" />
           <span className="text-[10px] uppercase tracking-widest font-black">VOLVER</span>
         </a>
-        <div className="text-right">
-          <h1 className="text-3xl md:text-5xl font-orbitron font-black text-white drop-shadow-[0_0_35px_rgba(255,255,255,0.6)] mb-1">
-            C DESIGN <span className="text-lilac drop-shadow-[0_0_20px_rgba(168,85,247,0.7)]">LAB</span>
+        <div className="text-center">
+          <h1 
+            className="text-4xl md:text-6xl font-serif font-bold mb-2 uppercase"
+            style={{ 
+              color: '#c4b5fd', 
+              textShadow: '0 0 15px rgba(194,171,237,0.8), 0 0 30px rgba(194,171,237,0.5)' 
+            }}
+          >
+            C DESIGN LAB
           </h1>
-          <p className="text-[10px] md:text-xs text-lilac/80 uppercase tracking-[0.5em] font-bold">Digital Fashion Masterpiece</p>
+          <p 
+            className="font-serif text-lg md:text-2xl italic tracking-wide"
+            style={{ color: '#9333ea' }}
+          >
+            Digital Fashion Masterpiece
+          </p>
         </div>
       </nav>
 
@@ -161,45 +125,51 @@ export const IALab = () => {
             <p className="text-white/40 text-[8px] uppercase tracking-widest font-bold">IA Generative Engine</p>
           </div>
           
-          <div className="input-area mb-6">
+          <div className="input-area mb-6 rounded-xl overflow-hidden" style={{ backgroundColor: '#3b1566' }}>
             <textarea
               value={userPrompt}
               onChange={(e) => setUserPrompt(e.target.value)}
               placeholder="Describe tu visión aquí..."
-              className="w-full h-full bg-transparent border-none p-5 text-white text-base placeholder-white/30 focus:ring-0 outline-none transition-all resize-none font-light leading-snug"
+              rows={6}
+              className="w-full bg-transparent border-none p-5 text-white text-base placeholder-white/30 focus:ring-0 outline-none transition-all resize-none font-light leading-snug"
             />
           </div>
           
           <div className="space-y-4">
-            <button
-              onClick={handleGenerate}
-              disabled={isGenerating || !userPrompt.trim()}
-              className="w-full py-4 rounded-xl font-black text-xs tracking-[0.4em] bg-lilac text-bg-tertiary shadow-[0_0_40px_rgba(168,85,247,0.5)] hover:bg-white hover:scale-105 transition-all flex items-center justify-center gap-3 disabled:opacity-30 border border-white/40 uppercase"
-            >
-              {isGenerating ? <Loader2 className="animate-spin" /> : <><Wand2 className="w-5 h-5" /> GENERAR ✨</>}
-            </button>
+            <div className="grid grid-cols-2 gap-4">
+              <button
+                onClick={handleGenerate}
+                disabled={isGenerating || !userPrompt.trim()}
+                className="w-full py-4 rounded-xl font-black text-xs tracking-[0.4em] bg-lilac text-white shadow-[0_0_40px_rgba(168,85,247,0.5)] hover:brightness-125 hover:scale-105 transition-all flex items-center justify-center gap-3 border border-white/40 uppercase"
+              >
+                {isGenerating ? <Loader2 className="animate-spin" /> : <><Wand2 className="w-5 h-5" /> GENERAR ✨</>}
+              </button>
+
+              <button
+                onClick={handleDownload}
+                style={{
+                  backgroundColor: '#4a1040',
+                  pointerEvents: (result.url && !isGenerating && !isImageLoading) ? 'auto' : 'none'
+                }}
+                className="w-full py-4 rounded-xl font-black text-xs tracking-[0.2em] text-white hover:brightness-125 transition-all flex items-center justify-center gap-2 border border-white/20 uppercase shadow-[0_0_20px_rgba(74,16,64,0.5)] cursor-pointer"
+              >
+                <Download className="w-4 h-4" /> DESCARGAR
+              </button>
+            </div>
             
-            <button
-              onClick={handleMusicMagic}
-              disabled={isComposingMusic || !userPrompt.trim()}
-              className="w-full py-4 rounded-xl font-black text-xs tracking-[0.4em] bg-white/5 text-white hover:bg-lilac/20 hover:text-lilac transition-all flex items-center justify-center gap-3 border border-white/10 uppercase shadow-[0_0_30px_rgba(255,255,255,0.05)] group"
+            <a
+              href="https://labs.google/fx/es/tools/music-fx"
+              target="_blank"
+              rel="noreferrer"
+              className="w-full py-4 rounded-xl font-black text-xs tracking-[0.4em] bg-white/5 text-white hover:bg-lilac/20 hover:text-lilac transition-all flex items-center justify-center gap-3 border border-white/10 uppercase shadow-[0_0_30px_rgba(255,255,255,0.05)] group cursor-pointer"
             >
-              {isComposingMusic ? <Loader2 className="animate-spin" /> : <><Music2 className="w-5 h-5 group-hover:scale-110 transition-transform" /> MAGIA MUSICAL 🎵</>}
-            </button>
+              <Music2 className="w-5 h-5 group-hover:scale-110 transition-transform" /> MAGIA MUSICAL 🎵
+            </a>
           </div>
         </motion.div>
 
         {/* Panel de Resultado - Perfectly Aligned */}
         <div className="glass-panel">
-          <div className="text-center space-y-2 mb-4">
-            <h3 className="text-[10px] font-black text-white tracking-[0.4em] uppercase flex items-center justify-center gap-4">
-              <span className="w-6 h-[1px] bg-white/20" />
-              2. Resultado
-              <span className="w-6 h-[1px] bg-white/20" />
-            </h3>
-            <p className="text-white/40 text-[8px] uppercase tracking-widest font-bold">AI Render Output</p>
-          </div>
-
           <div id="result-container" className="image-placeholder mb-6 overflow-hidden relative">
             {isGenerating ? (
               <div className="absolute inset-0 flex flex-col items-center justify-center bg-bg/60 backdrop-blur-xl z-20">
@@ -229,21 +199,6 @@ export const IALab = () => {
                 </div>
                 <p className="text-lilac/30 font-serif italic text-sm">Tu obra aparecerá aquí...</p>
               </div>
-            )}
-          </div>
-          
-          <div className="h-20 flex items-end">
-            {result.url && !isGenerating && !isImageLoading && (
-              <motion.a 
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                href={result.url} 
-                target="_blank" 
-                rel="noreferrer" 
-                className="w-full py-4 rounded-xl bg-gradient-to-br from-[#3b0f6b] to-[#240842] text-white text-center font-black text-xs tracking-[0.4em] shadow-[0_0_30px_rgba(168,85,247,0.4)] hover:brightness-125 transition-all border border-lilac/30 uppercase"
-              >
-                DESCARGAR OBRA 📥
-              </motion.a>
             )}
           </div>
         </div>

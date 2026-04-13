@@ -16,7 +16,7 @@ export const Navbar: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOp
   return (
     <nav className={cn(
       "fixed top-0 left-0 w-full z-[9999] flex items-center justify-between px-6 md:px-12 py-4 transition-all duration-500",
-      scrolled ? "bg-[#1a0b2e]/90 backdrop-blur-xl border-b border-lilac/10 py-3" : "bg-transparent"
+      scrolled ? "bg-[#1a0b2e]/90 backdrop-blur-xl py-3" : "bg-transparent"
     )}>
       <ul className="flex items-center gap-2">
         <li>
@@ -38,7 +38,7 @@ export const Navbar: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOp
         <li>
           <Link
             to="/emprendedores"
-            className="text-[10px] uppercase tracking-[0.15em] text-white border border-white/60 px-5 py-2 hover:brightness-125 transition-all rounded shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_35px_rgba(168,85,247,0.6)] bg-gradient-to-r from-lilac-neon to-[#7c3aed] font-bold"
+            className="text-[10px] uppercase tracking-[0.15em] text-white border border-white/40 px-5 py-2 hover:bg-white/20 transition-all rounded shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.6)] font-bold"
           >
             ¿sos emprendedor?
           </Link>
@@ -81,7 +81,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
           <span className="inline-block text-[10px] uppercase tracking-[0.25em] text-white border border-white/40 px-4 py-1.5 mb-8 bg-white/5 rounded shadow-[0_0_15px_rgba(255,255,255,0.2)]">
             AI Creator Content · Tucumán, Argentina
           </span>
-          <motion.h1 
+          <motion.h1
             className="font-serif text-4xl md:text-6xl lg:text-7xl font-light leading-[1.1] mb-8 tracking-tight"
             initial="hidden"
             animate="visible"
@@ -96,7 +96,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
               }
             }}
           >
-            <motion.span 
+            <motion.span
               className="block text-4xl md:text-[51px] lg:text-[72px] text-white"
               variants={{
                 hidden: { opacity: 0, y: 20 },
@@ -105,7 +105,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
             >
               NO SOLO ES
             </motion.span>
-            <motion.span 
+            <motion.span
               className="block italic text-lilac text-4xl md:text-[57px] lg:text-[80px]"
               variants={{
                 hidden: { opacity: 0, y: 20 },
@@ -114,7 +114,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
             >
               CREATIVO,
             </motion.span>
-            <motion.span 
+            <motion.span
               className="block text-4xl md:text-[51px] lg:text-[72px] text-white"
               variants={{
                 hidden: { opacity: 0, y: 20 },
@@ -127,37 +127,43 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
           <p className="text-[19px] text-white/80 max-w-md mb-10 font-light leading-relaxed">
             Integramos diseño gráfico con inteligencia artificial generativa para crear piezas visuales que rompen los formatos tradicionales.
           </p>
-          <div className="flex flex-wrap gap-4 mb-12">
+          <div className="grid grid-cols-2 gap-4 mb-12 max-w-[450px]">
             <button
               onClick={() => onOpenOverlay('muestras')}
-              className="border border-lilac-neon bg-lilac-neon/10 text-white px-8 py-3 text-xs uppercase tracking-widest hover:bg-lilac-neon transition-all rounded shadow-[0_0_20px_rgba(168,85,247,0.3)] hover:shadow-[0_0_35px_rgba(168,85,247,0.6)] font-bold group"
+              className="w-full h-full flex items-center justify-center border text-white py-3 px-2 sm:px-4 text-[10px] sm:text-xs uppercase tracking-widest hover:brightness-125 transition-all rounded font-bold text-center"
+              style={{ borderColor: '#c2abed', boxShadow: '0 0 15px rgba(194, 171, 237, 0.4), inset 0 0 5px rgba(194, 171, 237, 0.2)' }}
             >
-              <span className="group-hover:text-bg transition-colors">Portfolio</span>
+              Portfolio
             </button>
             <a
               href="#about"
-              className="border border-white/40 text-white px-8 py-3 text-xs uppercase tracking-widest hover:bg-white/10 transition-all rounded shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.3)] font-bold"
+              className="w-full h-full flex items-center justify-center border text-white py-3 px-2 sm:px-4 text-[10px] sm:text-xs uppercase tracking-widest hover:brightness-125 transition-all rounded font-bold text-center"
+              style={{ borderColor: '#c2abed', boxShadow: '0 0 15px rgba(194, 171, 237, 0.4), inset 0 0 5px rgba(194, 171, 237, 0.2)' }}
             >
               Quiénes somos
             </a>
-            <div 
-              className="relative"
+            <div
+              className="relative w-full h-full"
               onMouseLeave={() => setIsProjectsOpen(false)}
             >
               <button
                 onClick={() => setIsProjectsOpen(!isProjectsOpen)}
                 onMouseEnter={() => setIsProjectsOpen(true)}
-                className="border border-white/40 text-white px-8 py-3 text-xs uppercase tracking-widest hover:bg-white/10 transition-all rounded shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.5)] flex items-center gap-2 font-bold"
+                className="w-full h-full flex items-center justify-center gap-2 border text-white py-3 px-2 sm:px-4 text-[10px] sm:text-xs uppercase tracking-widest hover:brightness-125 transition-all rounded font-bold text-center"
+                style={{ borderColor: '#c2abed', boxShadow: '0 0 15px rgba(194, 171, 237, 0.4), inset 0 0 5px rgba(194, 171, 237, 0.2)' }}
               >
                 Projects
                 <span className={cn("text-[8px] opacity-50 transition-transform", isProjectsOpen ? "rotate-180" : "")}>▼</span>
               </button>
-              
+
               <div className={cn(
                 "absolute top-full left-0 pt-2 w-48 transition-all duration-300 z-50",
                 isProjectsOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible translate-y-2 pointer-events-none"
               )}>
-                <div className="w-full bg-bg-tertiary border border-lilac/20 rounded-lg overflow-hidden shadow-2xl backdrop-blur-xl">
+                <div
+                  className="w-full border border-lilac/20 rounded-lg overflow-hidden shadow-2xl backdrop-blur-xl"
+                  style={{ backgroundColor: '#3b1566' }}
+                >
                   <a
                     href="https://www.instagram.com/andromedamodamasculina/"
                     target="_blank"
@@ -189,9 +195,10 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
               href="/ia-lab.html"
               target="_blank"
               rel="noreferrer"
-              className="border border-lilac-neon text-lilac-glow px-8 py-3 text-xs uppercase tracking-widest font-bold hover:bg-lilac-neon hover:text-white transition-all duration-300 rounded shadow-[0_0_10px_rgba(168,85,247,0.3)] hover:shadow-[0_0_25px_rgba(168,85,247,0.8)] flex items-center gap-2 group"
+              className="w-full h-full flex items-center justify-center gap-2 border text-white py-3 px-2 sm:px-4 text-[10px] sm:text-xs uppercase tracking-widest font-bold hover:brightness-125 transition-all duration-300 rounded text-center"
+              style={{ borderColor: '#c2abed', boxShadow: '0 0 15px rgba(194, 171, 237, 0.4), inset 0 0 5px rgba(194, 171, 237, 0.2)' }}
             >
-              <span className="group-hover:animate-pulse">✨ ¡PROBAR MAGIA!</span>
+              <span className="hover:animate-pulse border-none">✨ ¡PROBAR MAGIA!</span>
             </a>
           </div>
           <div className="flex gap-10">
@@ -215,27 +222,27 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
           className="relative flex items-center justify-center"
         >
           <div className="relative w-full max-w-md aspect-square flex items-center justify-center">
-            <motion.div 
+            <motion.div
               className="absolute w-[101%] h-[101%] border border-white/40 rounded-full shadow-[0_0_15px_rgba(255,255,255,0.8)]"
-              animate={{ 
+              animate={{
                 rotate: 360,
                 scale: [1, 1.02, 1],
                 opacity: [0.4, 0.9, 0.4]
               }}
-              transition={{ 
+              transition={{
                 rotate: { duration: 20, repeat: Infinity, ease: "linear" },
                 scale: { duration: 3, repeat: Infinity, ease: "easeInOut" },
                 opacity: { duration: 3, repeat: Infinity, ease: "easeInOut" }
               }}
             />
-            <motion.div 
+            <motion.div
               className="absolute w-[104%] h-[104%] border border-white/20 rounded-full shadow-[0_0_25px_rgba(255,255,255,0.5)]"
-              animate={{ 
+              animate={{
                 rotate: -360,
                 y: [0, -8, 0],
                 scale: [1, 1.03, 1]
               }}
-              transition={{ 
+              transition={{
                 rotate: { duration: 30, repeat: Infinity, ease: "linear" },
                 y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
                 scale: { duration: 5, repeat: Infinity, ease: "easeInOut" }
@@ -245,7 +252,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
               src="/logo.png"
               alt="C Design IA Logo"
               className="w-full object-contain contrast-125 brightness-110 saturate-125 drop-shadow-[0_0_8px_rgba(255,255,255,0.9)] drop-shadow-[0_0_20px_rgba(255,255,255,0.4)]"
-              animate={{ 
+              animate={{
                 scale: [1, 1.02, 1],
                 filter: [
                   "contrast(1.25) brightness(1.1) drop-shadow(0 0 8px rgba(255,255,255,0.7))",
@@ -264,19 +271,24 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
       </div>
 
       {/* Video Carousel Section */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.6 }}
-        className="w-full mt-16 relative"
+        className="w-full mt-24 pt-12 relative"
       >
         <div className="max-w-6xl mx-auto mb-6 px-4">
-          <h3 className="text-[15px] uppercase tracking-[0.3em] bg-lilac text-bg font-bold border-2 border-lilac px-4 py-1 rounded-sm w-fit">Influencers Virtuales</h3>
+          <h3
+            className="font-serif text-[18px] uppercase tracking-[0.2em] font-bold border px-4 py-1 rounded-sm w-fit"
+            style={{ backgroundColor: '#1e1a52', color: '#c2abed', borderColor: '#c2abed', boxShadow: '0 0 15px rgba(194, 171, 237, 0.4), inset 0 0 5px rgba(194, 171, 237, 0.2)', textShadow: '0 0 8px rgba(194,171,237,0.5)' }}
+          >
+            Influencers Virtuales
+          </h3>
         </div>
 
         <div className="relative group/carousel max-w-6xl mx-auto px-4 md:px-0">
           {/* Left Arrow */}
-          <button 
+          <button
             onClick={() => scroll('left')}
             className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-12 h-full bg-gradient-to-r from-bg to-transparent opacity-0 group-hover/carousel:opacity-100 transition-opacity flex items-center justify-start pl-4 text-lilac hover:text-white"
           >
@@ -284,70 +296,70 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
           </button>
 
           {/* Right Arrow */}
-          <button 
+          <button
             onClick={() => scroll('right')}
             className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-12 h-full bg-gradient-to-l from-bg to-transparent opacity-0 group-hover/carousel:opacity-100 transition-opacity flex items-center justify-end pr-4 text-lilac hover:text-white"
           >
             <span className="text-2xl">→</span>
           </button>
 
-          <div 
+          <div
             ref={carouselRef}
             className="flex overflow-x-auto pb-12 no-scrollbar scroll-smooth snap-x snap-mandatory md:justify-center gap-6 px-[12.5%] md:px-4 scroll-px-[12.5%] md:scroll-px-4"
           >
-          {influencers.map((inf, idx) => (
-            <motion.div
-              key={`${inf.id}-${idx}`}
-              whileHover={{ scale: 1.05 }}
-              className="flex-shrink-0 w-[75vw] md:w-64 aspect-[3/4] bg-bg-tertiary rounded-xl overflow-hidden border border-white/5 relative group cursor-pointer snap-center"
-              onClick={(e) => {
-                const video = e.currentTarget.querySelector('video');
-                const playBtn = e.currentTarget.querySelector('.play-indicator');
-                if (video) {
-                  if (video.paused) {
-                    video.muted = false;
-                    video.play();
-                    if (playBtn) playBtn.innerHTML = 'Ⅱ';
-                  } else {
-                    video.pause();
-                    if (playBtn) playBtn.innerHTML = '▶';
+            {influencers.map((inf, idx) => (
+              <motion.div
+                key={`${inf.id}-${idx}`}
+                whileHover={{ scale: 1.05 }}
+                className="flex-shrink-0 w-[75vw] md:w-64 aspect-[3/4] bg-bg-tertiary rounded-xl overflow-hidden border border-white/5 relative group cursor-pointer snap-center"
+                onClick={(e) => {
+                  const video = e.currentTarget.querySelector('video');
+                  const playBtn = e.currentTarget.querySelector('.play-indicator');
+                  if (video) {
+                    if (video.paused) {
+                      video.muted = false;
+                      video.play();
+                      if (playBtn) playBtn.innerHTML = 'Ⅱ';
+                    } else {
+                      video.pause();
+                      if (playBtn) playBtn.innerHTML = '▶';
+                    }
                   }
-                }
-              }}
-            >
-              <video 
-                src={inf.video}
-                className="w-full h-full object-cover opacity-100 transition-opacity"
-                muted
-                loop
-                playsInline
-                preload="metadata"
-                onMouseOver={(e) => {
-                  const v = e.target as HTMLVideoElement;
-                  if (v.paused) v.play();
                 }}
-                onMouseOut={(e) => {
-                  const v = e.target as HTMLVideoElement;
-                  const playBtn = v.parentElement?.querySelector('.play-indicator');
-                  v.pause();
-                  v.muted = true;
-                  if (playBtn) playBtn.innerHTML = '▶';
-                }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-              <div className="absolute bottom-4 left-4">
-                <div className="text-[10px] text-lilac uppercase tracking-widest font-bold">{inf.title}</div>
-              </div>
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                <div className="play-indicator w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white text-xs">
-                  ▶
+              >
+                <video
+                  src={inf.video}
+                  className="w-full h-full object-cover opacity-100 transition-opacity"
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  onMouseOver={(e) => {
+                    const v = e.target as HTMLVideoElement;
+                    if (v.paused) v.play();
+                  }}
+                  onMouseOut={(e) => {
+                    const v = e.target as HTMLVideoElement;
+                    const playBtn = v.parentElement?.querySelector('.play-indicator');
+                    v.pause();
+                    v.muted = true;
+                    if (playBtn) playBtn.innerHTML = '▶';
+                  }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                <div className="absolute bottom-4 left-4">
+                  <div className="text-[10px] text-lilac uppercase tracking-widest font-bold">{inf.title}</div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                  <div className="play-indicator w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white text-xs">
+                    ▶
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
     </section>
   );
 };
@@ -398,20 +410,23 @@ export const FeaturedWorks: React.FC = () => {
   };
 
   return (
-    <section className="pt-4 pb-12 bg-bg relative overflow-hidden">
+    <section className="mt-16 pt-24 pb-12 bg-bg relative overflow-hidden">
       <div className="w-full">
-        <div className="max-w-6xl mx-auto flex items-center justify-between mb-10 px-6 md:px-12">
+        <div className="max-w-6xl mx-auto flex items-center justify-between mb-10 px-4">
           <div className="flex items-center gap-4 flex-1">
-            <h2 className="text-[15px] uppercase tracking-[0.3em] bg-lilac text-bg font-bold border-2 border-lilac px-4 py-1 rounded-sm whitespace-nowrap">
+            <h2
+              className="font-serif text-[18px] uppercase tracking-[0.2em] font-bold border px-4 py-1 rounded-sm whitespace-nowrap"
+              style={{ backgroundColor: '#1e1a52', color: '#c2abed', borderColor: '#c2abed', boxShadow: '0 0 15px rgba(194, 171, 237, 0.4), inset 0 0 5px rgba(194, 171, 237, 0.2)', textShadow: '0 0 8px rgba(194,171,237,0.5)' }}
+            >
               Trabajos Destacados
             </h2>
-            <div className="h-[1px] flex-1 bg-lilac/20" />
+            <div className="h-[1px] flex-1 bg-white/5" />
           </div>
         </div>
 
         <div className="relative group/carousel max-w-6xl mx-auto px-4 md:px-0">
           {/* Left Arrow */}
-          <button 
+          <button
             onClick={() => scroll('left')}
             className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-16 h-full bg-gradient-to-r from-bg to-transparent opacity-0 group-hover/carousel:opacity-100 transition-opacity flex items-center justify-start pl-4 text-lilac hover:text-white"
           >
@@ -419,74 +434,74 @@ export const FeaturedWorks: React.FC = () => {
           </button>
 
           {/* Right Arrow */}
-          <button 
+          <button
             onClick={() => scroll('right')}
             className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-16 h-full bg-gradient-to-l from-bg to-transparent opacity-0 group-hover/carousel:opacity-100 transition-opacity flex items-center justify-end pr-4 text-lilac hover:text-white"
           >
             <span className="text-3xl">→</span>
           </button>
 
-          <div 
+          <div
             ref={carouselRef}
             className="flex overflow-x-auto no-scrollbar scroll-smooth pb-12 snap-x snap-mandatory md:justify-start gap-6 px-[10%] md:px-4 scroll-px-[10%] md:scroll-px-4"
           >
-          {works.map((work) => (
-            <motion.div
-              key={work.id}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -5 }}
-              className="group relative flex-shrink-0 w-[80vw] md:w-[400px] aspect-[3/4] bg-bg-tertiary rounded-xl overflow-hidden border border-white/5 cursor-pointer snap-center"
-              onClick={(e) => {
-                const video = e.currentTarget.querySelector('video');
-                const playBtn = e.currentTarget.querySelector('.play-indicator');
-                if (video) {
-                  if (video.paused) {
-                    video.muted = false;
-                    video.play();
-                    if (playBtn) playBtn.innerHTML = 'Ⅱ';
-                  } else {
-                    video.pause();
-                    if (playBtn) playBtn.innerHTML = '▶';
+            {works.map((work) => (
+              <motion.div
+                key={work.id}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -5 }}
+                className="group relative flex-shrink-0 w-[80vw] md:w-[400px] aspect-[3/4] bg-bg-tertiary rounded-xl overflow-hidden border border-white/5 cursor-pointer snap-center"
+                onClick={(e) => {
+                  const video = e.currentTarget.querySelector('video');
+                  const playBtn = e.currentTarget.querySelector('.play-indicator');
+                  if (video) {
+                    if (video.paused) {
+                      video.muted = false;
+                      video.play();
+                      if (playBtn) playBtn.innerHTML = 'Ⅱ';
+                    } else {
+                      video.pause();
+                      if (playBtn) playBtn.innerHTML = '▶';
+                    }
                   }
-                }
-              }}
-            >
-              <video
-                src={work.video}
-                className="w-full h-full object-cover opacity-100 transition-all duration-500"
-                muted
-                loop
-                playsInline
-                preload="metadata"
-                onMouseOver={(e) => {
-                  const v = e.target as HTMLVideoElement;
-                  if (v.paused) v.play();
                 }}
-                onMouseOut={(e) => {
-                  const v = e.target as HTMLVideoElement;
-                  const playBtn = v.parentElement?.querySelector('.play-indicator');
-                  v.pause();
-                  v.muted = true;
-                  if (playBtn) playBtn.innerHTML = '▶';
-                }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-bg/90 via-transparent to-transparent opacity-60 group-hover:opacity-0 transition-opacity" />
-              <div className="absolute bottom-4 left-4">
-                <div className="text-[10px] text-lilac uppercase tracking-widest font-bold drop-shadow-lg">{work.title}</div>
-              </div>
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                <div className="play-indicator w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white">
-                  ▶
+              >
+                <video
+                  src={work.video}
+                  className="w-full h-full object-cover opacity-100 transition-all duration-500"
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  onMouseOver={(e) => {
+                    const v = e.target as HTMLVideoElement;
+                    if (v.paused) v.play();
+                  }}
+                  onMouseOut={(e) => {
+                    const v = e.target as HTMLVideoElement;
+                    const playBtn = v.parentElement?.querySelector('.play-indicator');
+                    v.pause();
+                    v.muted = true;
+                    if (playBtn) playBtn.innerHTML = '▶';
+                  }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-bg/90 via-transparent to-transparent opacity-60 group-hover:opacity-0 transition-opacity" />
+                <div className="absolute bottom-4 left-4">
+                  <div className="text-[10px] text-lilac uppercase tracking-widest font-bold drop-shadow-lg">{work.title}</div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                  <div className="play-indicator w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white">
+                    ▶
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
   );
 };
 
@@ -499,13 +514,13 @@ export const SectionCards: React.FC<{ onOpenOverlay: (id: string) => void }> = (
   ];
 
   return (
-    <div id="projects" className="flex flex-col md:flex-row border-y border-lilac/10">
+    <div id="projects" className="flex flex-col md:flex-row">
       {cards.map((card) => (
         <button
           key={card.id}
           onClick={() => onOpenOverlay(card.id)}
           className={cn(
-            "flex-1 p-8 md:p-10 flex flex-col items-center gap-3 text-center border-b md:border-b-0 md:border-r border-lilac/10 transition-all duration-500 hover:brightness-125 hover:scale-y-[1.03] relative overflow-hidden group bg-gradient-to-br",
+            "flex-1 p-8 md:p-10 flex flex-col items-center gap-3 text-center transition-all duration-500 hover:brightness-125 hover:scale-y-[1.03] relative overflow-hidden group bg-gradient-to-br",
             card.color
           )}
         >
@@ -523,51 +538,37 @@ export const SectionCards: React.FC<{ onOpenOverlay: (id: string) => void }> = (
 
 export const About: React.FC = () => {
   return (
-    <section id="about" className="py-24 px-6 md:px-12 bg-bg-secondary">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-        <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          <h2 className="font-serif text-4xl md:text-5xl font-light leading-tight mb-8 text-white">
-            Un poco de<br />
-            <em className="italic text-lilac">historia...</em>
-          </h2>
-          <div className="space-y-6 text-white/80 font-light leading-relaxed text-base md:text-lg">
-            <p>
-              Este proyecto surge como una <strong className="text-white font-normal">evolución natural del diseño gráfico</strong> hacia entornos digitales impulsados por inteligencia artificial, y de la necesidad de experimentar con nuevas metodologías visuales que integren creatividad humana y tecnología.
-            </p>
-            <p>
-              A lo largo del tiempo, el enfoque se consolidó en la <strong className="text-white font-normal">creación de piezas interactivas</strong>, portafolios digitales y contenido visual asistido por IA generativa.
-            </p>
-            <p>
-              La idea principal es explorar y ampliar la percepción creativa, <strong className="text-white font-normal">optimizar procesos</strong> y aportar nuevas perspectivas estéticas al mercado. Porque diseñar no solo es ver una pieza visual atractiva sino que sea funcional para su objetivo.
-            </p>
+    <section id="about">
+      <motion.div
+        className="about-inner reveal"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+      >
+        <div>
+          <span className="section-tag">Quiénes somos</span>
+          <h2 className="section-h2">Un poco de<br /><em style={{ fontStyle: 'italic', color: 'var(--color-lilac)' }}>historia...</em></h2>
+          <div className="divider"></div>
+          <div className="about-text">
+            <p>Este proyecto surge como una <strong>evolución natural del diseño gráfico</strong> hacia entornos digitales impulsados por inteligencia artificial, y de la necesidad de experimentar con nuevas metodologías visuales que integren creatividad humana y tecnología.</p>
+            <p>A lo largo del tiempo, el enfoque se consolidó en la <strong>creación de piezas interactivas</strong>, portafolios digitales y contenido visual asistido por IA generativa.</p>
+            <p>La idea principal es explorar y ampliar la percepción creativa, <strong>optimizar procesos</strong> y aportar nuevas perspectivas estéticas al mercado. Porque diseñar no solo es ver una pieza visual atractiva sino que sea funcional para su objetivo.</p>
           </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, x: 30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="space-y-4"
-        >
+        </div>
+        <div>
           {[
-            { title: "Misión", desc: "Responder a la demanda actual del diseño digital, manteniéndose a la vanguardia mediante la integración de herramientas tradicionales con tecnologías de IA generativa." },
-            { title: "Innovación", desc: "Creación de portafolios interactivos con avatares parlantes, diseñados para presentar contenido de manera dinámica y romper con los formatos visuales tradicionales." },
-            { title: "Influencers Virtuales", desc: "Desarrollo de personajes virtuales para campañas de marketing digital en Instagram y TikTok, impulsados por modelos de IA." }
+            { title: "Misión", desc: "Responder a la demanda actual del diseño digital, manteniéndose a la vanguardia mediante la integración de herramientas tradicionales con tecnologías de IA generativa.", bgColor: "#1e1a52" },
+            { title: "Innovación", desc: "Creación de portafolios interactivos con avatares parlantes, diseñados para presentar contenido de manera dinámica y romper con los formatos visuales tradicionales.", bgColor: "#3b1566" },
+            { title: "Influencers Virtuales", desc: "Desarrollo de personajes virtuales para campañas de marketing digital en Instagram y TikTok, impulsados por modelos de IA.", bgColor: "#4a1040" }
           ].map((obj, i) => (
-            <div key={i} className="bg-bg-tertiary border border-lilac/10 p-8 relative overflow-hidden rounded-lg group">
-              <div className="absolute top-0 left-0 w-1 h-full bg-lilac-dim" />
-              <h3 className="font-serif text-lg text-white mb-3 drop-shadow-[0_0_8px_rgba(167,139,250,0.4)] group-hover:drop-shadow-[0_0_12px_rgba(167,139,250,0.7)] transition-all">{obj.title}</h3>
-              <p className="text-sm text-white/60 leading-relaxed">{obj.desc}</p>
+            <div className="obj-card" key={i} style={{ backgroundColor: obj.bgColor }}>
+              <h3>{obj.title}</h3>
+              <p>{obj.desc}</p>
             </div>
           ))}
-        </motion.div>
-      </div>
+        </div>
+      </motion.div>
     </section>
   );
 };
@@ -586,7 +587,7 @@ export const Contact: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     // Simulación de envío
     setTimeout(() => {
       const newReview = { ...formData };
@@ -599,7 +600,7 @@ export const Contact: React.FC = () => {
   };
 
   return (
-    <div className="bg-bg-tertiary border-y border-lilac/10 py-8 px-6 md:px-12">
+    <div className="bg-bg-tertiary border-y border-white/5 py-8 px-6 md:px-12">
       <div className="max-w-6xl mx-auto mb-12">
         <h2 className="font-serif text-3xl md:text-4xl font-light mb-12 text-center text-white">
           Lo que dicen <em className="italic text-lilac">nuestros clientes</em>
@@ -612,7 +613,7 @@ export const Contact: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="bg-gradient-to-br from-[#5c1a5c] to-[#3a0e3a] border border-white/30 p-6 rounded-lg relative group hover:border-white transition-all duration-500 hover:brightness-125 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
+              className="bg-gradient-to-br from-[#5c1a5c] to-[#3a0e3a] border border-white/5 p-6 rounded-lg relative group hover:border-white/20 transition-all duration-500 hover:brightness-125 shadow-[0_0_20px_rgba(255,255,255,0.05)] hover:shadow-[0_0_30px_rgba(255,255,255,0.15)]"
             >
               <div className="flex gap-1 mb-4">
                 {[...Array(5)].map((_, starIdx) => (
@@ -634,7 +635,10 @@ export const Contact: React.FC = () => {
         </div>
 
         {/* Formulario de Comentarios */}
-        <div className="max-w-2xl mx-auto bg-bg-secondary/50 border border-lilac/20 p-8 md:p-10 rounded-2xl backdrop-blur-sm shadow-2xl">
+        <div
+          className="max-w-2xl mx-auto border p-8 md:p-10 rounded-2xl backdrop-blur-sm shadow-2xl"
+          style={{ backgroundColor: '#1e1a52', borderColor: '#c2abed' }}
+        >
           <div className="text-center mb-8">
             <h3 className="font-serif text-2xl text-white mb-2">Dejanos tu comentario</h3>
             <p className="text-white/50 text-xs uppercase tracking-widest">Tu opinión nos ayuda a crecer</p>
@@ -649,7 +653,8 @@ export const Contact: React.FC = () => {
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full bg-bg-tertiary border border-lilac/20 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-lilac transition-colors"
+                  className="w-full bg-bg-tertiary border rounded-lg px-4 py-3 text-white text-sm focus:outline-none transition-colors"
+                  style={{ borderColor: '#c2abed' }}
                   placeholder="Tu nombre"
                 />
               </div>
@@ -660,7 +665,8 @@ export const Contact: React.FC = () => {
                   type="text"
                   value={formData.role}
                   onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                  className="w-full bg-bg-tertiary border border-lilac/20 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-lilac transition-colors"
+                  className="w-full bg-bg-tertiary border rounded-lg px-4 py-3 text-white text-sm focus:outline-none transition-colors"
+                  style={{ borderColor: '#c2abed' }}
                   placeholder="Ej: CEO TechStart"
                 />
               </div>
@@ -692,7 +698,8 @@ export const Contact: React.FC = () => {
                 rows={4}
                 value={formData.text}
                 onChange={(e) => setFormData({ ...formData, text: e.target.value })}
-                className="w-full bg-bg-tertiary border border-lilac/20 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-lilac transition-colors resize-none"
+                className="w-full bg-bg-tertiary border rounded-lg px-4 py-3 text-white text-sm focus:outline-none transition-colors resize-none"
+                style={{ borderColor: '#c2abed' }}
                 placeholder="Escribe aquí tu experiencia..."
               />
             </div>
@@ -702,9 +709,9 @@ export const Contact: React.FC = () => {
               disabled={isSubmitting}
               className={cn(
                 "w-full py-4 rounded-lg text-xs uppercase tracking-[0.2em] font-bold transition-all duration-500 flex items-center justify-center gap-3",
-                isSubmitting 
-                  ? "bg-lilac/20 text-white/50 cursor-not-allowed" 
-                  : "bg-lilac text-white hover:bg-lilac-dim shadow-[0_0_20px_rgba(167,139,250,0.3)] hover:shadow-[0_0_30px_rgba(167,139,250,0.5)]"
+                isSubmitting
+                  ? "bg-lilac/20 text-white/50 cursor-not-allowed"
+                  : "btn-publicar"
               )}
             >
               {isSubmitting ? (

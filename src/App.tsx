@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { 
-  Navbar, 
-  Hero, 
-  SectionCards, 
-  FeaturedWorks, 
-  About, 
-  Contact, 
-  Footer 
+import {
+  Navbar,
+  Hero,
+  SectionCards,
+  FeaturedWorks,
+  About,
+  Contact,
+  Footer
 } from './components/Layout';
 import { Overlay } from './components/Overlay';
-import { 
-  MuestrasContent, 
-  InstagramContent, 
-  TikTokContent, 
-  ToolsContent, 
-  ServicesContent 
+import {
+  MuestrasContent,
+  InstagramContent,
+  TikTokContent,
+  ToolsContent,
+  ServicesContent
 } from './components/OverlayContent';
 import { CustomCursor } from './components/CustomCursor';
 import { ChatPanel } from './components/ChatPanel';
@@ -62,7 +62,7 @@ function App() {
     <main className="bg-bg min-h-screen selection:bg-lilac-neon/30 selection:text-lilac-glow">
       <CustomCursor />
       <Navbar onOpenOverlay={setActiveOverlay} />
-      
+
       <Routes>
         <Route path="/" element={<HomePage setActiveOverlay={setActiveOverlay} />} />
         <Route path="/emprendedores" element={<Emprendedores />} />
@@ -70,20 +70,25 @@ function App() {
 
       <Footer />
 
-      <Overlay 
-        isOpen={!!activeOverlay} 
-        onClose={() => setActiveOverlay(null)} 
+      <Overlay
+        isOpen={!!activeOverlay}
+        onClose={() => setActiveOverlay(null)}
         title={getOverlayTitle()}
       >
         {renderOverlayContent()}
       </Overlay>
 
       {/* Floating Chat Button */}
-      <button 
+      <button
         onClick={() => setIsChatOpen(!isChatOpen)}
-        className="fixed bottom-8 right-8 z-[400] w-16 h-16 bg-lilac rounded-full shadow-[0_0_20px_rgba(168,85,247,0.5)] flex items-center justify-center text-white hover:scale-110 transition-transform group"
+        className="fixed bottom-8 right-8 z-[400] w-16 h-16 rounded-full flex items-center justify-center hover:scale-110 transition-transform group"
+        style={{
+          backgroundColor: '#c2abed',
+          color: '#1a1626',
+          boxShadow: '0 0 20px rgba(194,171,237,0.5)'
+        }}
       >
-        <div className="absolute inset-0 bg-white/20 rounded-full animate-ping opacity-20" />
+        <div className="absolute inset-0 bg-[#1a1626]/10 rounded-full animate-ping opacity-20" />
         <Sparkles className="w-8 h-8 group-hover:rotate-12 transition-transform" />
       </button>
 
