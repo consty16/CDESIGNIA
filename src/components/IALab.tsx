@@ -145,7 +145,7 @@ export const IALab = () => {
         </div>
       </nav>
 
-      <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-[1.2fr,1fr] gap-8 items-start relative z-10">
+      <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
         {/* Panel de Control - More Compact & Vivid */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
