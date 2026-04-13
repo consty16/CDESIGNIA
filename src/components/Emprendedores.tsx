@@ -46,81 +46,75 @@ export const Emprendedores: React.FC = () => {
           {/* Pack 1 */}
           <motion.div
             whileHover={{ y: -5 }}
-            className="bg-gradient-to-br from-[#400e3a] to-[#2e0828] border border-lilac/20 p-8 rounded-xl relative overflow-hidden shadow-lg hover:brightness-110 transition-all"
+            className="bg-bg-tertiary border-l-4 border-l-lilac-dim border-y border-r border-white/10 p-8 rounded-r-xl relative overflow-hidden"
           >
-            <p className="text-[10px] uppercase tracking-widest text-lilac mb-4 drop-shadow-md">Básico</p>
-            <h3 className="font-serif text-2xl mb-2 flex items-center gap-3 text-white">📦 Pack Emprendedor IA</h3>
-            <p className="text-xs text-white/50 mb-6">Ideal para empezar a vender mejor</p>
-            <ul className="space-y-3 mb-10 text-sm text-white/70">
+            <p className="text-[10px] uppercase tracking-widest text-lilac mb-4">Básico</p>
+            <h3 className="font-serif text-2xl mb-2 flex items-center gap-3">📦 Pack Emprendedor IA</h3>
+            <p className="text-xs text-text-muted mb-6">Ideal para empezar a vender mejor</p>
+            <ul className="space-y-3 mb-10 text-sm text-text-secondary">
               <li className="flex items-center gap-3"><span>✔</span> Optimización de Instagram y Facebook</li>
               <li className="flex items-center gap-3"><span>✔</span> Configuración de WhatsApp Business</li>
               <li className="flex items-center gap-3"><span>✔</span> 4 publicidades con IA por mes</li>
               <li className="flex items-center gap-3"><span>✔</span> 4 diseños para redes</li>
               <li className="flex items-center gap-3"><span>✔</span> Asesoría básica</li>
             </ul>
-            <div className="text-2xl font-medium text-white">
-              💰 Desde $45.000 <small className="text-[10px] text-white/40 uppercase tracking-widest">/ Mes</small>
+            <div className="text-2xl font-medium text-text-primary">
+              💰 Desde $45.000 <small className="text-[10px] text-text-muted uppercase tracking-widest">/ Mes</small>
             </div>
           </motion.div>
 
           {/* Pack 2 */}
           <motion.div
             whileHover={{ y: -5 }}
-            className="bg-gradient-to-br from-[#1e1060] to-[#12093e] border border-lilac/20 p-8 rounded-xl relative overflow-hidden shadow-lg hover:brightness-110 transition-all"
+            className="bg-bg-tertiary border-l-4 border-l-lilac-dim border-y border-r border-white/10 p-8 rounded-r-xl relative overflow-hidden"
           >
-            <p className="text-[10px] uppercase tracking-widest text-lilac mb-4 drop-shadow-md">Avanzado</p>
-            <h3 className="font-serif text-2xl mb-2 flex items-center gap-3 text-white">🔹 Pack Emprendedor PRO</h3>
-            <p className="text-xs text-white/50 mb-6">Para crecer y vender más</p>
-            <ul className="space-y-3 mb-10 text-sm text-white/70">
+            <p className="text-[10px] uppercase tracking-widest text-lilac mb-4">Avanzado</p>
+            <h3 className="font-serif text-2xl mb-2 flex items-center gap-3">🔹 Pack Emprendedor PRO</h3>
+            <p className="text-xs text-text-muted mb-6">Para crecer y vender más</p>
+            <ul className="space-y-3 mb-10 text-sm text-text-secondary">
               <li className="flex items-center gap-3"><span>✔</span> Hasta 10 publicidades con IA mensuales</li>
               <li className="flex items-center gap-3"><span>✔</span> Gestión de anuncios</li>
               <li className="flex items-center gap-3"><span>✔</span> Automatización básica</li>
               <li className="flex items-center gap-3"><span>✔</span> Estrategia de contenido</li>
             </ul>
-            <div className="text-2xl font-medium text-white">
-              💰 Desde $90.000 <small className="text-[10px] text-white/40 uppercase tracking-widest">/ Mes</small>
+            <div className="text-2xl font-medium text-text-primary">
+              💰 Desde $90.000 <small className="text-[10px] text-text-muted uppercase tracking-widest">/ Mes</small>
             </div>
           </motion.div>
 
           {/* Extra */}
           <motion.div
             whileHover={{ y: -5 }}
-            className="bg-gradient-to-br from-[#3b0f6b] to-[#240842] border border-lilac/20 p-8 rounded-xl relative overflow-hidden shadow-lg hover:brightness-110 transition-all"
+            className="bg-bg-tertiary border-l-4 border-l-lilac-dim border-y border-r border-white/10 p-8 rounded-r-xl relative overflow-hidden"
           >
-            <p className="text-[10px] uppercase tracking-widest text-lilac mb-4 drop-shadow-md">Adicional</p>
-            <h3 className="font-serif text-2xl mb-2 flex items-center gap-3 text-white">🎭 Extra: Modelo Virtual</h3>
-            <p className="text-xs text-white/50 mb-6">Contenido profesional sin modelos reales</p>
-            <ul className="space-y-3 mb-10 text-sm text-white/70">
+            <p className="text-[10px] uppercase tracking-widest text-lilac mb-4">Adicional</p>
+            <h3 className="font-serif text-2xl mb-2 flex items-center gap-3">🎭 Extra: Modelo Virtual</h3>
+            <p className="text-xs text-text-muted mb-6">Contenido profesional sin modelos reales</p>
+            <ul className="space-y-3 mb-10 text-sm text-text-secondary">
               <li className="flex items-center gap-3"><span>✔</span> Videos con modelos virtuales</li>
               <li className="flex items-center gap-3"><span>✔</span> Contenido llamativo y moderno</li>
               <li className="flex items-center gap-3"><span>✔</span> Ideal para mostrar productos</li>
             </ul>
-            <div className="text-2xl font-medium text-white">
-              💰 Desde $20.000 <small className="text-[10px] text-white/40 uppercase tracking-widest">/ Mes</small>
+            <div className="text-2xl font-medium text-text-primary">
+              💰 Desde $20.000 <small className="text-[10px] text-text-muted uppercase tracking-widest">/ Mes</small>
             </div>
           </motion.div>
         </div>
 
         {/* Bonus Section */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="bg-gradient-to-br from-[#5c1a5c] to-[#3a0e3a] border border-lilac/30 p-8 md:p-12 rounded-2xl shadow-2xl mb-20 relative overflow-hidden"
-        >
-          <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16 blur-3xl" />
-          <h3 className="font-serif text-2xl md:text-3xl text-white mb-8 flex items-center gap-3">
-            <span className="text-3xl drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">🎯</span> Bonus Exclusivo
+        <div className="bg-bg-secondary/50 border border-lilac/20 p-8 md:p-12 rounded-2xl backdrop-blur-sm mb-20 border-dashed">
+          <h3 className="font-serif text-2xl md:text-3xl text-lilac mb-8 flex items-center gap-3">
+            <span className="text-3xl">🎯</span> Bonus Exclusivo
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
-            <div className="flex items-center gap-4 text-lg text-white/90">
-              <span className="text-2xl">⚡</span> Diagnóstico gratuito
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex items-center gap-4 text-lg text-text-secondary">
+              <span className="text-2xl">🎯</span> Diagnóstico gratuito
             </div>
-            <div className="flex items-center gap-4 text-lg text-white/90">
-              <span className="text-2xl">🚀</span> Ideas para aumentar tus ventas
+            <div className="flex items-center gap-4 text-lg text-text-secondary">
+              <span className="text-2xl">🎯</span> Ideas para aumentar tus ventas
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Tools Section */}
         <div className="mb-8">
@@ -132,7 +126,7 @@ export const Emprendedores: React.FC = () => {
               "WhatsApp Business", "Tiendanube / Empretienda", "Wix", "Mercado Libre", 
               "Pedix", "Google Business", "Ads", "Pomeli"
             ].map((tool, i) => (
-              <div key={i} className="bg-gradient-to-br from-[#3b0f6b] to-[#240842] border border-lilac/30 p-4 rounded-lg text-center text-[13px] text-white font-bold shadow-[0_0_15px_rgba(168,85,247,0.2)] hover:scale-105 hover:brightness-125 transition-all drop-shadow-[0_0_2px_rgba(255,255,255,0.4)]">
+              <div key={i} className="bg-white/5 border border-white/5 p-4 rounded-lg text-center text-xs text-text-secondary">
                 {tool}
               </div>
             ))}

@@ -28,7 +28,7 @@ export const Navbar: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOp
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }
             }}
-            className="text-[12px] uppercase tracking-[0.15em] bg-gradient-to-br from-[#3b0f6b] to-[#240842] text-white px-6 py-2.5 hover:brightness-125 transition-all rounded shadow-[0_0_20px_rgba(168,85,247,0.4)] font-bold animate-pulse-slow border border-lilac/20 drop-shadow-[0_0_2px_rgba(255,255,255,0.5)]"
+            className="text-[10px] uppercase tracking-[0.15em] text-white border border-white/40 px-5 py-2 hover:bg-white/20 transition-all rounded shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.6)] font-bold"
           >
             Inicio
           </Link>
@@ -38,7 +38,7 @@ export const Navbar: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOp
         <li>
           <Link
             to="/emprendedores"
-            className="text-[12px] uppercase tracking-[0.15em] bg-gradient-to-br from-[#3b0f6b] to-[#240842] text-white px-6 py-2.5 hover:brightness-125 transition-all rounded shadow-[0_0_20px_rgba(168,85,247,0.4)] font-bold border border-lilac/20 drop-shadow-[0_0_2px_rgba(255,255,255,0.5)]"
+            className="text-[10px] uppercase tracking-[0.15em] text-white border border-lilac/40 px-5 py-2 hover:bg-lilac/20 transition-all rounded shadow-[0_0_15px_rgba(196,181,253,0.2)] hover:shadow-[0_0_25px_rgba(196,181,253,0.5)] bg-lilac/5 font-bold"
           >
             ¿sos emprendedor?
           </Link>
@@ -130,13 +130,13 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
           <div className="flex flex-wrap gap-4 mb-12">
             <button
               onClick={() => onOpenOverlay('muestras')}
-              className="bg-gradient-to-br from-[#3b0f6b] to-[#240842] text-white w-48 h-12 text-[13px] uppercase tracking-widest font-bold hover:brightness-125 transition-all rounded hover:scale-105 flex items-center justify-center border border-lilac/30"
+              className="bg-white text-black px-10 py-3 text-xs uppercase tracking-widest font-bold hover:bg-white/90 transition-all rounded shadow-[0_0_20px_rgba(255,255,255,0.4)] hover:shadow-[0_0_30px_rgba(255,255,255,0.6)] hover:scale-105"
             >
               Portfolio
             </button>
             <a
               href="#about"
-              className="bg-gradient-to-br from-[#3b0f6b] to-[#240842] text-white w-48 h-12 text-[13px] uppercase tracking-widest font-bold hover:brightness-125 transition-all rounded flex items-center justify-center border border-lilac/30"
+              className="border border-lilac/20 text-white px-8 py-3 text-xs uppercase tracking-widest hover:border-white transition-all rounded hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] font-bold"
             >
               Quiénes somos
             </a>
@@ -147,17 +147,17 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
               <button
                 onClick={() => setIsProjectsOpen(!isProjectsOpen)}
                 onMouseEnter={() => setIsProjectsOpen(true)}
-                className="bg-gradient-to-br from-[#3b0f6b] to-[#240842] text-white w-48 h-12 text-[13px] uppercase tracking-widest font-bold hover:brightness-125 transition-all rounded flex items-center justify-center gap-2 border border-lilac/30 drop-shadow-[0_0_3px_rgba(255,255,255,0.4)]"
+                className="border border-white/40 text-white px-8 py-3 text-xs uppercase tracking-widest hover:bg-white/10 transition-all rounded shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.5)] flex items-center gap-2 font-bold"
               >
                 Projects
-                <span className={cn("text-[9px] opacity-70 transition-transform", isProjectsOpen ? "rotate-180" : "")}>▼</span>
+                <span className={cn("text-[8px] opacity-50 transition-transform", isProjectsOpen ? "rotate-180" : "")}>▼</span>
               </button>
               
               <div className={cn(
                 "absolute top-full left-0 pt-2 w-48 transition-all duration-300 z-50",
                 isProjectsOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible translate-y-2 pointer-events-none"
               )}>
-                <div className="w-full bg-gradient-to-br from-[#3b0f6b] to-[#240842] border border-lilac/20 rounded-lg overflow-hidden shadow-2xl backdrop-blur-xl">
+                <div className="w-full bg-bg-tertiary border border-lilac/20 rounded-lg overflow-hidden shadow-2xl backdrop-blur-xl">
                   <a
                     href="https://www.instagram.com/andromedamodamasculina/"
                     target="_blank"
@@ -189,9 +189,9 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
               href="/ia-lab.html"
               target="_blank"
               rel="noreferrer"
-              className="bg-gradient-to-br from-[#3b0f6b] to-[#240842] text-white w-48 h-12 text-[13px] uppercase tracking-widest font-bold hover:brightness-150 transition-all duration-300 rounded flex items-center justify-center gap-2 group border-2 border-lilac/40 drop-shadow-[0_0_4px_rgba(255,255,255,0.6)]"
+              className="border border-lilac-neon text-lilac-glow px-8 py-3 text-xs uppercase tracking-widest font-bold hover:bg-lilac-neon hover:text-white transition-all duration-300 rounded shadow-[0_0_10px_rgba(168,85,247,0.3)] hover:shadow-[0_0_25px_rgba(168,85,247,0.8)] flex items-center gap-2 group"
             >
-              <span className="group-hover:animate-pulse">¡PROBAR MAGIA!</span>
+              <span className="group-hover:animate-pulse">✨ ¡PROBAR MAGIA!</span>
             </a>
           </div>
           <div className="flex gap-10">
@@ -556,14 +556,14 @@ export const About: React.FC = () => {
           className="space-y-4"
         >
           {[
-            { title: "Misión", desc: "Responder a la demanda actual del diseño digital, manteniéndose a la vanguardia mediante la integración de herramientas tradicionales con tecnologías de IA generativa.", color: "from-[#1e1060] to-[#12093e]" },
-            { title: "Innovación", desc: "Creación de portafolios interactivos con avatares parlantes, diseñados para presentar contenido de manera dinámica y romper con los formatos visuales tradicionales.", color: "from-[#3b0f6b] to-[#240842]" },
-            { title: "Influencers Virtuales", desc: "Desarrollo de personajes virtuales para campañas de marketing digital en Instagram y TikTok, impulsados por modelos de IA.", color: "from-[#5c1a5c] to-[#3a0e3a]" }
+            { title: "Misión", desc: "Responder a la demanda actual del diseño digital, manteniéndose a la vanguardia mediante la integración de herramientas tradicionales con tecnologías de IA generativa." },
+            { title: "Innovación", desc: "Creación de portafolios interactivos con avatares parlantes, diseñados para presentar contenido de manera dinámica y romper con los formatos visuales tradicionales." },
+            { title: "Influencers Virtuales", desc: "Desarrollo de personajes virtuales para campañas de marketing digital en Instagram y TikTok, impulsados por modelos de IA." }
           ].map((obj, i) => (
-            <div key={i} className={cn("bg-gradient-to-br border border-lilac/20 p-8 relative overflow-hidden rounded-lg group shadow-lg hover:brightness-110 transition-all", obj.color)}>
-              <div className="absolute top-0 left-0 w-1 h-full bg-white/20" />
-              <h3 className="font-serif text-lg text-white mb-2 uppercase tracking-wide drop-shadow-lg">{obj.title}</h3>
-              <p className="text-sm text-white/90 leading-relaxed font-light">{obj.desc}</p>
+            <div key={i} className="bg-bg-tertiary border border-lilac/10 p-8 relative overflow-hidden rounded-lg group">
+              <div className="absolute top-0 left-0 w-1 h-full bg-lilac-dim" />
+              <h3 className="font-serif text-lg text-white mb-3 drop-shadow-[0_0_8px_rgba(167,139,250,0.4)] group-hover:drop-shadow-[0_0_12px_rgba(167,139,250,0.7)] transition-all">{obj.title}</h3>
+              <p className="text-sm text-white/60 leading-relaxed">{obj.desc}</p>
             </div>
           ))}
         </motion.div>
@@ -634,7 +634,7 @@ export const Contact: React.FC = () => {
         </div>
 
         {/* Formulario de Comentarios */}
-        <div className="max-w-2xl mx-auto bg-gradient-to-br from-[#3b0f6b] to-[#240842] border border-lilac/20 p-8 md:p-10 rounded-2xl shadow-2xl">
+        <div className="max-w-2xl mx-auto bg-bg-secondary/50 border border-lilac/20 p-8 md:p-10 rounded-2xl backdrop-blur-sm shadow-2xl">
           <div className="text-center mb-8">
             <h3 className="font-serif text-2xl text-white mb-2">Dejanos tu comentario</h3>
             <p className="text-white/50 text-xs uppercase tracking-widest">Tu opinión nos ayuda a crecer</p>
@@ -703,13 +703,13 @@ export const Contact: React.FC = () => {
               className={cn(
                 "w-full py-4 rounded-lg text-xs uppercase tracking-[0.2em] font-bold transition-all duration-500 flex items-center justify-center gap-3",
                 isSubmitting 
-                  ? "bg-lilac/40 text-bg-tertiary/40 cursor-not-allowed" 
-                  : "bg-lilac text-bg-tertiary hover:bg-lilac-dim shadow-[0_0_40px_rgba(168,85,247,0.6)] hover:shadow-[0_0_60px_rgba(168,85,247,0.9)]"
+                  ? "bg-lilac/20 text-white/50 cursor-not-allowed" 
+                  : "bg-lilac text-white hover:bg-lilac-dim shadow-[0_0_20px_rgba(167,139,250,0.3)] hover:shadow-[0_0_30px_rgba(167,139,250,0.5)]"
               )}
             >
               {isSubmitting ? (
                 <>
-                  <div className="w-4 h-4 border-2 border-bg-tertiary/30 border-t-bg-tertiary rounded-full animate-spin" />
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                   Enviando...
                 </>
               ) : (
@@ -744,9 +744,9 @@ export const Contact: React.FC = () => {
               window.open("https://mail.google.com/mail/?view=cm&fs=1&to=constanzarissop91@gmail.com", "_blank", "noreferrer");
             }
           }}
-          className="bg-lilac text-bg-tertiary px-10 py-4 text-sm uppercase tracking-widest hover:bg-lilac-dim transition-all rounded shadow-[0_0_15px_rgba(168,85,247,0.3)] flex items-center gap-3 font-bold"
+          className="text-white border border-white/40 px-10 py-4 text-sm uppercase tracking-widest hover:bg-white/10 transition-all rounded shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)] hover:border-white flex items-center gap-3 font-bold"
         >
-          <Mail size={18} />
+          <Mail size={18} className="drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]" />
           <span>C DESIGN IA</span>
         </a>
       </div>

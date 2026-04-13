@@ -404,7 +404,7 @@ export const ToolsContent = () => {
               href={t.url}
               target="_blank"
               rel="noreferrer"
-              className="bg-bg border border-lilac/10 p-5 flex flex-col items-center gap-2 text-center hover:border-lilac-dim transition-colors rounded-lg group relative w-full shadow-inner"
+              className="bg-bg-tertiary border border-lilac/10 p-5 flex flex-col items-center gap-2 text-center hover:border-lilac-dim transition-colors rounded-lg group relative w-full"
             >
               <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity text-[8px] text-lilac">↗</div>
               <div className="text-2xl text-lilac-dim group-hover:scale-110 transition-transform">{t.icon}</div>
@@ -427,7 +427,7 @@ export const ToolsContent = () => {
               href={t.url}
               target="_blank"
               rel="noreferrer"
-              className="bg-bg border border-lilac/10 p-5 flex flex-col items-center gap-2 text-center hover:border-lilac-dim transition-colors rounded-lg group relative w-full shadow-inner"
+              className="bg-bg-tertiary border border-lilac/10 p-5 flex flex-col items-center gap-2 text-center hover:border-lilac-dim transition-colors rounded-lg group relative w-full"
             >
               <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity text-[8px] text-lilac">↗</div>
               <div className="text-2xl text-lilac-dim group-hover:scale-110 transition-transform">{t.icon}</div>
@@ -450,7 +450,7 @@ export const ToolsContent = () => {
               href={t.url}
               target="_blank"
               rel="noreferrer"
-              className="bg-bg border border-lilac/10 p-5 flex flex-col items-center gap-2 text-center hover:border-lilac-dim transition-colors rounded-lg group relative w-full shadow-inner"
+              className="bg-bg-tertiary border border-lilac/10 p-5 flex flex-col items-center gap-2 text-center hover:border-lilac-dim transition-colors rounded-lg group relative w-full"
             >
               <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity text-[8px] text-lilac">↗</div>
               <div className="text-2xl text-lilac-dim group-hover:scale-110 transition-transform">{t.icon}</div>

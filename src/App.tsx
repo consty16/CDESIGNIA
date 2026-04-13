@@ -84,7 +84,7 @@ function App() {
         className="fixed bottom-8 right-8 z-[400] w-16 h-16 bg-lilac rounded-full shadow-[0_0_20px_rgba(168,85,247,0.5)] flex items-center justify-center text-white hover:scale-110 transition-transform group"
       >
         <div className="absolute inset-0 bg-white/20 rounded-full animate-ping opacity-20" />
-        <Sparkles className="w-8 h-8 text-bg-tertiary group-hover:rotate-12 transition-transform" />
+        <Sparkles className="w-8 h-8 group-hover:rotate-12 transition-transform" />
       </button>
 
       <ChatPanel isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
