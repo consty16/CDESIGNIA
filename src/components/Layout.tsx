@@ -703,8 +703,8 @@ export const Contact: React.FC = () => {
               className={cn(
                 "w-full py-4 rounded-lg text-xs uppercase tracking-[0.2em] font-bold transition-all duration-500 flex items-center justify-center gap-3",
                 isSubmitting 
-                  ? "bg-lilac/20 text-white/50 cursor-not-allowed" 
-                  : "bg-lilac text-white hover:bg-lilac-dim shadow-[0_0_20px_rgba(167,139,250,0.3)] hover:shadow-[0_0_30px_rgba(167,139,250,0.5)]"
+                  ? "bg-purple-900/40 text-white/40 cursor-not-allowed" 
+                  : "bg-purple-900 text-white hover:bg-purple-800 shadow-[0_0_20px_rgba(168,85,247,0.2)] hover:shadow-[0_0_30px_rgba(168,85,247,0.4)]"
               )}
             >
               {isSubmitting ? (
