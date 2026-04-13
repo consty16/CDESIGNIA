@@ -66,20 +66,20 @@ export const ChatPanel: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ 
           exit={{ opacity: 0, y: 20, scale: 0.95 }}
           className="fixed bottom-32 right-4 md:right-8 z-[399] w-[calc(100vw-2rem)] md:w-80 bg-bg-secondary border border-lilac/20 flex flex-col max-h-[480px] shadow-2xl rounded-lg overflow-hidden"
         >
-          <div className="p-3.5 border-b border-lilac/10 flex items-center justify-between bg-bg-tertiary">
+          <div className="p-3.5 border-b border-[#1e1a52]/10 flex items-center justify-between" style={{ backgroundColor: '#c2abed', color: '#1e1a52' }}>
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-full bg-lilac/10 border border-lilac/20 flex items-center justify-center text-lilac font-bold">
+              <div className="w-8 h-8 rounded-full bg-[#1e1a52]/10 border border-[#1e1a52]/20 flex items-center justify-center font-bold" style={{ color: '#1e1a52' }}>
                 ◈
               </div>
               <div>
-                <div className="text-sm font-medium text-text-primary">C Design IA</div>
-                <div className="text-[10px] text-text-muted flex items-center gap-1">
-                  <span className="chat-dot"></span>
+                <div className="text-sm font-bold">C Design IA</div>
+                <div className="text-[10px] flex items-center gap-1 opacity-80">
+                  <span className="chat-dot" style={{ backgroundColor: '#1e1a52' }}></span>
                   Asistente virtual
                 </div>
               </div>
             </div>
-            <button onClick={onClose} className="text-text-muted hover:text-lilac transition-colors p-1">
+            <button onClick={onClose} className="hover:opacity-70 transition-opacity p-1" style={{ color: '#1e1a52' }}>
               <X size={18} />
             </button>
           </div>
@@ -90,18 +90,19 @@ export const ChatPanel: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ 
                 key={i}
                 className={`max-w-[90%] p-2.5 text-xs leading-relaxed rounded-lg ${
                   msg.role === 'model'
-                    ? 'bg-bg-tertiary border border-lilac/10 text-text-secondary self-start rounded-tl-none'
+                    ? 'self-start rounded-tl-none'
                     : 'bg-lilac/10 border border-lilac/20 text-text-primary self-end rounded-tr-none'
                 }`}
+                style={msg.role === 'model' ? { backgroundColor: '#c2abed', color: '#1e1a52' } : {}}
               >
                 <ReactMarkdown>{msg.parts[0].text}</ReactMarkdown>
               </div>
             ))}
             {isLoading && (
-              <div className="bg-bg-tertiary border border-lilac/10 self-start rounded-lg rounded-tl-none p-3 flex gap-1 items-center">
-                <span className="w-1 h-1 rounded-full bg-lilac-dim animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                <span className="w-1 h-1 rounded-full bg-lilac-dim animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                <span className="w-1 h-1 rounded-full bg-lilac-dim animate-bounce" style={{ animationDelay: '300ms' }}></span>
+              <div className="self-start rounded-lg rounded-tl-none p-3 flex gap-1 items-center" style={{ backgroundColor: '#c2abed' }}>
+                <span className="w-1 h-1 rounded-full bg-[#1e1a52] animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                <span className="w-1 h-1 rounded-full bg-[#1e1a52] animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                <span className="w-1 h-1 rounded-full bg-[#1e1a52] animate-bounce" style={{ animationDelay: '300ms' }}></span>
               </div>
             )}
           </div>
