@@ -54,8 +54,8 @@ export const IALab = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] font-sans text-white p-6 md:p-12 overflow-x-hidden">
-      <nav className="relative z-10 mb-16 flex justify-between items-center max-w-7xl mx-auto">
+    <div className="min-h-screen bg-[#050505] font-sans text-white p-4 md:p-8 overflow-hidden">
+      <nav className="relative z-10 mb-10 flex justify-between items-center max-w-5xl mx-auto">
         <a href="/" className="flex items-center gap-2 text-purple-400 hover:text-white transition-all group">
           <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1" />
           <span className="text-[10px] uppercase tracking-widest font-bold">Volver</span>
@@ -66,9 +66,9 @@ export const IALab = () => {
         </div>
       </nav>
 
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+      <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
         {/* Panel de Control */}
-        <div className="backdrop-blur-3xl bg-white/5 border border-white/10 rounded-[2.5rem] p-10 shadow-2xl space-y-8">
+        <div className="backdrop-blur-3xl bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 shadow-2xl space-y-5">
           <div className="text-center space-y-2">
             <h3 className="text-[10px] font-bold text-purple-300 uppercase tracking-[0.5em]">1. Describe tu obra maestra</h3>
             <p className="text-white/30 text-[9px] uppercase tracking-widest">IA Generative Engine</p>
@@ -77,12 +77,12 @@ export const IALab = () => {
             value={userPrompt}
             onChange={(e) => setUserPrompt(e.target.value)}
             placeholder="Ej: Extremely beautiful model, iridescent gown, symmetrical face, 8k..."
-            className="w-full h-56 bg-black/40 border border-white/10 rounded-[2rem] p-8 text-white focus:border-purple-500 transition-all outline-none resize-none"
+            className="w-full h-36 bg-black/40 border border-white/10 rounded-xl p-5 text-sm text-white focus:border-purple-500 transition-all outline-none resize-none"
           />
           <button
             onClick={handleGenerate}
             disabled={isGenerating || !userPrompt.trim()}
-            className="w-full py-6 rounded-2xl font-bold tracking-[0.4em] bg-gradient-to-r from-purple-600 to-purple-900 shadow-xl hover:brightness-125 transition-all flex items-center justify-center gap-3"
+            className="w-full py-4 rounded-xl font-bold text-xs tracking-[0.3em] bg-gradient-to-r from-purple-600 to-purple-900 shadow-xl hover:brightness-125 transition-all flex items-center justify-center gap-3"
           >
             {isGenerating ? <Loader2 className="animate-spin" /> : <><Wand2 className="w-5 h-5" /> Experiment Progress ✨</>}
           </button>
@@ -92,8 +92,8 @@ export const IALab = () => {
         <div className="w-full flex justify-center">
           <AnimatePresence mode="wait">
             {showResults && (
-              <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6 max-w-[450px] w-full">
-                <div className="w-full h-auto min-h-[300px] rounded-[2.5rem] border border-purple-500/30 overflow-hidden bg-black flex items-center justify-center shadow-[0_0_50px_rgba(168,85,247,0.1)]">
+              <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-4 max-w-[380px] w-full">
+                <div className="w-full h-auto min-h-[200px] rounded-2xl border border-purple-500/30 overflow-hidden bg-black flex items-center justify-center shadow-[0_0_50px_rgba(168,85,247,0.1)]">
                   <img 
                     src={result.url} 
                     className="w-full h-auto object-contain"
@@ -101,10 +101,10 @@ export const IALab = () => {
                   />
                 </div>
                 <div className="space-y-4">
-                  <div className="p-6 bg-white/5 border border-white/10 rounded-3xl">
+                  <div className="p-4 bg-white/5 border border-white/10 rounded-xl">
                     <p className="text-xs font-serif italic text-center text-white/60 leading-relaxed">"{result.advice}"</p>
                   </div>
-                  <a href={result.url} target="_blank" rel="noreferrer" className="block w-full py-5 rounded-full bg-purple-600 text-center font-bold text-[10px] tracking-[0.3em] shadow-lg hover:bg-purple-500 transition-all">
+                  <a href={result.url} target="_blank" rel="noreferrer" className="block w-full py-3 rounded-full bg-purple-600 text-center font-bold text-[10px] tracking-[0.3em] shadow-lg hover:bg-purple-500 transition-all">
                     GUARDAR EN MI DISPOSITIVO
                   </a>
                 </div>
