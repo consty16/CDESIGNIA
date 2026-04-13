@@ -106,7 +106,8 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
               NO SOLO ES
             </motion.span>
             <motion.span
-              className="block italic text-lilac text-4xl md:text-[57px] lg:text-[80px]"
+              className="block italic text-4xl md:text-[57px] lg:text-[80px]"
+              style={{ color: '#c2abed' }}
               variants={{
                 hidden: { opacity: 0, y: 20 },
                 visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
