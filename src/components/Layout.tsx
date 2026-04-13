@@ -614,7 +614,12 @@ export const Contact: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="bg-gradient-to-br from-[#5c1a5c] to-[#3a0e3a] border border-white/5 p-6 rounded-lg relative group hover:border-white/20 transition-all duration-500 hover:brightness-125 shadow-[0_0_20px_rgba(255,255,255,0.05)] hover:shadow-[0_0_30px_rgba(255,255,255,0.15)]"
+              className="border p-6 rounded-lg relative group transition-all duration-500 hover:brightness-125 shadow-[0_0_20px_rgba(255,255,255,0.05)]"
+              style={{ 
+                backgroundColor: '#2d1b4e',
+                borderColor: '#c2abed',
+                boxShadow: '0 0 15px rgba(194, 171, 237, 0.2)'
+              }}
             >
               <div className="flex gap-1 mb-4">
                 {[...Array(5)].map((_, starIdx) => (
