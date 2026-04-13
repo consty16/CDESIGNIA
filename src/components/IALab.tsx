@@ -18,6 +18,14 @@ export const IALab = () => {
   const [isComposingMusic, setIsComposingMusic] = useState(false);
   const [musicResult, setMusicResult] = useState('');
   const [isImageLoading, setIsImageLoading] = useState(true);
+  const audioRef = React.useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    // Inicializar el audio de fondo (Luxury Ambient)
+    audioRef.current = new Audio('https://cdn.pixabay.com/audio/2022/03/15/audio_7302484f98.mp3'); // Un track de piano de lujo
+    audioRef.current.loop = true;
+    audioRef.current.volume = 0.4;
+  }, []);
 
   useEffect(() => {
     let interval: any;
@@ -34,6 +42,10 @@ export const IALab = () => {
     setIsGenerating(true);
     setShowResults(false);
     setIsImageLoading(true);
+    if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+    }
     
     try {
       // PROMPT MAESTRO: Forzamos realismo y simetría total
@@ -103,12 +115,17 @@ export const IALab = () => {
       const cleanText = text.trim();
       setMusicResult(cleanText);
 
-      // WOW FACTOR: Voz de lujo leyendo la partitura
+      // WOW FACTOR: Música de ambiente + Voz de lujo
+      if (audioRef.current) {
+        audioRef.current.play().catch(e => console.log('Audio playback blocked by browser', e));
+      }
+
       if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel(); // Parar cualquier voz anterior
         const utterance = new SpeechSynthesisUtterance(cleanText);
         utterance.lang = 'es-ES';
-        utterance.rate = 0.85; // Un poco más lento para que suene poético
-        utterance.pitch = 1.1;
+        utterance.rate = 0.9;
+        utterance.volume = 1;
         window.speechSynthesis.speak(utterance);
       }
     } catch (error) {
