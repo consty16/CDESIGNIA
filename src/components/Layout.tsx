@@ -552,17 +552,18 @@ export const About: React.FC = () => {
           initial={{ opacity: 0, x: 30 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          transition={{ dur          {[
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="space-y-4"
+        >
+          {[
             { title: "Misión", desc: "Responder a la demanda actual del diseño digital, manteniéndose a la vanguardia mediante la integración de herramientas tradicionales con tecnologías de IA generativa.", color: "from-[#1e1060] to-[#12093e]" },
             { title: "Innovación", desc: "Creación de portafolios interactivos con avatares parlantes, diseñados para presentar contenido de manera dinámica y romper con los formatos visuales tradicionales.", color: "from-[#3b0f6b] to-[#240842]" },
             { title: "Influencers Virtuales", desc: "Desarrollo de personajes virtuales para campañas de marketing digital en Instagram y TikTok, impulsados por modelos de IA.", color: "from-[#5c1a5c] to-[#3a0e3a]" }
           ].map((obj, i) => (
-            <div key={i} className={cn("bg-gradient-to-br border border-lilac/20 p-8 relative overflow-hidden rounded-lg group shadow-lg hover:brightness-125 transition-all", obj.color)}>
+            <div key={i} className={cn("bg-gradient-to-br border border-lilac/20 p-8 relative overflow-hidden rounded-lg group shadow-lg hover:brightness-110 transition-all", obj.color)}>
               <div className="absolute top-0 left-0 w-1 h-full bg-white/20" />
-              <h3 className="font-serif text-lg text-white mb-3 drop-shadow-[0_0_8px_rgba(255,255,255,0.4)] group-hover:drop-shadow-[0_0_12px_rgba(255,255,255,0.7)] transition-all">{obj.title}</h3>
-              <p className="text-sm text-white/80 leading-relaxed font-light">{obj.desc}</p>
-            </div>
-          ))}text-white/60 leading-relaxed">{obj.desc}</p>
+              <h3 className="font-serif text-lg text-white mb-2 uppercase tracking-wide drop-shadow-lg">{obj.title}</h3>
+              <p className="text-sm text-white/90 leading-relaxed font-light">{obj.desc}</p>
             </div>
           ))}
         </motion.div>
