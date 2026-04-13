@@ -64,9 +64,10 @@ export const ChatPanel: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ 
           initial={{ opacity: 0, y: 20, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 20, scale: 0.95 }}
-          className="fixed bottom-32 right-4 md:right-8 z-[399] w-[calc(100vw-2rem)] md:w-80 bg-bg-secondary border border-lilac/20 flex flex-col max-h-[480px] shadow-2xl rounded-lg overflow-hidden"
+          className="fixed bottom-32 right-4 md:right-8 z-[399] w-[calc(100vw-2rem)] md:w-80 border border-[#1e1a52]/20 flex flex-col max-h-[480px] shadow-2xl rounded-lg overflow-hidden"
+          style={{ backgroundColor: '#c2abed', color: '#1e1a52' }}
         >
-          <div className="p-3.5 border-b border-[#1e1a52]/10 flex items-center justify-between" style={{ backgroundColor: '#c2abed', color: '#1e1a52' }}>
+          <div className="p-3.5 border-b border-[#1e1a52]/10 flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-full bg-[#1e1a52]/10 border border-[#1e1a52]/20 flex items-center justify-center font-bold" style={{ color: '#1e1a52' }}>
                 ◈
@@ -90,16 +91,16 @@ export const ChatPanel: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ 
                 key={i}
                 className={`max-w-[90%] p-2.5 text-xs leading-relaxed rounded-lg ${
                   msg.role === 'model'
-                    ? 'self-start rounded-tl-none'
-                    : 'bg-lilac/10 border border-lilac/20 text-text-primary self-end rounded-tr-none'
+                    ? 'self-start rounded-tl-none border border-[#1e1a52]/10'
+                    : 'bg-[#1e1a52]/10 border border-[#1e1a52]/20 text-[#1e1a52] self-end rounded-tr-none'
                 }`}
-                style={msg.role === 'model' ? { backgroundColor: '#c2abed', color: '#1e1a52' } : {}}
+                style={msg.role === 'model' ? { backgroundColor: 'rgba(255,255,255,0.3)' } : {}}
               >
                 <ReactMarkdown>{msg.parts[0].text}</ReactMarkdown>
               </div>
             ))}
             {isLoading && (
-              <div className="self-start rounded-lg rounded-tl-none p-3 flex gap-1 items-center" style={{ backgroundColor: '#c2abed' }}>
+              <div className="self-start rounded-lg rounded-tl-none p-3 flex gap-1 items-center" style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}>
                 <span className="w-1 h-1 rounded-full bg-[#1e1a52] animate-bounce" style={{ animationDelay: '0ms' }}></span>
                 <span className="w-1 h-1 rounded-full bg-[#1e1a52] animate-bounce" style={{ animationDelay: '150ms' }}></span>
                 <span className="w-1 h-1 rounded-full bg-[#1e1a52] animate-bounce" style={{ animationDelay: '300ms' }}></span>
@@ -107,32 +108,35 @@ export const ChatPanel: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ 
             )}
           </div>
 
-          <div className="p-2 border-t border-lilac/10 bg-bg-tertiary text-[10px] text-text-muted text-center">
+          <div className="p-2 border-t border-[#1e1a52]/10 text-[10px] text-center" style={{ color: '#1e1a52', opacity: 0.8 }}>
             ¿Preferís hablar directo?{' '}
             <a
               href="https://wa.me/5493815341233"
               target="_blank"
               rel="noreferrer"
-              className="text-wa font-medium hover:underline"
+              className="font-bold hover:underline"
+              style={{ color: '#1e1a52' }}
             >
               WhatsApp ↗
             </a>
           </div>
 
-          <div className="p-3 border-t border-lilac/10 flex gap-2 items-center bg-bg-secondary">
+          <div className="p-3 border-t border-[#1e1a52]/10 flex gap-2 items-center">
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
               placeholder="Escribí tu consulta..."
-              className="flex-1 bg-bg-tertiary border border-lilac/10 text-text-primary p-2 text-xs outline-none focus:border-lilac-dim transition-colors rounded"
+              className="flex-1 bg-white/20 border border-[#1e1a52]/10 p-2 text-xs outline-none focus:border-[#1e1a52]/30 transition-colors rounded placeholder-[#1e1a52]/50"
+              style={{ color: '#1e1a52' }}
               disabled={isLoading}
             />
             <button
               onClick={handleSend}
               disabled={isLoading || !input.trim()}
-              className="w-8 h-8 bg-lilac hover:opacity-80 disabled:opacity-30 text-bg flex items-center justify-center transition-all rounded"
+              className="w-8 h-8 hover:opacity-80 disabled:opacity-30 flex items-center justify-center transition-all rounded"
+              style={{ backgroundColor: '#1e1a52', color: '#c2abed' }}
             >
               <Send size={14} />
             </button>
