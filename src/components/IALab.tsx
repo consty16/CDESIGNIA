@@ -123,7 +123,7 @@ export const IALab = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] font-sans text-white p-4 md:p-8 overflow-hidden">
+    <div className="min-h-screen bg-bg font-sans text-white p-4 md:p-8 overflow-hidden">
       <nav className="relative z-10 mb-10 flex justify-between items-center max-w-5xl mx-auto">
         <a href="/" className="flex items-center gap-2 text-purple-400 hover:text-white transition-all group">
           <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1" />
