@@ -130,7 +130,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
           <div className="flex flex-wrap gap-4 mb-12">
             <button
               onClick={() => onOpenOverlay('muestras')}
-              className="bg-white text-black px-10 py-3 text-xs uppercase tracking-widest font-bold hover:bg-white/90 transition-all rounded shadow-[0_0_20px_rgba(255,255,255,0.4)] hover:shadow-[0_0_30px_rgba(255,255,255,0.6)] hover:scale-105"
+              className="bg-white text-black px-8 py-3 text-xs uppercase tracking-widest font-bold hover:bg-white/90 transition-all rounded shadow-[0_0_20px_rgba(255,255,255,0.4)] hover:shadow-[0_0_30px_rgba(255,255,255,0.6)] hover:scale-105"
             >
               Portfolio
             </button>
@@ -189,9 +189,9 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
               href="/ia-lab.html"
               target="_blank"
               rel="noreferrer"
-              className="border border-lilac-neon text-lilac-glow px-8 py-3 text-xs uppercase tracking-widest font-bold hover:bg-lilac-neon hover:text-white transition-all duration-300 rounded shadow-[0_0_10px_rgba(168,85,247,0.3)] hover:shadow-[0_0_25px_rgba(168,85,247,0.8)] flex items-center gap-2 group"
+              className="border border-lilac-neon text-lilac-glow px-8 py-3 text-xs uppercase tracking-widest font-bold hover:bg-lilac-neon hover:text-white transition-all duration-300 rounded shadow-[0_0_10px_rgba(168,85,247,0.3)] hover:shadow-[0_0_25px_rgba(168,85,247,0.8)] flex items-center justify-center gap-2 group min-w-[160px]"
             >
-              <span className="group-hover:animate-pulse">✨ ¡PROBAR MAGIA!</span>
+              <span className="group-hover:animate-pulse">¡PROBAR MAGIA!</span>
             </a>
           </div>
           <div className="flex gap-10">
