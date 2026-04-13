@@ -101,9 +101,6 @@ export const IALab = () => {
                   />
                 </div>
                 <div className="space-y-4">
-                  <div className="p-4 bg-white/5 border border-white/10 rounded-xl">
-                    <p className="text-xs font-serif italic text-center text-white/60 leading-relaxed">"{result.advice}"</p>
-                  </div>
                   <a href={result.url} target="_blank" rel="noreferrer" className="block w-full py-3 rounded-full bg-purple-600 text-center font-bold text-[10px] tracking-[0.3em] shadow-lg hover:bg-purple-500 transition-all">
                     GUARDAR EN MI DISPOSITIVO
                   </a>
