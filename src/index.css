@@ -2,134 +2,29 @@
 @import "tailwindcss";
 
 :root {
-  --font-serif: "Cormorant Garamond", Georgia, serif;
-  --font-sans: "DM Sans", system-ui, sans-serif;
-  --font-orbitron: "Orbitron", sans-serif;
-  --font-urbanist: "Urbanist", sans-serif;
+  /* Fondos */
+  --color-bg: #1a1626;
+  --color-bg-deep: #1a1626;
+  --color-bg-secondary: #1a1626;
+  --color-bg-tertiary: #1a1626;
 
-  --color-red-500: oklch(63.7% .237 25.331);
-  --color-yellow-500: oklch(79.5% .184 86.047);
-  --color-green-400: oklch(79.2% .209 151.711);
-  --color-green-500: oklch(72.3% .219 149.579);
-  --color-purple-500: oklch(62.7% .265 303.9);
-  --color-pink-500: oklch(65.6% .241 354.308);
-  --color-black: #000;
-  --color-white: #fff;
-
-  --color-bg: #0d091a;
-  --color-bg-deep: #050508;
-  --color-bg-secondary: #0a0a0f;
-  --color-bg-tertiary: #130f24;
+  /* Lilas */
   --color-lilac: #c4b5fd;
   --color-lilac-neon: #a855f7;
   --color-lilac-glow: #d8b4fe;
   --color-lilac-dim: #a78bfa;
+
+  /* Textos */
   --color-text-primary: #f0eeff;
   --color-text-secondary: #a89ec4;
   --color-text-muted: #6b6280;
+
+  /* WhatsApp */
   --color-wa: #25d366;
+
+  /* Tipografías */
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "DM Sans", system-ui, sans-serif;
+  --font-orbitron: "Orbitron", sans-serif;
+  --font-urbanist: "Urbanist", sans-serif;
 }
-
-@layer base {
-  body {
-    background-color: var(--color-bg-deep);
-    color: var(--color-text-primary);
-    font-family: var(--font-sans);
-    overflow-x: hidden;
-    cursor: none;
-  }
-
-  .neon-glow {
-    text-shadow: 0 0 10px #a855f7, 0 0 20px #a855f7;
-    filter: drop-shadow(0 0 10px #a855f7);
-  }
-
-  @media (max-width: 768px) {
-    body {
-      cursor: auto;
-    }
-  }
-}
-
-@layer components {
-  .hero-glow::before {
-    content: '';
-    position: absolute;
-    width: 700px;
-    height: 700px;
-    background: radial-gradient(circle, rgba(167, 139, 250, 0.1) 0%, transparent 70%);
-    top: 5%;
-    right: -150px;
-    animation: breathe 7s ease-in-out infinite;
-  }
-
-  .hero-glow::after {
-    content: '';
-    position: absolute;
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, rgba(92, 26, 92, 0.15) 0%, transparent 70%);
-    bottom: 10%;
-    left: -50px;
-    animation: breathe 9s ease-in-out infinite reverse;
-  }
-
-  @keyframes breathe {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.15); }
-  }
-
-  .chat-dot {
-    width: 0.375rem;
-    height: 0.375rem;
-    border-radius: 9999px;
-    background-color: #4ade80; /* matches bg-green-400 */
-    animation: pdot 2s infinite;
-  }
-
-  @keyframes pdot {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-  }
-
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  .no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-
-  /* IALab Symmetry Styles */
-  .ia-lab-wrapper {
-      display: flex;
-      justify-content: center;
-      align-items: stretch;
-      gap: 40px;
-      padding: 20px;
-  }
-
-  .glass-panel {
-      flex: 1;
-      max-width: 480px;
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 25px;
-      padding: 30px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-  }
-
-  .input-area, .image-placeholder {
-      height: 350px;
-      width: 100%;
-      border-radius: 15px;
-      background: rgba(0, 0, 0, 0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-  }
-}
-
