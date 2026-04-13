@@ -9,6 +9,13 @@
   functions = "netlify/functions"
   publish = "dist"
 
+# IA Lab must be matched BEFORE the catch-all SPA redirect
+[[redirects]]
+  from = "/ia-lab"
+  to = "/ia-lab.html"
+  status = 200
+
+# SPA catch-all for React Router routes (main app)
 [[redirects]]
   from = "/*"
   to = "/index.html"
