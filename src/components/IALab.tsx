@@ -123,48 +123,65 @@ export const IALab = () => {
   };
 
   return (
-    <div className="min-h-screen bg-bg font-sans text-white p-4 md:p-8 overflow-hidden">
+    <div className="min-h-screen bg-[#1a0b2e] font-sans text-white p-4 md:p-8 overflow-hidden relative">
+      {/* Vibrant Creative Blobs */}
+      <div className="absolute top-0 right-0 w-[60%] h-[60%] bg-[#5c1a5c]/20 blur-[180px] rounded-full animate-pulse z-0" />
+      <div className="absolute bottom-0 left-0 w-[50%] h-[50%] bg-[#3b0f6b]/20 blur-[180px] rounded-full animate-pulse-slow z-0" />
+      <div className="absolute top-[30%] left-[20%] w-[40%] h-[40%] bg-white/5 blur-[150px] rounded-full z-0" />
+
       <nav className="relative z-10 mb-10 flex justify-between items-center max-w-5xl mx-auto">
-        <a href="/" className="flex items-center gap-2 text-purple-400 hover:text-white transition-all group">
+        <a href="/" className="flex items-center gap-2 text-white/50 hover:text-lilac transition-all group">
           <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1" />
-          <span className="text-[10px] uppercase tracking-widest font-bold">Volver</span>
+          <span className="text-[10px] uppercase tracking-widest font-black">VOLVER</span>
         </a>
         <div className="text-right">
-          <h1 className="text-3xl md:text-5xl font-serif italic uppercase tracking-tighter text-purple-300" style={{ textShadow: '0 0 10px #a855f7, 0 0 30px #a855f7, 0 0 60px #7c3aed' }}>C DESIGN LAB</h1>
-          <p className="text-[9px] text-purple-500 mt-1 uppercase tracking-[0.4em]">Digital Fashion Masterpiece</p>
+          <h1 className="text-4xl md:text-6xl font-orbitron font-black text-white drop-shadow-[0_0_35px_rgba(255,255,255,0.6)] mb-1">
+            C DESIGN <span className="text-lilac drop-shadow-[0_0_20px_rgba(168,85,247,0.7)]">LAB</span>
+          </h1>
+          <p className="text-[10px] md:text-xs text-lilac/80 uppercase tracking-[0.5em] font-bold">Digital Fashion Masterpiece</p>
         </div>
       </nav>
 
-      <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-        {/* Panel de Control */}
-        <div className="backdrop-blur-3xl bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 shadow-2xl space-y-5">
-          <div className="text-center space-y-2">
-            <h3 className="text-[10px] font-bold text-purple-300 uppercase tracking-[0.5em]">1. Describe tu obra maestra</h3>
-            <p className="text-white/30 text-[9px] uppercase tracking-widest">IA Generative Engine</p>
+      <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-start relative z-10">
+        {/* Panel de Control - Brighter Glass */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="backdrop-blur-3xl bg-white/10 border border-white/20 rounded-3xl p-8 md:p-10 shadow-[0_0_80px_rgba(0,0,0,0.4)] space-y-8"
+        >
+          <div className="text-center space-y-3">
+            <h3 className="text-xs font-black text-white tracking-[0.4em] uppercase flex items-center justify-center gap-4">
+              <span className="w-8 h-[1px] bg-white/20" />
+              1. Describe tu Obra Maestra
+              <span className="w-8 h-[1px] bg-white/20" />
+            </h3>
+            <p className="text-white/40 text-[9px] uppercase tracking-widest font-bold">IA Generative Engine</p>
           </div>
+          
           <textarea
             value={userPrompt}
             onChange={(e) => setUserPrompt(e.target.value)}
             placeholder="Ej: Extremely beautiful model, iridescent gown, symmetrical face, 8k..."
-            className="w-full h-40 bg-gradient-to-br from-[#5c1a5c] to-[#3a0e3a] border border-lilac/30 rounded-xl p-4 text-white placeholder-white/40 focus:ring-2 focus:ring-lilac focus:border-transparent outline-none transition-all resize-none mb-4 shadow-inner"
+            className="w-full h-44 bg-gradient-to-br from-[#5c1a5c]/80 to-[#3a0e3a]/80 border border-lilac/40 rounded-2xl p-6 text-white text-lg placeholder-white/30 focus:ring-4 focus:ring-lilac/30 outline-none transition-all resize-none shadow-inner leading-relaxed font-light"
           />
+          
           <button
             onClick={handleGenerate}
             disabled={isGenerating || !userPrompt.trim()}
-            className="w-full py-5 rounded-xl font-bold text-sm tracking-[0.3em] bg-lilac text-bg-tertiary shadow-[0_0_40px_rgba(168,85,247,0.6)] hover:brightness-110 hover:scale-105 transition-all flex items-center justify-center gap-3 disabled:opacity-40 border border-white/20"
+            className="w-full py-6 rounded-2xl font-black text-sm tracking-[0.4em] bg-lilac text-bg-tertiary shadow-[0_0_50px_rgba(168,85,247,0.6)] hover:bg-white hover:scale-[1.03] transition-all flex items-center justify-center gap-4 disabled:opacity-30 border border-white/40 uppercase"
           >
-            {isGenerating ? <Loader2 className="animate-spin" /> : <><Wand2 className="w-5 h-5" /> EXPERIMENT PROGRESS ✨</>}
+            {isGenerating ? <Loader2 className="animate-spin" /> : <><Wand2 className="w-6 h-6" /> EXPERIMENT PROGRESS ✨</>}
           </button>
           
           <a
             href="https://musicfx.withgoogle.com/dj"
             target="_blank"
             rel="noreferrer"
-            className="w-full mt-4 py-5 rounded-xl font-bold text-sm tracking-[0.3em] bg-bg-tertiary text-lilac shadow-[0_0_30px_rgba(168,85,247,0.3)] hover:brightness-150 hover:text-white transition-all flex items-center justify-center gap-3 border border-lilac/30 uppercase"
+            className="w-full py-6 rounded-2xl font-black text-sm tracking-[0.4em] bg-white/5 text-white hover:bg-lilac hover:text-bg-tertiary transition-all flex items-center justify-center gap-4 border border-white/10 uppercase shadow-[0_0_30px_rgba(255,255,255,0.05)] hover:shadow-[0_0_40px_rgba(168,85,247,0.3)] group"
           >
-            <Music2 className="w-5 h-5" /> hagamos magia MUSICAL 🎵
+            <Music2 className="w-6 h-6 group-hover:scale-125 transition-transform" /> HAGAMOS MAGIA MUSICAL 🎵
           </a>
-        </div>
+        </motion.div>
 
         {/* Panel de Resultado Lateral */}
         <div className="w-full flex justify-center">
