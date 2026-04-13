@@ -38,7 +38,7 @@ export const Navbar: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOp
         <li>
           <Link
             to="/emprendedores"
-            className="text-[10px] uppercase tracking-[0.15em] text-white border border-white/60 px-5 py-2 hover:brightness-125 transition-all rounded shadow-[0_0_15px_rgba(167,139,250,0.4)] hover:shadow-[0_0_25px_rgba(167,139,250,0.6)] bg-gradient-to-r from-[#5c1a5c] to-[#3a0e3a] font-bold"
+            className="text-[10px] uppercase tracking-[0.15em] text-white border border-white/60 px-5 py-2 hover:brightness-125 transition-all rounded shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_35px_rgba(168,85,247,0.6)] bg-gradient-to-r from-lilac-neon to-[#7c3aed] font-bold"
           >
             ¿sos emprendedor?
           </Link>
@@ -130,13 +130,13 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
           <div className="flex flex-wrap gap-4 mb-12">
             <button
               onClick={() => onOpenOverlay('muestras')}
-              className="border border-white/40 text-white px-8 py-3 text-xs uppercase tracking-widest hover:bg-white/10 transition-all rounded shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.5)] font-bold"
+              className="border border-lilac-neon bg-lilac-neon/10 text-white px-8 py-3 text-xs uppercase tracking-widest hover:bg-lilac-neon transition-all rounded shadow-[0_0_20px_rgba(168,85,247,0.3)] hover:shadow-[0_0_35px_rgba(168,85,247,0.6)] font-bold group"
             >
-              Portfolio
+              <span className="group-hover:text-bg transition-colors">Portfolio</span>
             </button>
             <a
               href="#about"
-              className="border border-white/40 text-white px-8 py-3 text-xs uppercase tracking-widest hover:bg-white/10 transition-all rounded shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.5)] font-bold"
+              className="border border-white/40 text-white px-8 py-3 text-xs uppercase tracking-widest hover:bg-white/10 transition-all rounded shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.3)] font-bold"
             >
               Quiénes somos
             </a>
