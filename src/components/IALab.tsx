@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Sparkles, Loader2, ChevronLeft, Download, Send, Wand2 } from 'lucide-react';
+import { Sparkles, Loader2, ChevronLeft, Download, Send, Wand2, Music2 } from 'lucide-react';
 
 const WAITING_MESSAGES = [
   "C DESIGN LAB está conceptualizando tu idea...",
@@ -86,6 +86,14 @@ export const IALab = () => {
           >
             {isGenerating ? <Loader2 className="animate-spin" /> : <><Wand2 className="w-5 h-5" /> Experiment Progress ✨</>}
           </button>
+          <a
+            href="https://aistudio.google.com/music"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full py-4 rounded-xl font-bold text-xs tracking-[0.3em] border border-purple-500/40 bg-purple-950/50 shadow-lg hover:bg-purple-900/60 hover:border-purple-400 transition-all flex items-center justify-center gap-3 text-purple-300 hover:text-white"
+          >
+            <Music2 className="w-5 h-5" /> hagamos magia MUSICAL 🎵
+          </a>
         </div>
 
         {/* Panel de Resultado Lateral */}
