@@ -634,7 +634,7 @@ export const Contact: React.FC = () => {
         </div>
 
         {/* Formulario de Comentarios */}
-        <div className="max-w-2xl mx-auto bg-bg-secondary/50 border border-lilac/20 p-8 md:p-10 rounded-2xl backdrop-blur-sm shadow-2xl">
+        <div className="max-w-2xl mx-auto bg-gradient-to-br from-[#3b0f6b] to-[#240842] border border-lilac/20 p-8 md:p-10 rounded-2xl shadow-2xl">
           <div className="text-center mb-8">
             <h3 className="font-serif text-2xl text-white mb-2">Dejanos tu comentario</h3>
             <p className="text-white/50 text-xs uppercase tracking-widest">Tu opinión nos ayuda a crecer</p>
