@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Sparkles, Loader2, ChevronLeft, Download, Send, Wand2, Music2, Music } from 'lucide-react';
 
@@ -16,6 +16,9 @@ export const IALab = () => {
   const [showResults, setShowResults] = useState(false);
   const [result, setResult] = useState({ url: '', advice: '', ready: false, error: false });
   const [isImageLoading, setIsImageLoading] = useState(true);
+  const [isComposingMusic, setIsComposingMusic] = useState(false);
+  const [musicResult, setMusicResult] = useState('');
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     let interval: any;
@@ -68,7 +71,7 @@ export const IALab = () => {
       }
 
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -174,14 +177,13 @@ export const IALab = () => {
               {isGenerating ? <Loader2 className="animate-spin" /> : <><Wand2 className="w-5 h-5" /> GENERAR ✨</>}
             </button>
             
-            <a
-              href="https://musicfx.withgoogle.com/dj"
-              target="_blank"
-              rel="noreferrer"
+            <button
+              onClick={handleMusicMagic}
+              disabled={isComposingMusic || !userPrompt.trim()}
               className="w-full py-4 rounded-xl font-black text-xs tracking-[0.4em] bg-white/5 text-white hover:bg-lilac/20 hover:text-lilac transition-all flex items-center justify-center gap-3 border border-white/10 uppercase shadow-[0_0_30px_rgba(255,255,255,0.05)] group"
             >
-              <Music2 className="w-5 h-5 group-hover:scale-110 transition-transform" /> MAGIA MUSICAL 🎵
-            </a>
+              {isComposingMusic ? <Loader2 className="animate-spin" /> : <><Music2 className="w-5 h-5 group-hover:scale-110 transition-transform" /> MAGIA MUSICAL 🎵</>}
+            </button>
           </div>
         </motion.div>
 
@@ -225,11 +227,6 @@ export const IALab = () => {
           )}
         </div>
       </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </div>
 
       {/* Loading Fullscreen */}
       <AnimatePresence>
@@ -238,6 +235,30 @@ export const IALab = () => {
             <Loader2 className="w-20 h-20 text-purple-500 animate-spin mb-8" />
             <p className="text-2xl font-serif italic text-white animate-pulse">"{WAITING_MESSAGES[currentMessage]}"</p>
           </div>
+        )}
+      </AnimatePresence>
+
+      {/* Background Audio for Wow Factor */}
+      <audio ref={audioRef} src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" />
+      
+      {/* Music Result Overlay */}
+      <AnimatePresence>
+        {musicResult && (
+          <motion.div 
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 px-8 py-4 bg-white/10 backdrop-blur-2xl border border-white/20 rounded-2xl shadow-2xl text-center"
+          >
+            <p className="text-lilac text-[10px] font-black tracking-widest uppercase mb-1">Concepto Sonoro</p>
+            <p className="text-white text-sm font-serif italic max-w-md">"{musicResult}"</p>
+            <button 
+              onClick={() => setMusicResult('')}
+              className="mt-3 text-[10px] text-white/40 hover:text-white transition-colors"
+            >
+              CERRAR
+            </button>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>
