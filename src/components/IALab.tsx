@@ -13,19 +13,8 @@ export const IALab = () => {
   const [userPrompt, setUserPrompt] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [currentMessage, setCurrentMessage] = useState(0);
-  const [showResults, setShowResults] = useState(false);
   const [result, setResult] = useState({ url: '', advice: '', ready: false, error: false });
-  const [isComposingMusic, setIsComposingMusic] = useState(false);
-  const [musicResult, setMusicResult] = useState('');
   const [isImageLoading, setIsImageLoading] = useState(true);
-  const audioRef = React.useRef<HTMLAudioElement | null>(null);
-
-  useEffect(() => {
-    // Inicializar el audio de fondo (Luxury Ambient)
-    audioRef.current = new Audio('https://cdn.pixabay.com/audio/2022/03/15/audio_7302484f98.mp3'); // Un track de piano de lujo
-    audioRef.current.loop = true;
-    audioRef.current.volume = 0.4;
-  }, []);
 
   useEffect(() => {
     let interval: any;
@@ -42,10 +31,6 @@ export const IALab = () => {
     setIsGenerating(true);
     setShowResults(false);
     setIsImageLoading(true);
-    if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-    }
     
     try {
       // PROMPT MAESTRO: Forzamos realismo y simetría total
@@ -169,17 +154,14 @@ export const IALab = () => {
           >
             {isGenerating ? <Loader2 className="animate-spin" /> : <><Wand2 className="w-5 h-5" /> Experiment Progress ✨</>}
           </button>
-          <button
-            onClick={handleMusicMagic}
-            disabled={isComposingMusic || !userPrompt.trim()}
-            className="w-full py-4 rounded-xl font-bold text-xs tracking-[0.3em] border border-purple-500/40 bg-purple-950/50 shadow-lg hover:bg-purple-900/60 hover:border-purple-400 transition-all flex items-center justify-center gap-3 text-purple-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-purple-950/50"
+          <a
+            href="https://labs.google/fx/es-419/tools/music-fx-dj"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`w-full py-4 rounded-xl font-bold text-xs tracking-[0.3em] border border-purple-500/40 bg-purple-950/50 shadow-lg hover:bg-purple-900/60 hover:border-purple-400 transition-all flex items-center justify-center gap-3 text-purple-300 hover:text-white ${!userPrompt.trim() ? 'opacity-40 cursor-not-allowed pointer-events-none' : ''}`}
           >
-            {isComposingMusic ? (
-              <><Loader2 className="w-5 h-5 animate-spin" /> Componiendo partitura...</>
-            ) : (
-              <><Music2 className="w-5 h-5" /> hagamos magia MUSICAL 🎵</>
-            )}
-          </button>
+            <Music2 className="w-5 h-5" /> hagamos magia MUSICAL 🎵
+          </a>
         </div>
 
         {/* Panel de Resultado Lateral */}
@@ -205,21 +187,6 @@ export const IALab = () => {
                     }}
                   />
                 </div>
-                {musicResult && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="rounded-xl border border-purple-500/30 bg-purple-950/30 backdrop-blur-xl p-5 shadow-[0_0_30px_rgba(168,85,247,0.08)]"
-                  >
-                    <div className="flex items-start gap-3">
-                      <Music className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
-                      <p className="text-sm text-purple-200/90 leading-relaxed italic font-serif">
-                        {musicResult}
-                      </p>
-                    </div>
-                  </motion.div>
-                )}
                 <div className="space-y-4">
                   <a href={result.url} target="_blank" rel="noreferrer" className="block w-full py-3 rounded-full bg-purple-600 text-center font-bold text-[10px] tracking-[0.3em] shadow-lg hover:bg-purple-500 transition-all">
                     GUARDAR EN MI DISPOSITIVO
