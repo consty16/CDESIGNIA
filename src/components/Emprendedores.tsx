@@ -132,7 +132,7 @@ export const Emprendedores: React.FC = () => {
               "WhatsApp Business", "Tiendanube / Empretienda", "Wix", "Mercado Libre", 
               "Pedix", "Google Business", "Ads", "Pomeli"
             ].map((tool, i) => (
-              <div key={i} className="bg-gradient-to-br from-[#3b0f6b] to-[#240842] border border-lilac/30 p-4 rounded-lg text-center text-[13px] text-lilac font-bold shadow-[0_0_15px_rgba(168,85,247,0.2)] hover:scale-105 hover:brightness-125 transition-all">
+              <div key={i} className="bg-gradient-to-br from-[#3b0f6b] to-[#240842] border border-lilac/30 p-4 rounded-lg text-center text-[13px] text-white font-bold shadow-[0_0_15px_rgba(168,85,247,0.2)] hover:scale-105 hover:brightness-125 transition-all drop-shadow-[0_0_2px_rgba(255,255,255,0.4)]">
                 {tool}
               </div>
             ))}
