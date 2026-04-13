@@ -142,88 +142,89 @@ export const IALab = () => {
         </div>
       </nav>
 
-      <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-start relative z-10">
-        {/* Panel de Control - Brighter Glass */}
+      <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-[1.2fr,1fr] gap-8 items-start relative z-10">
+        {/* Panel de Control - More Compact & Vivid */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="backdrop-blur-3xl bg-white/10 border border-white/20 rounded-3xl p-8 md:p-10 shadow-[0_0_80px_rgba(0,0,0,0.4)] space-y-8"
+          className="backdrop-blur-3xl bg-white/10 border border-white/20 rounded-3xl p-6 md:p-8 shadow-[0_0_80px_rgba(0,0,0,0.3)] space-y-6"
         >
-          <div className="text-center space-y-3">
-            <h3 className="text-xs font-black text-white tracking-[0.4em] uppercase flex items-center justify-center gap-4">
-              <span className="w-8 h-[1px] bg-white/20" />
-              1. Describe tu Obra Maestra
-              <span className="w-8 h-[1px] bg-white/20" />
+          <div className="text-center space-y-2">
+            <h3 className="text-[10px] font-black text-white tracking-[0.4em] uppercase flex items-center justify-center gap-4">
+              <span className="w-6 h-[1px] bg-white/20" />
+              1. Tu Obra Maestra
+              <span className="w-6 h-[1px] bg-white/20" />
             </h3>
-            <p className="text-white/40 text-[9px] uppercase tracking-widest font-bold">IA Generative Engine</p>
+            <p className="text-white/40 text-[8px] uppercase tracking-widest font-bold">IA Generative Engine</p>
           </div>
           
           <textarea
             value={userPrompt}
             onChange={(e) => setUserPrompt(e.target.value)}
-            placeholder="Ej: Extremely beautiful model, iridescent gown, symmetrical face, 8k..."
-            className="w-full h-44 bg-gradient-to-br from-[#5c1a5c]/80 to-[#3a0e3a]/80 border border-lilac/40 rounded-2xl p-6 text-white text-lg placeholder-white/30 focus:ring-4 focus:ring-lilac/30 outline-none transition-all resize-none shadow-inner leading-relaxed font-light"
+            placeholder="Describe tu visión aquí..."
+            className="w-full h-32 bg-gradient-to-br from-[#5c1a5c] to-[#3a0e3a] border border-lilac/50 rounded-2xl p-5 text-white text-base placeholder-white/30 focus:ring-4 focus:ring-lilac/30 outline-none transition-all resize-none font-light leading-snug"
           />
           
-          <button
-            onClick={handleGenerate}
-            disabled={isGenerating || !userPrompt.trim()}
-            className="w-full py-6 rounded-2xl font-black text-sm tracking-[0.4em] bg-lilac text-bg-tertiary shadow-[0_0_50px_rgba(168,85,247,0.6)] hover:bg-white hover:scale-[1.03] transition-all flex items-center justify-center gap-4 disabled:opacity-30 border border-white/40 uppercase"
-          >
-            {isGenerating ? <Loader2 className="animate-spin" /> : <><Wand2 className="w-6 h-6" /> EXPERIMENT PROGRESS ✨</>}
-          </button>
-          
-          <a
-            href="https://musicfx.withgoogle.com/dj"
-            target="_blank"
-            rel="noreferrer"
-            className="w-full py-6 rounded-2xl font-black text-sm tracking-[0.4em] bg-white/5 text-white hover:bg-lilac hover:text-bg-tertiary transition-all flex items-center justify-center gap-4 border border-white/10 uppercase shadow-[0_0_30px_rgba(255,255,255,0.05)] hover:shadow-[0_0_40px_rgba(168,85,247,0.3)] group"
-          >
-            <Music2 className="w-6 h-6 group-hover:scale-125 transition-transform" /> HAGAMOS MAGIA MUSICAL 🎵
-          </a>
+          <div className="space-y-4">
+            <button
+              onClick={handleGenerate}
+              disabled={isGenerating || !userPrompt.trim()}
+              className="w-full py-4 rounded-xl font-black text-xs tracking-[0.4em] bg-lilac text-bg-tertiary shadow-[0_0_40px_rgba(168,85,247,0.5)] hover:bg-white hover:scale-105 transition-all flex items-center justify-center gap-3 disabled:opacity-30 border border-white/40 uppercase"
+            >
+              {isGenerating ? <Loader2 className="animate-spin" /> : <><Wand2 className="w-5 h-5" /> GENERAR ✨</>}
+            </button>
+            
+            <a
+              href="https://musicfx.withgoogle.com/dj"
+              target="_blank"
+              rel="noreferrer"
+              className="w-full py-4 rounded-xl font-black text-xs tracking-[0.4em] bg-white/5 text-white hover:bg-lilac/20 hover:text-lilac transition-all flex items-center justify-center gap-3 border border-white/10 uppercase shadow-[0_0_30px_rgba(255,255,255,0.05)] group"
+            >
+              <Music2 className="w-5 h-5 group-hover:scale-110 transition-transform" /> MAGIA MUSICAL 🎵
+            </a>
+          </div>
         </motion.div>
 
-        {/* Panel de Resultado Lateral */}
-        <div className="w-full flex justify-center">
-          <AnimatePresence mode="wait">
-            {showResults && (
-              <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-4 max-w-[380px] w-full">
-                <div className="grid grid-cols-1 gap-8">
-            <div className="relative aspect-square bg-black/40 rounded-2xl overflow-hidden border-2 border-lilac/20 shadow-2xl group">
-              {isGenerating ? (
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-bg/80 backdrop-blur-md z-10">
-                  <div className="w-20 h-20 border-4 border-lilac/30 border-t-lilac rounded-full animate-spin mb-6 shadow-[0_0_30px_rgba(168,85,247,0.4)]" />
-                  <p className="text-lilac font-black tracking-[0.3em] animate-pulse uppercase text-xs">Manifestando Arte...</p>
+        {/* Panel de Resultado - Perfectly Aligned */}
+        <div className="flex flex-col gap-6">
+          <div className="relative aspect-square bg-black/40 rounded-3xl overflow-hidden border-2 border-white/10 shadow-2xl group">
+            {isGenerating ? (
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-bg/60 backdrop-blur-xl z-20">
+                <div className="w-16 h-16 border-4 border-lilac/30 border-t-lilac rounded-full animate-spin mb-4" />
+                <p className="text-lilac font-black tracking-[0.3em] animate-pulse uppercase text-[10px]">CREANDO...</p>
+              </div>
+            ) : result ? (
+              <motion.img
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                src={result.url}
+                alt="AI Result"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="absolute inset-0 flex flex-col items-center justify-center p-10 text-center">
+                <div className="w-16 h-16 rounded-full bg-lilac/5 border border-lilac/10 flex items-center justify-center mb-4">
+                  <Wand2 className="w-8 h-8 text-lilac/20" />
                 </div>
-              ) : result ? (
-                <motion.img
-                  initial={{ opacity: 0, scale: 1.1 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  src={result.url}
-                  alt="C DESIGN LAB Masterpiece"
-                  className="w-full h-full object-cover transition-all duration-1000"
-                  onLoad={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.style.opacity = '1';
-                  }}
-                />
-              ) : (
-                <div className="absolute inset-0 flex flex-col items-center justify-center p-12 text-center">
-                  <div className="w-24 h-24 rounded-full bg-lilac/5 border border-lilac/10 flex items-center justify-center mb-6">
-                    <Wand2 className="w-10 h-10 text-lilac/20" />
-                  </div>
-                  <p className="text-lilac/40 font-serif italic text-lg leading-relaxed">
-                    Tu visión aparecerá aquí después de que la IA la procese...
-                  </p>
-                </div>
-              )}
-            </div>
+                <p className="text-lilac/30 font-serif italic text-sm">El arte aparecerá aquí...</p>
+              </div>
+            )}
           </div>
-                <div className="space-y-4">
-                  <a href={result.url} target="_blank" rel="noreferrer" className="block w-full py-3 rounded-full bg-lilac text-bg-tertiary text-center font-bold text-[10px] tracking-[0.3em] shadow-[0_0_30px_rgba(168,85,247,0.5)] hover:bg-lilac-dim transition-all">
-                    GUARDAR EN MI DISPOSITIVO
-                  </a>
-                </div>
+          
+          {result && !isGenerating && (
+            <motion.a 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              href={result.url} 
+              target="_blank" 
+              rel="noreferrer" 
+              className="w-full py-4 rounded-xl bg-gradient-to-br from-[#3b0f6b] to-[#240842] text-white text-center font-black text-xs tracking-[0.4em] shadow-[0_0_30px_rgba(168,85,247,0.4)] hover:brightness-125 transition-all border border-lilac/30 uppercase"
+            >
+              DESCARGAR OBRA 📥
+            </motion.a>
+          )}
+        </div>
+      </div>
               </motion.div>
             )}
           </AnimatePresence>
