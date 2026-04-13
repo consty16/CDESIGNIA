@@ -84,16 +84,16 @@ export const IALab = () => {
             disabled={isGenerating || !userPrompt.trim()}
             className="w-full py-6 rounded-2xl font-bold tracking-[0.4em] bg-gradient-to-r from-purple-600 to-purple-900 shadow-xl hover:brightness-125 transition-all flex items-center justify-center gap-3"
           >
-            {isGenerating ? <Loader2 className="animate-spin" /> : <><Wand2 className="w-5 h-5" /> CREAR ALTA COSTURA ✨</>}
+            {isGenerating ? <Loader2 className="animate-spin" /> : <><Wand2 className="w-5 h-5" /> Experiment Progress ✨</>}
           </button>
         </div>
 
         {/* Panel de Resultado Lateral */}
-        <div className="w-full">
+        <div className="w-full flex justify-center">
           <AnimatePresence mode="wait">
             {showResults && (
-              <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
-                <div className="w-full h-auto min-h-[400px] rounded-[2.5rem] border border-purple-500/30 overflow-hidden bg-black flex items-center justify-center shadow-[0_0_50px_rgba(168,85,247,0.1)]">
+              <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6 max-w-[450px] w-full">
+                <div className="w-full h-auto min-h-[300px] rounded-[2.5rem] border border-purple-500/30 overflow-hidden bg-black flex items-center justify-center shadow-[0_0_50px_rgba(168,85,247,0.1)]">
                   <img 
                     src={result.url} 
                     className="w-full h-auto object-contain"
