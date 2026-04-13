@@ -7,15 +7,22 @@
   --font-orbitron: "Orbitron", sans-serif;
   --font-urbanist: "Urbanist", sans-serif;
 
+  --color-red-500: oklch(63.7% .237 25.331);
+  --color-yellow-500: oklch(79.5% .184 86.047);
+  --color-green-400: oklch(79.2% .209 151.711);
+  --color-green-500: oklch(72.3% .219 149.579);
   --color-purple-500: oklch(62.7% .265 303.9);
-  --color-lilac-neon: #a855f7;
-  --color-lilac-glow: var(--color-lilac-neon);
+  --color-pink-500: oklch(65.6% .241 354.308);
   --color-black: #000;
-  --color-bg: #000000;
-  --color-bg-deep: #000000;
-  --color-bg-secondary: #0a0a0f;
-  --color-bg-tertiary: #130f24;
+  --color-white: #fff;
+
+  --color-bg: #1a1626;
+  --color-bg-deep: #1a1626;
+  --color-bg-secondary: #1a1626;
+  --color-bg-tertiary: #1a1626;
   --color-lilac: #c4b5fd;
+  --color-lilac-neon: #a855f7;
+  --color-lilac-glow: #d8b4fe;
   --color-lilac-dim: #a78bfa;
   --color-text-primary: #f0eeff;
   --color-text-secondary: #a89ec4;
@@ -50,7 +57,7 @@
     position: absolute;
     width: 700px;
     height: 700px;
-    background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(167, 139, 250, 0.1) 0%, transparent 70%);
     top: 5%;
     right: -150px;
     animation: breathe 7s ease-in-out infinite;
@@ -61,7 +68,7 @@
     position: absolute;
     width: 500px;
     height: 500px;
-    background: radial-gradient(circle, rgba(92, 26, 92, 0.25) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(92, 26, 92, 0.15) 0%, transparent 70%);
     bottom: 10%;
     left: -50px;
     animation: breathe 9s ease-in-out infinite reverse;
