@@ -130,13 +130,13 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
           <div className="flex flex-wrap gap-4 mb-12">
             <button
               onClick={() => onOpenOverlay('muestras')}
-              className="bg-white text-black px-8 py-3 text-xs uppercase tracking-widest font-bold hover:bg-white/90 transition-all rounded shadow-[0_0_20px_rgba(255,255,255,0.4)] hover:shadow-[0_0_30px_rgba(255,255,255,0.6)] hover:scale-105"
+              className="bg-white text-black w-44 h-11 text-xs uppercase tracking-widest font-bold hover:bg-white/90 transition-all rounded shadow-[0_0_20px_rgba(255,255,255,0.4)] hover:shadow-[0_0_30px_rgba(255,255,255,0.6)] hover:scale-105 flex items-center justify-center"
             >
               Portfolio
             </button>
             <a
               href="#about"
-              className="border border-lilac/20 text-white px-8 py-3 text-xs uppercase tracking-widest hover:border-white transition-all rounded hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] font-bold"
+              className="border border-lilac/20 text-white w-44 h-11 text-xs uppercase tracking-widest hover:border-white transition-all rounded hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] font-bold flex items-center justify-center"
             >
               Quiénes somos
             </a>
@@ -147,7 +147,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
               <button
                 onClick={() => setIsProjectsOpen(!isProjectsOpen)}
                 onMouseEnter={() => setIsProjectsOpen(true)}
-                className="border border-white/40 text-white px-8 py-3 text-xs uppercase tracking-widest hover:bg-white/10 transition-all rounded shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.5)] flex items-center gap-2 font-bold"
+                className="border border-white/40 text-white w-44 h-11 text-xs uppercase tracking-widest hover:bg-white/10 transition-all rounded shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.5)] flex items-center justify-center gap-2 font-bold"
               >
                 Projects
                 <span className={cn("text-[8px] opacity-50 transition-transform", isProjectsOpen ? "rotate-180" : "")}>▼</span>
@@ -189,7 +189,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
               href="/ia-lab.html"
               target="_blank"
               rel="noreferrer"
-              className="border border-lilac-neon text-lilac-glow px-8 py-3 text-xs uppercase tracking-widest font-bold hover:bg-lilac-neon hover:text-white transition-all duration-300 rounded shadow-[0_0_10px_rgba(168,85,247,0.3)] hover:shadow-[0_0_25px_rgba(168,85,247,0.8)] flex items-center justify-center gap-2 group min-w-[160px]"
+              className="border border-lilac-neon text-lilac-glow w-44 h-11 text-xs uppercase tracking-widest font-bold hover:bg-lilac-neon hover:text-white transition-all duration-300 rounded shadow-[0_0_10px_rgba(168,85,247,0.3)] hover:shadow-[0_0_25px_rgba(168,85,247,0.8)] flex items-center justify-center gap-2 group"
             >
               <span className="group-hover:animate-pulse">¡PROBAR MAGIA!</span>
             </a>
