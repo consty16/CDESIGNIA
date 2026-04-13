@@ -62,8 +62,13 @@ export const IALab = () => {
 
     try {
       const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+      if (!apiKey || apiKey === 'MY_GEMINI_API_KEY') {
+        setMusicResult('API Key no configurada. Agregá VITE_GEMINI_API_KEY en las variables de entorno.');
+        return;
+      }
+
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -82,7 +87,17 @@ export const IALab = () => {
       );
 
       const data = await response.json();
-      const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || 'No se pudo generar la composición.';
+      console.log('Gemini Music Response:', JSON.stringify(data, null, 2));
+
+      if (data.error) {
+        setMusicResult(`Error de API: ${data.error.message}`);
+        return;
+      }
+
+      // Buscar el texto en cualquier posición de parts (compatibilidad con modelos thinking)
+      const parts = data?.candidates?.[0]?.content?.parts || [];
+      const textPart = parts.find((p: any) => p.text && !p.thought);
+      const text = textPart?.text || parts[parts.length - 1]?.text || 'No se pudo generar la composición.';
       setMusicResult(text.trim());
     } catch (error) {
       console.error('Error en Gemini Music:', error);
