@@ -130,13 +130,13 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
           <div className="flex flex-wrap gap-4 mb-12">
             <button
               onClick={() => onOpenOverlay('muestras')}
-              className="bg-gradient-to-br from-[#3b0f6b] to-[#240842] text-lilac w-48 h-14 text-[14px] uppercase tracking-widest font-bold hover:brightness-125 transition-all rounded shadow-[0_0_40px_rgba(168,85,247,0.6)] hover:scale-105 flex items-center justify-center border border-lilac/30"
+              className="bg-gradient-to-br from-[#3b0f6b] to-[#240842] text-white w-48 h-12 text-[13px] uppercase tracking-widest font-bold hover:brightness-125 transition-all rounded hover:scale-105 flex items-center justify-center border border-lilac/30"
             >
               Portfolio
             </button>
             <a
               href="#about"
-              className="bg-gradient-to-br from-[#3b0f6b] to-[#240842] text-lilac w-48 h-14 text-[14px] uppercase tracking-widest font-bold hover:brightness-125 transition-all rounded shadow-[0_0_40px_rgba(168,85,247,0.6)] flex items-center justify-center border border-lilac/30"
+              className="bg-gradient-to-br from-[#3b0f6b] to-[#240842] text-white w-48 h-12 text-[13px] uppercase tracking-widest font-bold hover:brightness-125 transition-all rounded flex items-center justify-center border border-lilac/30"
             >
               Quiénes somos
             </a>
@@ -147,7 +147,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
               <button
                 onClick={() => setIsProjectsOpen(!isProjectsOpen)}
                 onMouseEnter={() => setIsProjectsOpen(true)}
-                className="bg-gradient-to-br from-[#3b0f6b] to-[#240842] text-white w-48 h-12 text-[13px] uppercase tracking-widest font-bold hover:brightness-125 transition-all rounded shadow-[0_0_30px_rgba(168,85,247,0.5)] flex items-center justify-center gap-2 border border-lilac/30 drop-shadow-[0_0_3px_rgba(255,255,255,0.4)]"
+                className="bg-gradient-to-br from-[#3b0f6b] to-[#240842] text-white w-48 h-12 text-[13px] uppercase tracking-widest font-bold hover:brightness-125 transition-all rounded flex items-center justify-center gap-2 border border-lilac/30 drop-shadow-[0_0_3px_rgba(255,255,255,0.4)]"
               >
                 Projects
                 <span className={cn("text-[9px] opacity-70 transition-transform", isProjectsOpen ? "rotate-180" : "")}>▼</span>
@@ -189,7 +189,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
               href="/ia-lab.html"
               target="_blank"
               rel="noreferrer"
-              className="bg-gradient-to-br from-[#3b0f6b] to-[#240842] text-white w-48 h-12 text-[13px] uppercase tracking-widest font-bold hover:brightness-150 transition-all duration-300 rounded shadow-[0_0_50px_rgba(168,85,247,0.8)] flex items-center justify-center gap-2 group border-2 border-lilac/40 drop-shadow-[0_0_4px_rgba(255,255,255,0.6)]"
+              className="bg-gradient-to-br from-[#3b0f6b] to-[#240842] text-white w-48 h-12 text-[13px] uppercase tracking-widest font-bold hover:brightness-150 transition-all duration-300 rounded flex items-center justify-center gap-2 group border-2 border-lilac/40 drop-shadow-[0_0_4px_rgba(255,255,255,0.6)]"
             >
               <span className="group-hover:animate-pulse">¡PROBAR MAGIA!</span>
             </a>
