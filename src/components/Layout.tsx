@@ -662,7 +662,8 @@ export const Contact: React.FC = () => {
 
         {/* Formulario de Comentarios */}
         <div
-          className="max-w-2xl mx-auto border p-8 md:p-10 rounded-2xl backdrop-blur-sm shadow-2xl bg-[#1e1a52] border-[#c2abed]"
+          className="max-w-2xl mx-auto border p-8 md:p-10 rounded-2xl backdrop-blur-sm shadow-2xl border-[#c2abed]"
+          style={{ backgroundColor: '#1e1a52' }}
         >
           <div className="text-center mb-8">
             <h3 className="font-serif text-2xl text-white mb-2">Dejanos tu comentario</h3>
