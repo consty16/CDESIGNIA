@@ -598,6 +598,7 @@ export const Contact: React.FC = () => {
       body: formDataToSubmit.toString(),
     })
       .then((response) => {
+        console.log("Respuesta Netlify:", response.status);
         if (!response.ok) throw new Error('Submission failed');
         alert("¡Formulario enviado con éxito!");
         const newReview = { ...formData };
