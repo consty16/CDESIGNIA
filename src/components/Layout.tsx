@@ -597,9 +597,11 @@ export const Contact: React.FC = () => {
     formDataToSubmit.append('stars', formData.stars.toString());
     formDataToSubmit.append('text', formData.text);
 
-    fetch('/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    console.log("Enviando a Netlify...", Object.fromEntries(formDataToSubmit));
+
+    fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: formDataToSubmit.toString(),
     })
       .then((response) => {
