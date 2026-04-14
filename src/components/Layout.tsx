@@ -562,7 +562,7 @@ export const About: React.FC = () => {
             { title: "Innovación", desc: "Creación de portafolios interactivos con avatares parlantes, diseñados para presentar contenido de manera dinámica y romper con los formatos visuales tradicionales.", bgColor: "#3b1566" },
             { title: "Influencers Virtuales", desc: "Desarrollo de personajes virtuales para campañas de marketing digital en Instagram y TikTok, impulsados por modelos de IA.", bgColor: "#4a1040" }
           ].map((obj, i) => (
-            <div key={i} className={cn("obj-card", i === 0 ? "bg-[#1e1a52]" : i === 1 ? "bg-[#3b1566]" : "bg-[#4a1040]")}>
+            <div key={i} className="obj-card" style={{ backgroundColor: obj.bgColor }}>
               <h3>{obj.title}</h3>
               <p>{obj.desc}</p>
             </div>
