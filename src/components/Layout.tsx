@@ -132,14 +132,14 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
             <button
               onClick={() => onOpenOverlay('muestras')}
               className="w-full h-full flex items-center justify-center border-2 text-white py-3 px-2 sm:px-4 text-[10px] sm:text-xs uppercase tracking-widest hover:brightness-125 transition-all rounded font-bold text-center"
-              style={{ borderColor: '#c2abed', boxShadow: '0 0 15px #c2abed, inset 0 0 8px #c2abed' }}
+              style={{ borderColor: '#c2abed', boxShadow: '0 0 10px rgba(194, 171, 237, 0.3), inset 0 0 5px rgba(194, 171, 237, 0.2)' }}
             >
               Portfolio
             </button>
             <a
               href="#about"
               className="w-full h-full flex items-center justify-center border-2 text-white py-3 px-2 sm:px-4 text-[10px] sm:text-xs uppercase tracking-widest hover:brightness-125 transition-all rounded font-bold text-center"
-              style={{ borderColor: '#c2abed', boxShadow: '0 0 15px #c2abed, inset 0 0 8px #c2abed' }}
+              style={{ borderColor: '#c2abed', boxShadow: '0 0 10px rgba(194, 171, 237, 0.3), inset 0 0 5px rgba(194, 171, 237, 0.2)' }}
             >
               Quiénes somos
             </a>
@@ -151,7 +151,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
                 onClick={() => setIsProjectsOpen(!isProjectsOpen)}
                 onMouseEnter={() => setIsProjectsOpen(true)}
                 className="w-full h-full flex items-center justify-center gap-2 border-2 text-white py-3 px-2 sm:px-4 text-[10px] sm:text-xs uppercase tracking-widest hover:brightness-125 transition-all rounded font-bold text-center"
-                style={{ borderColor: '#c2abed', boxShadow: '0 0 15px #c2abed, inset 0 0 8px #c2abed' }}
+                style={{ borderColor: '#c2abed', boxShadow: '0 0 10px rgba(194, 171, 237, 0.3), inset 0 0 5px rgba(194, 171, 237, 0.2)' }}
               >
                 Projects
                 <span className={cn("text-[8px] opacity-50 transition-transform", isProjectsOpen ? "rotate-180" : "")}>▼</span>
@@ -196,7 +196,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
               target="_blank"
               rel="noreferrer"
               className="w-full h-full flex items-center justify-center gap-2 border-2 text-white py-3 px-2 sm:px-4 text-[10px] sm:text-xs uppercase tracking-widest font-bold hover:brightness-125 transition-all duration-300 rounded text-center"
-              style={{ borderColor: '#c2abed', boxShadow: '0 0 20px #c2abed, inset 0 0 10px #c2abed' }}
+              style={{ borderColor: '#c2abed', boxShadow: '0 0 12px rgba(194, 171, 237, 0.4), inset 0 0 6px rgba(194, 171, 237, 0.2)' }}
             >
               <span className="hover:animate-pulse border-none">✨ ¡PROBAR MAGIA!</span>
             </a>
@@ -280,7 +280,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
         <div className="max-w-6xl mx-auto mb-6 px-4">
           <h3
             className="font-serif text-[18px] uppercase tracking-[0.2em] font-bold border-2 px-4 py-1 rounded-sm w-fit"
-            style={{ backgroundColor: '#1e1a52', color: '#ffffff', borderColor: '#c2abed', boxShadow: '0 0 15px #c2abed, inset 0 0 8px #c2abed' }}
+            style={{ backgroundColor: '#1e1a52', color: '#ffffff', borderColor: '#c2abed', boxShadow: '0 0 12px rgba(194, 171, 237, 0.4), inset 0 0 6px rgba(194, 171, 237, 0.2)' }}
           >
             Influencers Virtuales
           </h3>
@@ -416,7 +416,7 @@ export const FeaturedWorks: React.FC = () => {
           <div className="flex items-center gap-4 flex-1">
             <h2
               className="font-serif text-[18px] uppercase tracking-[0.2em] font-bold border-2 px-4 py-1 rounded-sm whitespace-nowrap text-[#c2abed]"
-              style={{ backgroundColor: '#1e1a52', borderColor: '#c2abed', boxShadow: '0 0 15px #c2abed, inset 0 0 8px #c2abed' }}
+              style={{ backgroundColor: '#1e1a52', borderColor: '#c2abed', boxShadow: '0 0 12px rgba(194, 171, 237, 0.4), inset 0 0 6px rgba(194, 171, 237, 0.2)' }}
             >
               Trabajos Destacados
             </h2>
