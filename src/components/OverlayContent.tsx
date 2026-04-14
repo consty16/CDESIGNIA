@@ -212,7 +212,7 @@ export const MuestrasContent = () => {
                     }}
                   />
                   {/* Controles: Play/Pause + Volumen */}
-                  <div className="absolute bottom-0 left-0 right-0 px-3 py-2 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-20" style={{background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%)'}}>
+                  <div className="absolute bottom-0 left-0 right-0 px-3 py-2 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-20 bg-gradient-to-t from-black/85 to-transparent">
                     <button
                       className="w-7 h-7 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white text-[11px] hover:bg-white/40 transition-colors flex-shrink-0"
                       title="Play / Pause"
@@ -305,7 +305,7 @@ export const InstagramContent = () => {
         <a
           href="https://www.instagram.com/cdesign_ia/?hl=es"
           target="_blank"
-          rel="noreferrer"
+          rel="noopener noreferrer"
           className="inline-flex items-center gap-2 bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] text-white px-10 py-4 text-xs uppercase tracking-widest font-bold hover:opacity-90 transition-all rounded-full shadow-lg shadow-pink-500/20 hover:scale-105"
         >
           Ver Perfil en Instagram ↗
@@ -327,7 +327,7 @@ export const TikTokContent = () => {
         <a
           href="https://www.tiktok.com/@cdesign_ia?is_from_webapp=1&sender_device=pc"
           target="_blank"
-          rel="noreferrer"
+          rel="noopener noreferrer"
           className="inline-flex items-center gap-2 bg-[#fe2c55] text-white px-10 py-4 text-xs uppercase tracking-widest font-bold hover:bg-[#e6254c] transition-all rounded-full shadow-lg shadow-[#fe2c55]/20 hover:scale-105"
         >
           Seguinos en TikTok ↗
@@ -501,7 +501,7 @@ export const ServicesContent = () => (
         <a
           href="https://wa.me/5493815341233"
           target="_blank"
-          rel="noreferrer"
+          rel="noopener noreferrer"
           className="inline-flex items-center gap-2 text-[10px] uppercase tracking-widest text-wa border border-wa/30 px-4 py-1.5 hover:bg-wa/10 transition-all rounded font-bold"
         >
           Consultar por WhatsApp ↗

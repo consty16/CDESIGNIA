@@ -131,15 +131,13 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
           <div className="grid grid-cols-2 gap-4 mb-12 max-w-[450px]">
             <button
               onClick={() => onOpenOverlay('muestras')}
-              className="w-full h-full flex items-center justify-center border text-white py-3 px-2 sm:px-4 text-[10px] sm:text-xs uppercase tracking-widest hover:brightness-125 transition-all rounded font-bold text-center"
-              style={{ borderColor: '#c2abed', boxShadow: '0 0 15px rgba(194, 171, 237, 0.4), inset 0 0 5px rgba(194, 171, 237, 0.2)' }}
+              className="w-full h-full flex items-center justify-center border text-white py-3 px-2 sm:px-4 text-[10px] sm:text-xs uppercase tracking-widest hover:brightness-125 transition-all rounded font-bold text-center border-[#c2abed] shadow-[0_0_15px_rgba(194,171,237,0.4),inset_0_0_5px_rgba(194,171,237,0.2)]"
             >
               Portfolio
             </button>
             <a
               href="#about"
-              className="w-full h-full flex items-center justify-center border text-white py-3 px-2 sm:px-4 text-[10px] sm:text-xs uppercase tracking-widest hover:brightness-125 transition-all rounded font-bold text-center"
-              style={{ borderColor: '#c2abed', boxShadow: '0 0 15px rgba(194, 171, 237, 0.4), inset 0 0 5px rgba(194, 171, 237, 0.2)' }}
+              className="w-full h-full flex items-center justify-center border text-white py-3 px-2 sm:px-4 text-[10px] sm:text-xs uppercase tracking-widest hover:brightness-125 transition-all rounded font-bold text-center border-[#c2abed] shadow-[0_0_15px_rgba(194,171,237,0.4),inset_0_0_5px_rgba(194,171,237,0.2)]"
             >
               Quiénes somos
             </a>
@@ -150,8 +148,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
               <button
                 onClick={() => setIsProjectsOpen(!isProjectsOpen)}
                 onMouseEnter={() => setIsProjectsOpen(true)}
-                className="w-full h-full flex items-center justify-center gap-2 border text-white py-3 px-2 sm:px-4 text-[10px] sm:text-xs uppercase tracking-widest hover:brightness-125 transition-all rounded font-bold text-center"
-                style={{ borderColor: '#c2abed', boxShadow: '0 0 15px rgba(194, 171, 237, 0.4), inset 0 0 5px rgba(194, 171, 237, 0.2)' }}
+                className="w-full h-full flex items-center justify-center gap-2 border text-white py-3 px-2 sm:px-4 text-[10px] sm:text-xs uppercase tracking-widest hover:brightness-125 transition-all rounded font-bold text-center border-[#c2abed] shadow-[0_0_15px_rgba(194,171,237,0.4),inset_0_0_5px_rgba(194,171,237,0.2)]"
               >
                 Projects
                 <span className={cn("text-[8px] opacity-50 transition-transform", isProjectsOpen ? "rotate-180" : "")}>▼</span>
@@ -162,13 +159,12 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
                 isProjectsOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible translate-y-2 pointer-events-none"
               )}>
                 <div
-                  className="w-full border border-lilac/20 rounded-lg overflow-hidden shadow-2xl backdrop-blur-xl"
-                  style={{ backgroundColor: '#3b1566' }}
+                  className="w-full border border-lilac/20 rounded-lg overflow-hidden shadow-2xl backdrop-blur-xl bg-[#3b1566]"
                 >
                   <a
                     href="https://www.instagram.com/andromedamodamasculina/"
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     className="block px-6 py-3 text-[10px] uppercase tracking-widest text-white/80 hover:text-white hover:bg-lilac/20 transition-colors border-b border-white/5"
                   >
                     ✦ ANDROMEDA ↗
@@ -176,7 +172,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
                   <a
                     href="https://madtecnoymas.netlify.app/"
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     className="block px-6 py-3 text-[10px] uppercase tracking-widest text-white/80 hover:text-white hover:bg-lilac/20 transition-colors border-b border-white/5"
                   >
                     ❋ MAD TECNO ↗
@@ -184,7 +180,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
                   <a
                     href="/sc-security-consulting.html"
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     className="block px-6 py-3 text-[10px] uppercase tracking-widest text-white/80 hover:text-white hover:bg-lilac/20 transition-colors"
                   >
                     ◈ SC SECURITY CONSULTING ↗
@@ -196,8 +192,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
               href="/ia-lab.html"
               target="_blank"
               rel="noreferrer"
-              className="w-full h-full flex items-center justify-center gap-2 border text-white py-3 px-2 sm:px-4 text-[10px] sm:text-xs uppercase tracking-widest font-bold hover:brightness-125 transition-all duration-300 rounded text-center"
-              style={{ borderColor: '#c2abed', boxShadow: '0 0 15px rgba(194, 171, 237, 0.4), inset 0 0 5px rgba(194, 171, 237, 0.2)' }}
+              className="w-full h-full flex items-center justify-center gap-2 border text-white py-3 px-2 sm:px-4 text-[10px] sm:text-xs uppercase tracking-widest font-bold hover:brightness-125 transition-all duration-300 rounded text-center border-[#c2abed] shadow-[0_0_15px_rgba(194,171,237,0.4),inset_0_0_5px_rgba(194,171,237,0.2)]"
             >
               <span className="hover:animate-pulse border-none">✨ ¡PROBAR MAGIA!</span>
             </a>
@@ -280,8 +275,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
       >
         <div className="max-w-6xl mx-auto mb-6 px-4">
           <h3
-            className="font-serif text-[18px] uppercase tracking-[0.2em] font-bold border px-4 py-1 rounded-sm w-fit"
-            style={{ backgroundColor: '#1e1a52', color: '#c2abed', borderColor: '#c2abed', boxShadow: '0 0 15px rgba(194, 171, 237, 0.4), inset 0 0 5px rgba(194, 171, 237, 0.2)', textShadow: '0 0 8px rgba(194,171,237,0.5)' }}
+            className="font-serif text-[18px] uppercase tracking-[0.2em] font-bold border px-4 py-1 rounded-sm w-fit bg-[#1e1a52] text-[#c2abed] border-[#c2abed] shadow-[0_0_15px_rgba(194,171,237,0.4),inset_0_0_5px_rgba(194,171,237,0.2)] text-shadow-[0_0_8px_rgba(194,171,237,0.5)]"
           >
             Influencers Virtuales
           </h3>
@@ -416,8 +410,7 @@ export const FeaturedWorks: React.FC = () => {
         <div className="max-w-6xl mx-auto flex items-center justify-between mb-10 px-4">
           <div className="flex items-center gap-4 flex-1">
             <h2
-              className="font-serif text-[18px] uppercase tracking-[0.2em] font-bold border px-4 py-1 rounded-sm whitespace-nowrap"
-              style={{ backgroundColor: '#1e1a52', color: '#c2abed', borderColor: '#c2abed', boxShadow: '0 0 15px rgba(194, 171, 237, 0.4), inset 0 0 5px rgba(194, 171, 237, 0.2)', textShadow: '0 0 8px rgba(194,171,237,0.5)' }}
+              className="font-serif text-[18px] uppercase tracking-[0.2em] font-bold border px-4 py-1 rounded-sm whitespace-nowrap bg-[#1e1a52] text-[#c2abed] border-[#c2abed] shadow-[0_0_15px_rgba(194,171,237,0.4),inset_0_0_5px_rgba(194,171,237,0.2)] text-shadow-[0_0_8px_rgba(194,171,237,0.5)]"
             >
               Trabajos Destacados
             </h2>
@@ -549,7 +542,7 @@ export const About: React.FC = () => {
       >
         <div>
           <span className="section-tag">Quiénes somos</span>
-          <h2 className="section-h2">Un poco de<br /><em style={{ fontStyle: 'italic', color: 'var(--color-lilac)' }}>historia...</em></h2>
+          <h2 className="section-h2">Un poco de<br /><em className="italic text-lilac">historia...</em></h2>
           <div className="divider"></div>
           <div className="about-text">
             <p>Este proyecto surge como una <strong>evolución natural del diseño gráfico</strong> hacia entornos digitales impulsados por inteligencia artificial, y de la necesidad de experimentar con nuevas metodologías visuales que integren creatividad humana y tecnología.</p>
@@ -563,7 +556,7 @@ export const About: React.FC = () => {
             { title: "Innovación", desc: "Creación de portafolios interactivos con avatares parlantes, diseñados para presentar contenido de manera dinámica y romper con los formatos visuales tradicionales.", bgColor: "#3b1566" },
             { title: "Influencers Virtuales", desc: "Desarrollo de personajes virtuales para campañas de marketing digital en Instagram y TikTok, impulsados por modelos de IA.", bgColor: "#4a1040" }
           ].map((obj, i) => (
-            <div className="obj-card" key={i} style={{ backgroundColor: obj.bgColor }}>
+            <div key={i} className={cn("obj-card", i === 0 ? "bg-[#1e1a52]" : i === 1 ? "bg-[#3b1566]" : "bg-[#4a1040]")}>
               <h3>{obj.title}</h3>
               <p>{obj.desc}</p>
             </div>
@@ -662,8 +655,7 @@ export const Contact: React.FC = () => {
 
         {/* Formulario de Comentarios */}
         <div
-          className="max-w-2xl mx-auto border p-8 md:p-10 rounded-2xl backdrop-blur-sm shadow-2xl"
-          style={{ backgroundColor: '#1e1a52', borderColor: '#c2abed' }}
+          className="max-w-2xl mx-auto border p-8 md:p-10 rounded-2xl backdrop-blur-sm shadow-2xl bg-[#1e1a52] border-[#c2abed]"
         >
           <div className="text-center mb-8">
             <h3 className="font-serif text-2xl text-white mb-2">Dejanos tu comentario</h3>
@@ -687,8 +679,7 @@ export const Contact: React.FC = () => {
                   name="name"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full bg-bg-tertiary border rounded-lg px-4 py-3 text-white text-sm focus:outline-none transition-colors"
-                  style={{ borderColor: '#c2abed' }}
+                  className="w-full bg-bg-tertiary border rounded-lg px-4 py-3 text-white text-sm focus:outline-none transition-colors border-[#c2abed]"
                   placeholder="Tu nombre"
                 />
               </div>
@@ -700,8 +691,7 @@ export const Contact: React.FC = () => {
                   name="role"
                   value={formData.role}
                   onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                  className="w-full bg-bg-tertiary border rounded-lg px-4 py-3 text-white text-sm focus:outline-none transition-colors"
-                  style={{ borderColor: '#c2abed' }}
+                  className="w-full bg-bg-tertiary border rounded-lg px-4 py-3 text-white text-sm focus:outline-none transition-colors border-[#c2abed]"
                   placeholder="Ej: CEO TechStart"
                 />
               </div>
@@ -735,8 +725,7 @@ export const Contact: React.FC = () => {
                 name="text"
                 value={formData.text}
                 onChange={(e) => setFormData({ ...formData, text: e.target.value })}
-                className="w-full bg-bg-tertiary border rounded-lg px-4 py-3 text-white text-sm focus:outline-none transition-colors resize-none"
-                style={{ borderColor: '#c2abed' }}
+                className="w-full bg-bg-tertiary border rounded-lg px-4 py-3 text-white text-sm focus:outline-none transition-colors resize-none border-[#c2abed]"
                 placeholder="Escribe aquí tu experiencia..."
               />
             </div>
@@ -813,7 +802,7 @@ export const Footer: React.FC = () => {
             key={link.label}
             href={link.url}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             className="text-[10px] uppercase tracking-widest text-white hover:text-white transition-all hover:shadow-[0_0_10px_rgba(255,255,255,0.4)] px-2 py-1 rounded"
           >
             {link.label}

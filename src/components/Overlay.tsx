@@ -31,6 +31,7 @@ export const Overlay: React.FC<OverlayProps> = ({ isOpen, onClose, title, childr
               <h2 className="font-serif text-xl md:text-2xl font-light text-text-primary">{title}</h2>
               <button
                 onClick={onClose}
+                title="Cerrar"
                 className="w-9 h-9 border border-lilac/20 text-text-muted hover:text-lilac hover:border-lilac flex items-center justify-center transition-all rounded"
               >
                 <X size={18} />
