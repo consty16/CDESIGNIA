@@ -84,7 +84,7 @@ function App() {
         className="fixed bottom-8 right-8 z-[400] w-16 h-16 rounded-full flex items-center justify-center hover:scale-110 transition-transform group"
         style={{
           backgroundColor: '#c2abed',
-          color: '#1a1626',
+          color: '#0a090f',
           boxShadow: '0 0 20px rgba(194,171,237,0.5)'
         }}
       >
