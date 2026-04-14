@@ -277,7 +277,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
       >
         <div className="max-w-6xl mx-auto mb-6 px-4">
           <h3
-            className="font-serif text-[18px] uppercase tracking-[0.2em] font-bold border px-4 py-1 rounded-sm w-fit bg-[#1e1a52] text-[#c2abed] border-[#8332db] shadow-[0_0_15px_rgba(131,50,219,0.6),inset_0_0_8px_rgba(131,50,219,0.3)]"
+            className="font-serif text-[18px] uppercase tracking-[0.2em] font-bold border-2 px-4 py-1 rounded-sm w-fit bg-[#1e1a52] text-[#c2abed] border-[#8332db] shadow-[0_0_15px_rgba(131,50,219,0.6),inset_0_0_8px_rgba(131,50,219,0.3)]"
           >
             Influencers Virtuales
           </h3>
@@ -412,7 +412,7 @@ export const FeaturedWorks: React.FC = () => {
         <div className="max-w-6xl mx-auto flex items-center justify-between mb-10 px-4">
           <div className="flex items-center gap-4 flex-1">
             <h2
-              className="font-serif text-[18px] uppercase tracking-[0.2em] font-bold border px-4 py-1 rounded-sm whitespace-nowrap bg-[#1e1a52] text-[#c2abed] border-[#8332db] shadow-[0_0_15px_rgba(131,50,219,0.6),inset_0_0_8px_rgba(131,50,219,0.3)]"
+              className="font-serif text-[18px] uppercase tracking-[0.2em] font-bold border-2 px-4 py-1 rounded-sm whitespace-nowrap bg-[#1e1a52] text-[#c2abed] border-[#8332db] shadow-[0_0_15px_rgba(131,50,219,0.6),inset_0_0_8px_rgba(131,50,219,0.3)]"
             >
               Trabajos Destacados
             </h2>
