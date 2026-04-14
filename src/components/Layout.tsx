@@ -162,7 +162,8 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
                 isProjectsOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible translate-y-2 pointer-events-none"
               )}>
                 <div
-                  className="w-full border border-lilac/20 rounded-lg overflow-hidden shadow-2xl backdrop-blur-xl bg-[#3b1566]"
+                  className="w-full border border-lilac/30 rounded-lg overflow-hidden shadow-2xl"
+                  style={{ backgroundColor: '#3b1566' }}
                 >
                   <a
                     href="https://www.instagram.com/andromedamodamasculina/"
