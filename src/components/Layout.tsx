@@ -113,7 +113,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
                 visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
               }}
             >
-              CREATIVO
+              CREATIVO,
             </motion.span>
             <motion.span
               className="block text-4xl md:text-[51px] lg:text-[72px] text-white"
@@ -122,7 +122,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
                 visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
               }}
             >
-              ES INTELIGENTE
+              ES INTELIGENTE.
             </motion.span>
           </motion.h1>
           <p className="text-[19px] text-white/80 max-w-md mb-10 font-light leading-relaxed">
