@@ -280,7 +280,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
         <div className="max-w-6xl mx-auto mb-6 px-4">
           <h3
             className="font-serif text-[18px] uppercase tracking-[0.2em] font-bold border-2 px-4 py-1 rounded-sm w-fit"
-            style={{ backgroundColor: '#1e1a52', color: '#c2abed', borderColor: '#5b2d8e', boxShadow: '0 0 15px rgba(91,45,142,0.5), inset 0 0 8px rgba(91,45,142,0.3)' }}
+            style={{ backgroundColor: '#1e1a52', color: '#ffffff', borderColor: '#5b2d8e', boxShadow: '0 0 15px rgba(91,45,142,0.5), inset 0 0 8px rgba(91,45,142,0.3)' }}
           >
             Influencers Virtuales
           </h3>
