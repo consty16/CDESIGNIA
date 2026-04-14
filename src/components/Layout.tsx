@@ -150,8 +150,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
               <button
                 onClick={() => setIsProjectsOpen(!isProjectsOpen)}
                 onMouseEnter={() => setIsProjectsOpen(true)}
-                className="w-full h-full flex items-center justify-center gap-2 border text-white py-3 px-2 sm:px-4 text-[10px] sm:text-xs uppercase tracking-widest hover:brightness-125 transition-all rounded font-bold text-center"
-                style={{ borderColor: '#8332db', boxShadow: '0 0 10px rgba(131,50,219,0.4), inset 0 0 5px rgba(131,50,219,0.2)' }}
+                className="w-full h-full flex items-center justify-center gap-2 border text-white py-3 px-2 sm:px-4 text-[10px] sm:text-xs uppercase tracking-widest hover:brightness-125 transition-all rounded font-bold text-center border-[#5b2d8e] shadow-[0_0_10px_rgba(91,45,142,0.4),inset_0_0_5px_rgba(91,45,142,0.2)]"
               >
                 Projects
                 <span className={cn("text-[8px] opacity-50 transition-transform", isProjectsOpen ? "rotate-180" : "")}>▼</span>
@@ -195,8 +194,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
               href="/ia-lab.html"
               target="_blank"
               rel="noreferrer"
-              className="w-full h-full flex items-center justify-center gap-2 border text-white py-3 px-2 sm:px-4 text-[10px] sm:text-xs uppercase tracking-widest font-bold hover:brightness-125 transition-all duration-300 rounded text-center"
-              style={{ borderColor: '#8332db', boxShadow: '0 0 15px rgba(131,50,219,0.5), inset 0 0 8px rgba(131,50,219,0.3)' }}
+              className="w-full h-full flex items-center justify-center gap-2 border text-white py-3 px-2 sm:px-4 text-[10px] sm:text-xs uppercase tracking-widest font-bold hover:brightness-125 transition-all duration-300 rounded text-center border-[#5b2d8e] shadow-[0_0_15px_rgba(91,45,142,0.5),inset_0_0_8px_rgba(91,45,142,0.3)]"
             >
               <span className="hover:animate-pulse border-none">✨ ¡PROBAR MAGIA!</span>
             </a>
@@ -279,8 +277,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
       >
         <div className="max-w-6xl mx-auto mb-6 px-4">
           <h3
-            className="font-serif text-[18px] uppercase tracking-[0.2em] font-bold border px-4 py-1 rounded-sm w-fit"
-            style={{ backgroundColor: '#1e1a52', color: '#c2abed', borderColor: '#8332db', boxShadow: '0 0 15px rgba(131,50,219,0.6), inset 0 0 8px rgba(131,50,219,0.3)', textShadow: '0 0 8px rgba(131,50,219,0.5)' }}
+            className="font-serif text-[18px] uppercase tracking-[0.2em] font-bold border px-4 py-1 rounded-sm w-fit bg-[#1e1a52] text-[#c2abed] border-[#8332db] shadow-[0_0_15px_rgba(131,50,219,0.6),inset_0_0_8px_rgba(131,50,219,0.3)]"
           >
             Influencers Virtuales
           </h3>
@@ -415,8 +412,7 @@ export const FeaturedWorks: React.FC = () => {
         <div className="max-w-6xl mx-auto flex items-center justify-between mb-10 px-4">
           <div className="flex items-center gap-4 flex-1">
             <h2
-              className="font-serif text-[18px] uppercase tracking-[0.2em] font-bold border px-4 py-1 rounded-sm whitespace-nowrap"
-              style={{ backgroundColor: '#1e1a52', color: '#c2abed', borderColor: '#8332db', boxShadow: '0 0 15px rgba(131,50,219,0.6), inset 0 0 8px rgba(131,50,219,0.3)', textShadow: '0 0 8px rgba(131,50,219,0.5)' }}
+              className="font-serif text-[18px] uppercase tracking-[0.2em] font-bold border px-4 py-1 rounded-sm whitespace-nowrap bg-[#1e1a52] text-[#c2abed] border-[#8332db] shadow-[0_0_15px_rgba(131,50,219,0.6),inset_0_0_8px_rgba(131,50,219,0.3)]"
             >
               Trabajos Destacados
             </h2>
@@ -634,12 +630,7 @@ export const Contact: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="border p-6 rounded-lg relative group transition-all duration-500 hover:brightness-125 shadow-[0_0_20px_rgba(255,255,255,0.05)]"
-              style={{ 
-                backgroundColor: '#2d1b4e',
-                borderColor: '#c2abed',
-                boxShadow: '0 0 15px rgba(194, 171, 237, 0.2)'
-              }}
+              className="border p-6 rounded-lg relative group transition-all duration-500 hover:brightness-125 shadow-[0_0_20px_rgba(255,255,255,0.05)] bg-[#2d1b4e] border-[#c2abed] shadow-[0_0_15px_rgba(194,171,237,0.2)]"
             >
               <div className="flex gap-1 mb-4">
                 {[...Array(5)].map((_, starIdx) => (
@@ -662,16 +653,15 @@ export const Contact: React.FC = () => {
 
         {/* Formulario de Comentarios */}
         <div
-          className="max-w-2xl mx-auto border p-8 md:p-10 rounded-2xl backdrop-blur-sm shadow-2xl border-[#c2abed]"
-          style={{ backgroundColor: '#1e1a52' }}
+          className="max-w-2xl mx-auto border p-8 md:p-10 rounded-2xl backdrop-blur-sm shadow-2xl border-[#c2abed] bg-[#1e1a52]"
         >
           <div className="text-center mb-8">
             <h3 className="font-serif text-2xl text-white mb-2">Dejanos tu comentario</h3>
             <p className="text-white/50 text-xs uppercase tracking-widest">Tu opinión nos ayuda a crecer</p>
           </div>
 
-          <form 
-            onSubmit={handleSubmit} 
+          <form
+            onSubmit={handleSubmit}
             className="space-y-6"
             name="comentarios-clientes"
             method="POST"
@@ -744,7 +734,9 @@ export const Contact: React.FC = () => {
                 "w-full py-4 rounded-lg text-xs uppercase tracking-[0.2em] font-bold transition-all duration-500 flex items-center justify-center gap-3",
                 formData.text.trim() ? "cursor-pointer" : "opacity-50 cursor-not-allowed"
               )}
-              style={{ backgroundColor: '#c2abed', color: '#0a090f' }}
+              className={cn(
+                "w-full py-4 rounded-lg text-xs uppercase tracking-[0.2em] font-bold transition-all duration-500 flex items-center justify-center gap-3 bg-[#c2abed] text-[#0a090f]"
+              )}
             >
               {isSubmitting ? (
                 <>

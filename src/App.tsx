@@ -81,14 +81,11 @@ function App() {
       {/* Floating Chat Button */}
       <button
         onClick={() => setIsChatOpen(!isChatOpen)}
-        className="fixed bottom-8 right-8 z-[400] w-16 h-16 rounded-full flex items-center justify-center hover:scale-110 transition-transform group"
-        style={{
-          backgroundColor: '#c2abed',
-          color: '#0a090f',
-          boxShadow: '0 0 20px rgba(194,171,237,0.5)'
-        }}
+        title="Abrir chat de asistencia"
+        aria-label="Abrir asistente virtual"
+        className="fixed bottom-8 right-8 z-[400] w-16 h-16 rounded-full flex items-center justify-center hover:scale-110 transition-transform group bg-[#c2abed] text-[#0a090f] shadow-[0_0_20px_rgba(194,171,237,0.5)]"
       >
-        <div className="absolute inset-0 bg-[#1a1626]/10 rounded-full animate-ping opacity-20" />
+        <div className="absolute inset-0 bg-[#0a090f]/10 rounded-full animate-ping opacity-20" />
         <Sparkles className="w-8 h-8 group-hover:rotate-12 transition-transform" />
       </button>
 
