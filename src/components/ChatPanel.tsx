@@ -64,17 +64,17 @@ export const ChatPanel: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ 
           initial={{ opacity: 0, y: 20, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 20, scale: 0.95 }}
-          className="fixed bottom-32 right-4 md:right-8 z-[399] w-[calc(100vw-2rem)] md:w-80 border border-[#1e1a52]/20 flex flex-col max-h-[480px] shadow-2xl rounded-lg overflow-hidden bg-[#c2abed] text-[#1e1a52]"
+          className="fixed bottom-32 right-4 md:right-8 z-[399] w-[calc(100vw-2rem)] md:w-80 border border-[#0a090f]/20 flex flex-col max-h-[480px] shadow-2xl rounded-lg overflow-hidden bg-[#c2abed] text-[#0a090f]"
         >
-          <div className="p-3.5 border-b border-[#1e1a52]/10 flex items-center justify-between">
+          <div className="p-3.5 border-b border-[#0a090f]/10 flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-full bg-[#1e1a52]/10 border border-[#1e1a52]/20 flex items-center justify-center font-bold text-[#1e1a52]">
+              <div className="w-8 h-8 rounded-full bg-[#0a090f]/10 border border-[#0a090f]/20 flex items-center justify-center font-bold text-[#0a090f]">
                 ◈
               </div>
               <div>
                 <div className="text-sm font-bold">C Design IA</div>
                 <div className="text-[10px] flex items-center gap-1 opacity-80">
-                  <span className="chat-dot bg-[#1e1a52]"></span>
+                  <span className="chat-dot bg-[#0a090f]"></span>
                   Asistente virtual
                 </div>
               </div>
@@ -83,7 +83,7 @@ export const ChatPanel: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ 
               onClick={onClose} 
               title="Cerrar chat"
               aria-label="Cerrar chat"
-              className="hover:opacity-70 transition-opacity p-1 text-[#1e1a52]"
+              className="hover:opacity-70 transition-opacity p-1 text-[#0a090f]"
             >
               <X size={18} />
             </button>
@@ -95,42 +95,42 @@ export const ChatPanel: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ 
                 key={i}
                 className={`max-w-[90%] p-2.5 text-xs leading-relaxed rounded-lg ${
                   msg.role === 'model'
-                    ? 'self-start rounded-tl-none border border-[#1e1a52]/10 bg-white/30'
-                    : 'bg-[#1e1a52]/10 border border-[#1e1a52]/20 text-[#1e1a52] self-end rounded-tr-none'
+                    ? 'self-start rounded-tl-none border border-[#0a090f]/10 bg-white/40 text-[#0a090f]'
+                    : 'bg-[#0a090f]/10 border border-[#0a090f]/20 text-[#0a090f] self-end rounded-tr-none'
                 }`}
               >
                 <ReactMarkdown>{msg.parts[0].text}</ReactMarkdown>
               </div>
             ))}
             {isLoading && (
-              <div className="self-start rounded-lg rounded-tl-none p-3 flex gap-1 items-center bg-white/30">
-                <span className="w-1 h-1 rounded-full bg-[#1e1a52] animate-bounce [animation-delay:0ms]"></span>
-                <span className="w-1 h-1 rounded-full bg-[#1e1a52] animate-bounce [animation-delay:150ms]"></span>
-                <span className="w-1 h-1 rounded-full bg-[#1e1a52] animate-bounce [animation-delay:300ms]"></span>
+              <div className="self-start rounded-lg rounded-tl-none p-3 flex gap-1 items-center bg-white/40">
+                <span className="w-1 h-1 rounded-full bg-[#0a090f] animate-bounce [animation-delay:0ms]"></span>
+                <span className="w-1 h-1 rounded-full bg-[#0a090f] animate-bounce [animation-delay:150ms]"></span>
+                <span className="w-1 h-1 rounded-full bg-[#0a090f] animate-bounce [animation-delay:300ms]"></span>
               </div>
             )}
           </div>
 
-          <div className="p-2 border-t border-[#1e1a52]/10 text-[10px] text-center text-[#1e1a52] opacity-80">
+          <div className="p-2 border-t border-[#0a090f]/10 text-[10px] text-center text-[#0a090f] opacity-80">
             ¿Preferís hablar directo?{' '}
             <a
               href="https://wa.me/5493815341233"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-bold hover:underline text-[#1e1a52]"
+              className="font-bold hover:underline text-[#0a090f]"
             >
               WhatsApp ↗
             </a>
           </div>
 
-          <div className="p-3 border-t border-[#1e1a52]/10 flex gap-2 items-center">
+          <div className="p-3 border-t border-[#0a090f]/10 flex gap-2 items-center">
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
               placeholder="Escribí tu consulta..."
-              className="flex-1 bg-white/20 border border-[#1e1a52]/10 p-2 text-xs outline-none focus:border-[#1e1a52]/30 transition-colors rounded placeholder-[#1e1a52]/50 text-[#1e1a52]"
+              className="flex-1 bg-white/20 border border-[#0a090f]/10 p-2 text-xs outline-none focus:border-[#0a090f]/30 transition-colors rounded placeholder-[#0a090f]/50 text-[#0a090f]"
               disabled={isLoading}
             />
             <button
@@ -138,7 +138,7 @@ export const ChatPanel: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ 
               disabled={isLoading || !input.trim()}
               title="Enviar mensaje"
               aria-label="Enviar mensaje"
-              className="w-8 h-8 hover:opacity-80 disabled:opacity-30 flex items-center justify-center transition-all rounded bg-[#1e1a52] text-[#c2abed]"
+              className="w-8 h-8 hover:opacity-80 disabled:opacity-30 flex items-center justify-center transition-all rounded bg-[#0a090f] text-[#c2abed]"
             >
               <Send size={14} />
             </button>
