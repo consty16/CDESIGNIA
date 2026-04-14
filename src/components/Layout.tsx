@@ -587,6 +587,7 @@ export const Contact: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
     setIsSubmitting(true);
 
     const formDataToSubmit = new URLSearchParams();
@@ -739,12 +740,11 @@ export const Contact: React.FC = () => {
 
             <button
               type="submit"
-              disabled={isSubmitting}
               className={cn(
                 "w-full py-4 rounded-lg text-xs uppercase tracking-[0.2em] font-bold transition-all duration-500 flex items-center justify-center gap-3",
-                isSubmitting
-                  ? "bg-lilac/20 text-white/50 cursor-not-allowed"
-                  : "btn-publicar"
+                formData.text.trim() 
+                  ? "btn-publicar cursor-pointer" 
+                  : "bg-lilac/20 text-white/50 cursor-not-allowed"
               )}
             >
               {isSubmitting ? (
