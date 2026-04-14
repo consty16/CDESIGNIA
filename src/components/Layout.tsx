@@ -636,7 +636,7 @@ export const Contact: React.FC = () => {
               transition={{ duration: 0.5, delay: i * 0.1 }}
               className="border p-6 rounded-lg relative group transition-all duration-500 hover:brightness-125 shadow-[0_0_20px_rgba(255,255,255,0.05)]"
               style={{ 
-                backgroundColor: '#2d1b4e',
+                backgroundColor: '#1e1a52',
                 borderColor: '#c2abed',
                 boxShadow: '0 0 15px rgba(194, 171, 237, 0.2)'
               }}
@@ -742,9 +742,10 @@ export const Contact: React.FC = () => {
               className={cn(
                 "w-full py-4 rounded-lg text-xs uppercase tracking-[0.2em] font-bold transition-all duration-500 flex items-center justify-center gap-3",
                 formData.text.trim() 
-                  ? "btn-publicar cursor-pointer" 
+                  ? "cursor-pointer" 
                   : "bg-lilac/20 text-white/50 cursor-not-allowed"
               )}
+              style={formData.text.trim() ? { backgroundColor: '#c2abed', color: '#0a090f' } : {}}
             >
               {isSubmitting ? (
                 <>
