@@ -64,7 +64,8 @@ export const ChatPanel: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ 
           initial={{ opacity: 0, y: 20, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 20, scale: 0.95 }}
-          className="fixed bottom-32 right-4 md:right-8 z-[399] w-[calc(100vw-2rem)] md:w-80 border border-[#0a090f]/20 flex flex-col max-h-[480px] shadow-2xl rounded-lg overflow-hidden bg-[#c2abed] text-[#0a090f]"
+          className="fixed bottom-32 right-4 md:right-8 z-[399] w-[calc(100vw-2rem)] md:w-80 border border-[#0a090f]/20 flex flex-col max-h-[480px] shadow-2xl rounded-lg overflow-hidden"
+          style={{ backgroundColor: '#c2abed', color: '#0a090f' }}
         >
           <div className="p-3.5 border-b border-[#0a090f]/10 flex items-center justify-between">
             <div className="flex items-center gap-2.5">
