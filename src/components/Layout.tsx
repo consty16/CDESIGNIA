@@ -601,7 +601,8 @@ export const Contact: React.FC = () => {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: formDataToSubmit.toString(),
     })
-      .then(() => {
+      .then((response) => {
+        if (!response.ok) throw new Error('Submission failed');
         const newReview = { ...formData };
         setReviews([newReview, ...reviews]);
         setFormData({ name: '', role: '', text: '', stars: 5 });
@@ -679,6 +680,7 @@ export const Contact: React.FC = () => {
                 <input
                   required
                   type="text"
+                  name="name"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="w-full bg-bg-tertiary border rounded-lg px-4 py-3 text-white text-sm focus:outline-none transition-colors"
@@ -691,6 +693,7 @@ export const Contact: React.FC = () => {
                 <input
                   required
                   type="text"
+                  name="role"
                   value={formData.role}
                   onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                   className="w-full bg-bg-tertiary border rounded-lg px-4 py-3 text-white text-sm focus:outline-none transition-colors"
@@ -702,6 +705,7 @@ export const Contact: React.FC = () => {
 
             <div className="space-y-2">
               <label className="text-[10px] uppercase tracking-widest text-lilac ml-1">Calificación</label>
+              <input type="hidden" name="stars" value={formData.stars} />
               <div className="flex gap-2">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
@@ -724,6 +728,7 @@ export const Contact: React.FC = () => {
               <textarea
                 required
                 rows={4}
+                name="text"
                 value={formData.text}
                 onChange={(e) => setFormData({ ...formData, text: e.target.value })}
                 className="w-full bg-bg-tertiary border rounded-lg px-4 py-3 text-white text-sm focus:outline-none transition-colors resize-none"
