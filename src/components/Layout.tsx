@@ -621,7 +621,7 @@ export const Contact: React.FC = () => {
   };
 
   return (
-    <div className="border-y border-white/5 py-8 px-6 md:px-12" style={{ backgroundColor: '#1e1a52' }}>
+    <div className="bg-bg-tertiary border-y border-white/5 py-8 px-6 md:px-12">
       <div className="max-w-6xl mx-auto mb-12">
         <h2 className="font-serif text-3xl md:text-4xl font-light mb-12 text-center text-white">
           Lo que dicen <em className="italic text-lilac">nuestros clientes</em>
