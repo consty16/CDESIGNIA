@@ -589,15 +589,30 @@ export const Contact: React.FC = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulación de envío
-    setTimeout(() => {
-      const newReview = { ...formData };
-      setReviews([newReview, ...reviews]);
-      setFormData({ name: '', role: '', text: '', stars: 5 });
-      setIsSubmitting(false);
-      setShowSuccess(true);
-      setTimeout(() => setShowSuccess(false), 5000);
-    }, 1500);
+    const formDataToSubmit = new URLSearchParams();
+    formDataToSubmit.append('form-name', 'comentarios-clientes');
+    formDataToSubmit.append('name', formData.name);
+    formDataToSubmit.append('role', formData.role);
+    formDataToSubmit.append('stars', formData.stars.toString());
+    formDataToSubmit.append('text', formData.text);
+
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: formDataToSubmit.toString(),
+    })
+      .then(() => {
+        const newReview = { ...formData };
+        setReviews([newReview, ...reviews]);
+        setFormData({ name: '', role: '', text: '', stars: 5 });
+        setIsSubmitting(false);
+        setShowSuccess(true);
+        setTimeout(() => setShowSuccess(false), 5000);
+      })
+      .catch((error) => {
+        console.error('Netlify Form Submission Error:', error);
+        setIsSubmitting(false);
+      });
   };
 
   return (
@@ -650,7 +665,14 @@ export const Contact: React.FC = () => {
             <p className="text-white/50 text-xs uppercase tracking-widest">Tu opinión nos ayuda a crecer</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form 
+            onSubmit={handleSubmit} 
+            className="space-y-6"
+            name="comentarios-clientes"
+            method="POST"
+            data-netlify="true"
+          >
+            <input type="hidden" name="form-name" value="comentarios-clientes" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <label className="text-[10px] uppercase tracking-widest text-lilac ml-1">Nombre</label>
