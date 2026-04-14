@@ -606,6 +606,7 @@ export const Contact: React.FC = () => {
     })
       .then((response) => {
         if (!response.ok) throw new Error('Submission failed');
+        alert("¡Formulario enviado con éxito!");
         const newReview = { ...formData };
         setReviews([newReview, ...reviews]);
         setFormData({ name: '', role: '', text: '', stars: 5 });
