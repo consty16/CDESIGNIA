@@ -280,7 +280,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
         <div className="max-w-6xl mx-auto mb-6 px-4">
           <h3
             className="font-serif text-[18px] uppercase tracking-[0.2em] font-bold border px-4 py-1 rounded-sm w-fit"
-            style={{ backgroundColor: '#1e1a52', color: '#8332db', borderColor: '#8332db', boxShadow: '0 0 15px rgba(131,50,219,0.6), inset 0 0 8px rgba(131,50,219,0.3)', textShadow: '0 0 8px rgba(131,50,219,0.5)' }}
+            style={{ backgroundColor: '#1e1a52', color: '#c2abed', borderColor: '#8332db', boxShadow: '0 0 15px rgba(131,50,219,0.6), inset 0 0 8px rgba(131,50,219,0.3)', textShadow: '0 0 8px rgba(131,50,219,0.5)' }}
           >
             Influencers Virtuales
           </h3>
@@ -416,7 +416,7 @@ export const FeaturedWorks: React.FC = () => {
           <div className="flex items-center gap-4 flex-1">
             <h2
               className="font-serif text-[18px] uppercase tracking-[0.2em] font-bold border px-4 py-1 rounded-sm whitespace-nowrap"
-              style={{ backgroundColor: '#1e1a52', color: '#8332db', borderColor: '#8332db', boxShadow: '0 0 15px rgba(131,50,219,0.6), inset 0 0 8px rgba(131,50,219,0.3)', textShadow: '0 0 8px rgba(131,50,219,0.5)' }}
+              style={{ backgroundColor: '#1e1a52', color: '#c2abed', borderColor: '#8332db', boxShadow: '0 0 15px rgba(131,50,219,0.6), inset 0 0 8px rgba(131,50,219,0.3)', textShadow: '0 0 8px rgba(131,50,219,0.5)' }}
             >
               Trabajos Destacados
             </h2>
