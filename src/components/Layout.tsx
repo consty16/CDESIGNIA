@@ -634,7 +634,7 @@ export const Contact: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="border p-6 rounded-lg relative group transition-all duration-500 hover:brightness-125 shadow-[0_0_20px_rgba(255,255,255,0.05)] bg-[#2d1b4e] border-[#c2abed] shadow-[0_0_15px_rgba(194,171,237,0.2)]"
+              className="border p-6 rounded-lg relative group transition-all duration-500 hover:brightness-125 bg-[#1e1a52] border-[#c2abed] shadow-[0_0_20px_rgba(255,255,255,0.05),0_0_15px_rgba(194,171,237,0.2)]"
             >
               <div className="flex gap-1 mb-4">
                 {[...Array(5)].map((_, starIdx) => (
@@ -657,7 +657,7 @@ export const Contact: React.FC = () => {
 
         {/* Formulario de Comentarios */}
         <div
-          className="max-w-2xl mx-auto border p-8 md:p-10 rounded-2xl backdrop-blur-sm shadow-2xl border-[#c2abed] bg-[#1e1a52]"
+          className="max-w-2xl mx-auto border p-8 md:p-10 rounded-2xl backdrop-blur-sm shadow-2xl border-[#c2abed] bg-[#3b1566]"
         >
           <div className="text-center mb-8">
             <h3 className="font-serif text-2xl text-white mb-2">Dejanos tu comentario</h3>
@@ -735,11 +735,8 @@ export const Contact: React.FC = () => {
             <button
               type="submit"
               className={cn(
-                "w-full py-4 rounded-lg text-xs uppercase tracking-[0.2em] font-bold transition-all duration-500 flex items-center justify-center gap-3",
+                "w-full py-4 rounded-lg text-xs uppercase tracking-[0.2em] font-bold transition-all duration-500 flex items-center justify-center gap-3 bg-[#c2abed] text-[#0a090f]",
                 formData.text.trim() ? "cursor-pointer" : "opacity-50 cursor-not-allowed"
-              )}
-              className={cn(
-                "w-full py-4 rounded-lg text-xs uppercase tracking-[0.2em] font-bold transition-all duration-500 flex items-center justify-center gap-3 bg-[#c2abed] text-[#0a090f]"
               )}
             >
               {isSubmitting ? (
