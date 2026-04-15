@@ -18,7 +18,7 @@ export const IALab = () => {
   const [showResults, setShowResults] = useState(false);
   const [result, setResult] = useState({ url: '', advice: '', ready: false, error: false });
   const [isImageLoading, setIsImageLoading] = useState(true);
-  
+
   // Antigravity Transformation State
   const [mode, setMode] = useState<'create' | 'transform'>('create');
   const [rawImageData, setRawImageData] = useState<string | null>(null);
@@ -41,13 +41,13 @@ export const IALab = () => {
   // Logic from Antigravity Motor
   const apiFetchRetry = async (url: string, options: any, retries = 5): Promise<any> => {
     for (let i = 0; i < retries; i++) {
-        try {
-            const response = await fetch(url, options);
-            if (response.ok) return await response.json();
-        } catch (err) {
-            if (i === retries - 1) throw err;
-        }
-        await new Promise(res => setTimeout(res, Math.pow(2, i) * 1000));
+      try {
+        const response = await fetch(url, options);
+        if (response.ok) return await response.json();
+      } catch (err) {
+        if (i === retries - 1) throw err;
+      }
+      await new Promise(res => setTimeout(res, Math.pow(2, i) * 1000));
     }
   };
 
@@ -71,7 +71,7 @@ export const IALab = () => {
     setShowResults(false);
     setIsImageLoading(true);
     setStatusMsg('');
-    
+
     try {
       if (mode === 'create') {
         const stylePreset = "highly detailed facial features, perfect symmetrical eyes, realistic skin pores, sharp focus, 8k, fashion editorial, cinematic lighting, masterpiece, flawless face";
@@ -93,16 +93,17 @@ export const IALab = () => {
           return;
         }
 
-        const API_KEY = import.meta.env.VITE_GEMINI_API_KEY || "";
+        const API_KEY = "AIzaSyCX6Y6Kgf5rpDMKnFVXWDKB1QKtE1W7BDc";
         const endpointUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent?key=${API_KEY}`;
-        
+
         const payloadData = {
           contents: [{
             parts: [
-              { text: `TASK: Professional Visual Transformation. 
+              {
+                text: `TASK: Professional Visual Transformation. 
                        USER PROMPT: "${userPrompt}". 
                        CONTEXT: C Design IA Project. 
-                       INSTRUCTION: Fully transform the image based on the prompt. Maintain structural identity but reinvent lighting, materials, and environment.` 
+                       INSTRUCTION: Fully transform the image based on the prompt. Maintain structural identity but reinvent lighting, materials, and environment.`
               },
               { inlineData: { mimeType: "image/png", data: rawImageData } }
             ]
@@ -175,11 +176,11 @@ export const IALab = () => {
           <span className="text-[10px] uppercase tracking-widest font-black">VOLVER</span>
         </a>
         <div className="text-center">
-          <h1 
+          <h1
             className="text-4xl md:text-6xl font-serif font-bold mb-2 uppercase"
-            style={{ 
-              color: '#c4b5fd', 
-              textShadow: '0 0 15px rgba(194,171,237,0.8), 0 0 30px rgba(194,171,237,0.5)' 
+            style={{
+              color: '#c4b5fd',
+              textShadow: '0 0 15px rgba(194,171,237,0.8), 0 0 30px rgba(194,171,237,0.5)'
             }}
           >
             C DESIGN LAB
@@ -192,20 +193,20 @@ export const IALab = () => {
 
       <div className="ia-lab-wrapper max-w-5xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Panel de Control */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           className="glass-panel"
         >
           {/* Mode Switcher */}
           <div className="flex bg-black/40 p-1 rounded-xl mb-6 border border-white/10">
-            <button 
+            <button
               onClick={() => setMode('create')}
               className={`flex-1 py-2 rounded-lg text-[10px] font-black tracking-widest uppercase transition-all ${mode === 'create' ? 'bg-lilac text-white shadow-lg' : 'text-white/40 hover:text-white'}`}
             >
               Crear desde Cero
             </button>
-            <button 
+            <button
               onClick={() => setMode('transform')}
               className={`flex-1 py-2 rounded-lg text-[10px] font-black tracking-widest uppercase transition-all ${mode === 'transform' ? 'bg-purple-600 text-white shadow-lg' : 'text-white/40 hover:text-white'}`}
             >
@@ -219,16 +220,16 @@ export const IALab = () => {
                 <label htmlFor="ag-file" className="text-[10px] font-black text-white/60 tracking-widest uppercase mb-3 block">
                   1. Imagen de Referencia
                 </label>
-                <div 
+                <div
                   onClick={() => fileInputRef.current?.click()}
                   className="relative h-48 rounded-xl border-2 border-dashed border-white/10 bg-white/5 hover:bg-white/10 transition-all cursor-pointer overflow-hidden flex flex-col items-center justify-center group"
                 >
-                  <input 
-                    type="file" 
-                    ref={fileInputRef} 
-                    onChange={handleFileChange} 
-                    accept="image/*" 
-                    className="hidden" 
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                    accept="image/*"
+                    className="hidden"
                   />
                   {imagePreview ? (
                     <>
@@ -280,7 +281,7 @@ export const IALab = () => {
                   </>
                 )}
               </button>
-              
+
               {statusMsg && (
                 <p className="text-center text-[10px] uppercase tracking-widest font-bold opacity-60 animate-pulse">
                   {statusMsg}
@@ -291,19 +292,19 @@ export const IALab = () => {
         </motion.div>
 
         {/* Panel de Resultado */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           className="glass-panel flex flex-col"
         >
           <div className="text-center mb-6">
-             <h3 className="text-[10px] font-black text-white/40 tracking-[0.4em] uppercase">Resultado Final</h3>
+            <h3 className="text-[10px] font-black text-white/40 tracking-[0.4em] uppercase">Resultado Final</h3>
           </div>
-          
+
           <div className="flex-1 min-h-[400px] relative rounded-2xl overflow-hidden bg-black/20 border border-white/5 group">
             <AnimatePresence mode="wait">
               {isGenerating ? (
-                <motion.div 
+                <motion.div
                   key="loading"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -316,7 +317,7 @@ export const IALab = () => {
                   </p>
                 </motion.div>
               ) : result.url ? (
-                <motion.div 
+                <motion.div
                   key="image"
                   initial={{ opacity: 0, scale: 1.1 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -330,7 +331,7 @@ export const IALab = () => {
                     onLoad={() => setIsImageLoading(false)}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-8">
-                    <button 
+                    <button
                       onClick={handleDownload}
                       className="bg-white text-black py-3 px-6 rounded-full font-black text-[10px] tracking-widest uppercase flex items-center justify-center gap-2 hover:bg-lilac hover:text-white transition-colors"
                     >
@@ -348,7 +349,7 @@ export const IALab = () => {
           </div>
 
           <div className="mt-8 grid grid-cols-2 gap-4">
-             <a
+            <a
               href="https://labs.google/fx/es/tools/music-fx"
               target="_blank"
               rel="noreferrer"
@@ -356,7 +357,7 @@ export const IALab = () => {
             >
               <Music2 className="w-4 h-4" /> Banda Sonora
             </a>
-             <button
+            <button
               onClick={() => {
                 setResult({ url: '', advice: '', ready: false, error: false });
                 setUserPrompt('');
@@ -375,7 +376,7 @@ export const IALab = () => {
       {/* Loading Overlay */}
       <AnimatePresence>
         {isGenerating && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -385,7 +386,7 @@ export const IALab = () => {
               <Loader2 className="w-32 h-32 text-purple-600 animate-spin" />
               <Sparkles className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 text-white animate-pulse" />
             </div>
-            <motion.p 
+            <motion.p
               key={currentMessage}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
