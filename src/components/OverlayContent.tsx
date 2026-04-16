@@ -1,5 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { cn } from '../lib/utils';
+
+// Amplificador de audio global para manejar los videos
+const audioBoosters = new WeakMap<HTMLVideoElement, GainNode>();
+let globalAudioCtx: AudioContext | null = null;
+
+const ensureAudioCtx = () => {
+  if (!globalAudioCtx) {
+    globalAudioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+  }
+  if (globalAudioCtx.state === 'suspended') {
+    globalAudioCtx.resume();
+  }
+  return globalAudioCtx;
+};
+
+const boostVideo = (video: HTMLVideoElement) => {
+  try {
+    const ctx = ensureAudioCtx();
+    if (audioBoosters.has(video)) return;
+
+    const source = ctx.createMediaElementSource(video);
+    const gainNode = ctx.createGain();
+    gainNode.gain.value = 2.5; // Amplificar 2.5 veces el sonido original
+    source.connect(gainNode);
+    gainNode.connect(ctx.destination);
+    audioBoosters.set(video, gainNode);
+  } catch (err) {
+    console.warn("Audio boost not possible (likely already connected or cross-origin):", err);
+  }
+};
 
 const Lightbox = ({ isOpen, onClose, src, title, type = 'image' }: { isOpen: boolean, onClose: () => void, src: string, title: string, type?: 'image' | 'web' | 'video' }) => {
   if (!isOpen) return null;
@@ -27,7 +57,12 @@ const Lightbox = ({ isOpen, onClose, src, title, type = 'image' }: { isOpen: boo
             <video 
               src={src} 
               controls 
-              autoPlay 
+              onLoadedMetadata={(e) => {
+                const v = e.target as HTMLVideoElement;
+                v.volume = 1;
+                boostVideo(v);
+              }}
+              onPlay={(e) => boostVideo(e.target as HTMLVideoElement)}
               className="max-w-full max-h-full"
             >
               Tu navegador no soporta el elemento de video.
@@ -208,40 +243,63 @@ export const MuestrasContent = () => {
                     onMouseOut={(e) => {
                       const v = e.target as HTMLVideoElement;
                       v.pause();
-                      v.currentTime = 0;
+                    }}
+                    onClick={(e) => {
+                      const v = e.target as HTMLVideoElement;
+                      boostVideo(v);
+                      if (v.paused) {
+                        v.muted = false;
+                        v.volume = 1;
+                        v.play();
+                      } else {
+                        v.pause();
+                      }
                     }}
                   />
                   {/* Controles: Play/Pause + Volumen */}
-                  <div className="absolute bottom-0 left-0 right-0 px-3 py-2 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-20 bg-gradient-to-t from-black/85 to-transparent">
-                    <button
-                      className="w-7 h-7 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white text-[11px] hover:bg-white/40 transition-colors flex-shrink-0"
-                      title="Play / Pause"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        const container = (e.currentTarget as HTMLElement).closest('.relative');
-                        const v = container?.querySelector('video') as HTMLVideoElement;
-                        const btn = e.currentTarget as HTMLButtonElement;
-                        if (v) {
-                          if (v.paused) { v.play(); btn.textContent = 'Ⅱ'; }
-                          else { v.pause(); btn.textContent = '▶'; }
-                        }
-                      }}
-                    >▶</button>
-                    <button
-                      className="w-7 h-7 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white text-[11px] hover:bg-white/40 transition-colors flex-shrink-0"
-                      title="Silenciar / Activar sonido"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        const container = (e.currentTarget as HTMLElement).closest('.relative');
-                        const v = container?.querySelector('video') as HTMLVideoElement;
-                        const btn = e.currentTarget as HTMLButtonElement;
-                        if (v) {
-                          v.muted = !v.muted;
-                          btn.textContent = v.muted ? '🔇' : '🔊';
-                        }
-                      }}
-                    >🔇</button>
-                    <div className="text-[8px] text-white/60 uppercase tracking-widest truncate">{p.title}</div>
+                  <div className="absolute bottom-0 left-0 right-0 px-3 py-2 flex items-center justify-between opacity-100 group-hover:opacity-100 transition-opacity z-20 bg-gradient-to-t from-black/90 to-transparent">
+                    <div className="flex items-center gap-2">
+                      <button
+                        className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white text-xs hover:bg-white/40 transition-colors flex-shrink-0 border border-white/10"
+                        title="Play / Pause"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const container = (e.currentTarget as HTMLElement).closest('.relative');
+                          const v = container?.querySelector('video') as HTMLVideoElement;
+                          const btn = e.currentTarget as HTMLButtonElement;
+                          if (v) {
+                            boostVideo(v);
+                            if (v.paused) { 
+                              v.muted = false; 
+                              v.volume = 1;
+                              v.play(); 
+                              btn.textContent = 'Ⅱ'; 
+                            }
+                            else { 
+                              v.pause(); 
+                              btn.textContent = '▶'; 
+                            }
+                          }
+                        }}
+                      >▶</button>
+                      <button
+                        className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white text-xs hover:bg-white/40 transition-colors flex-shrink-0 border border-white/10"
+                        title="Silenciar / Activar sonido"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const container = (e.currentTarget as HTMLElement).closest('.relative');
+                          const v = container?.querySelector('video') as HTMLVideoElement;
+                          const btn = e.currentTarget as HTMLButtonElement;
+                          if (v) {
+                            boostVideo(v);
+                            v.muted = !v.muted;
+                            v.volume = 1;
+                            btn.textContent = v.muted ? '🔇' : '🔊';
+                          }
+                        }}
+                      >🔇</button>
+                    </div>
+                    <div className="text-[9px] text-white font-bold uppercase tracking-widest truncate drop-shadow-md">{p.title}</div>
                   </div>
                 </div>
               ) : (

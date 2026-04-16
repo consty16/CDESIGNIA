@@ -1,8 +1,38 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Mail } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { cn } from '../lib/utils';
+
+// Amplificador de audio global para manejar los videos
+const audioBoosters = new WeakMap<HTMLVideoElement, GainNode>();
+let globalAudioCtx: AudioContext | null = null;
+
+const ensureAudioCtx = () => {
+  if (!globalAudioCtx) {
+    globalAudioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+  }
+  if (globalAudioCtx.state === 'suspended') {
+    globalAudioCtx.resume();
+  }
+  return globalAudioCtx;
+};
+
+const boostVideo = (video: HTMLVideoElement) => {
+  try {
+    const ctx = ensureAudioCtx();
+    if (audioBoosters.has(video)) return;
+
+    const source = ctx.createMediaElementSource(video);
+    const gainNode = ctx.createGain();
+    gainNode.gain.value = 2.5; // Amplificar 2.5 veces el sonido original
+    source.connect(gainNode);
+    gainNode.connect(ctx.destination);
+    audioBoosters.set(video, gainNode);
+  } catch (err) {
+    console.warn("Audio boost not possible:", err);
+  }
+};
 
 export const Navbar: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpenOverlay }) => {
   const [scrolled, setScrolled] = useState(false);
@@ -341,18 +371,30 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
                   }}
                   onMouseOut={(e) => {
                     const v = e.target as HTMLVideoElement;
-                    const playBtn = v.parentElement?.querySelector('.play-indicator');
                     v.pause();
-                    v.muted = true;
-                    if (playBtn) playBtn.innerHTML = '▶';
                   }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                <div className="absolute bottom-4 left-4">
+                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
                   <div className="text-[10px] text-lilac uppercase tracking-widest font-bold">{inf.title}</div>
+                  <div className="flex gap-2">
+                    <button
+                      className="w-7 h-7 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white text-[10px] hover:bg-white/40 transition-colors border border-white/10"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const v = e.currentTarget.closest('.group')?.querySelector('video');
+                        if (v) {
+                          boostVideo(v);
+                          v.muted = !v.muted;
+                          v.volume = 1;
+                          e.currentTarget.textContent = v.muted ? '🔇' : '🔊';
+                        }
+                      }}
+                    >🔇</button>
+                  </div>
                 </div>
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                  <div className="play-indicator w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white text-xs">
+                  <div className="play-indicator w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white text-xs border border-white/10">
                     ▶
                   </div>
                 </div>
@@ -482,18 +524,28 @@ export const FeaturedWorks: React.FC = () => {
                   }}
                   onMouseOut={(e) => {
                     const v = e.target as HTMLVideoElement;
-                    const playBtn = v.parentElement?.querySelector('.play-indicator');
                     v.pause();
-                    v.muted = true;
-                    if (playBtn) playBtn.innerHTML = '▶';
                   }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-bg/90 via-transparent to-transparent opacity-60 group-hover:opacity-0 transition-opacity" />
-                <div className="absolute bottom-4 left-4">
+                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
                   <div className="text-[10px] text-lilac uppercase tracking-widest font-bold drop-shadow-lg">{work.title}</div>
+                  <button
+                    className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white text-[10px] hover:bg-white/40 transition-colors border border-white/10 relative z-20"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const v = e.currentTarget.closest('.group')?.querySelector('video');
+                      if (v) {
+                        boostVideo(v);
+                        v.muted = !v.muted;
+                        v.volume = 1;
+                        e.currentTarget.textContent = v.muted ? '🔇' : '🔊';
+                      }
+                    }}
+                  >🔇</button>
                 </div>
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                  <div className="play-indicator w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white">
+                  <div className="play-indicator w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/10">
                     ▶
                   </div>
                 </div>
