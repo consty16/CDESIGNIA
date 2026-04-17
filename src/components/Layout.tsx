@@ -280,7 +280,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
               }}
             />
             <motion.img
-              src="/logo.png"
+              src="/LOGO1.png"
               alt="C Design IA Logo"
               className="w-full object-contain contrast-125 brightness-110 saturate-125 drop-shadow-[0_0_8px_rgba(255,255,255,0.9)] drop-shadow-[0_0_20px_rgba(255,255,255,0.4)]"
               animate={{
