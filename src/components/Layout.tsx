@@ -846,7 +846,7 @@ export const Footer: React.FC = () => {
   return (
     <footer className="py-4 px-6 md:px-12 border-t border-lilac/10 flex flex-col md:flex-row items-center justify-between gap-8">
       <div className="flex items-center gap-4">
-        <span className="text-[10px] text-white/50 uppercase tracking-widest">© 2025 C Design IA</span>
+        <span className="text-[10px] text-white/50 uppercase tracking-widest">DESARROLLADO POR C DESIGN IA 2025 BY AI STUDIO GOOGLE.</span>
       </div>
       <div className="flex gap-8">
         {[
