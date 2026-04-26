@@ -404,6 +404,7 @@ const tools = [
   { name: "DeepSeek", cat: "IA Texto", icon: "🐋", url: "https://www.deepseek.com" },
   { name: "Microsoft Copilot", cat: "IA Texto", icon: "🌀", url: "https://copilot.microsoft.com" },
   { name: "Qwen", cat: "IA Texto", icon: "🐉", url: "https://qwenlm.github.io" },
+  { name: "Kimi", cat: "IA Texto", icon: "🌙", url: "https://www.kimi.com/" },
 
   // Google Labs
   { name: "Firebase Console", cat: "Google Labs", icon: "🔥", url: "https://console.firebase.google.com" },
@@ -456,7 +457,7 @@ export const ToolsContent = () => {
           RECOMENDADAS
         </h4>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          {tools.filter(t => ["Gemini AI", "Grok", "DeepSeek", "Microsoft Copilot", "Qwen", "Claude AI", "ChatGPT"].includes(t.name)).map((t, i) => (
+          {tools.filter(t => ["Gemini AI", "Grok", "DeepSeek", "Microsoft Copilot", "Qwen", "Claude AI", "ChatGPT", "Kimi"].includes(t.name)).map((t, i) => (
             <a
               key={i}
               href={t.url}
