@@ -17,7 +17,7 @@ REGLAS: Respondé SIEMPRE en español, tono amable y profesional. Precios: depen
 export async function getGeminiResponse(history: { role: "user" | "model"; parts: { text: string }[] }[]) {
   const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
   const model = genAI.models.generateContent({
-    model: "gemini-3-flash-preview",
+    model: "gemini-2.5-flash",
     contents: history,
     config: {
       systemInstruction: SYSTEM_PROMPT,
