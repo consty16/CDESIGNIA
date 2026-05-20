@@ -247,9 +247,17 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
                     href="https://lacueva-piedraspreciosas.vercel.app/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block px-6 py-3 text-[10px] uppercase tracking-widest text-white/80 hover:text-white hover:bg-lilac/20 transition-colors"
+                    className="block px-6 py-3 text-[10px] uppercase tracking-widest text-white/80 hover:text-white hover:bg-lilac/20 transition-colors border-b border-white/5"
                   >
                     ◆ LA CUEVA ↗
+                  </a>
+                  <a
+                    href="https://estudiojuridicoxamenayasociados.vercel.app/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block px-6 py-3 text-[10px] uppercase tracking-widest text-white/80 hover:text-white hover:bg-lilac/20 transition-colors"
+                  >
+                    ⚖ ESTUDIO JURIDICO XAMENA ↗
                   </a>
                 </div>
               </div>
