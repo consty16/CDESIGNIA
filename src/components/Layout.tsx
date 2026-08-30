@@ -105,10 +105,11 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="relative px-4 md:pl-12 md:pr-0 text-center md:text-left items-center md:items-start flex flex-col"
+          className="relative flex flex-col"
+          style={{ alignItems: 'flex-start' }}
         >
           <div className="hidden md:block absolute left-0 top-4 bottom-4 w-[1px] bg-gradient-to-b from-transparent via-lilac/50 to-transparent" />
-          <span className="inline-block text-[10px] uppercase tracking-[0.25em] text-white border border-white/40 px-4 py-1.5 mb-8 bg-white/5 rounded shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+          <span className="inline-block text-[10px] uppercase tracking-[0.25em] text-white border border-white/40 px-4 py-1.5 mb-8 bg-white/5 rounded shadow-[0_0_15px_rgba(255,255,255,0.2)]" style={{ alignSelf: 'flex-start' }}>
             AI Creator Content · Tucumán, Argentina
           </span>
           <motion.h1
@@ -155,10 +156,10 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
               ES INTELIGENTE.
             </motion.span>
           </motion.h1>
-          <p className="text-[19px] text-white/80 max-w-md mb-10 font-light leading-relaxed mx-auto md:mx-0">
+          <p className="text-[19px] text-white/80 max-w-md mb-10 font-light leading-relaxed" style={{ margin: '0 0 2.5rem 0' }}>
             Integramos diseño gráfico con inteligencia artificial generativa para crear piezas visuales que rompen los formatos tradicionales.
           </p>
-          <div className="grid grid-cols-2 gap-4 mb-12 max-w-[450px] mx-auto md:mx-0 w-full">
+          <div className="grid grid-cols-2 gap-4 mb-12 max-w-[450px] w-full">
             <button
               onClick={() => onOpenOverlay('muestras')}
               className="w-full h-full flex items-center justify-center border-2 text-white py-3 px-2 sm:px-4 text-[10px] sm:text-xs uppercase tracking-widest hover:brightness-125 transition-all rounded font-bold text-center"
@@ -272,7 +273,7 @@ export const Hero: React.FC<{ onOpenOverlay: (id: string) => void }> = ({ onOpen
               <span className="hover:animate-pulse border-none">✨ ¡PROBAR MAGIA!</span>
             </a>
           </div>
-          <div className="flex gap-10 justify-center md:justify-start">
+          <div className="flex gap-10" style={{ justifyContent: 'flex-start' }}>
             {[
               { val: "19+", label: "Proyectos" },
               { val: "IA", label: "Generativa" },
