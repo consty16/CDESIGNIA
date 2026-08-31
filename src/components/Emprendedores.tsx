@@ -40,11 +40,11 @@ export const Emprendedores: React.FC = () => {
           </p>
         </motion.div>
 
-        <h2 
+        <h2
           className="font-serif text-4xl md:text-5xl text-center mb-12 text-white"
           style={{ textShadow: '0 0 10px rgba(255,255,255,0.4), 0 0 20px rgba(255,255,255,0.2)' }}
         >
-          Nuestros Packs
+          ¿Que te ofrecemos?
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
@@ -110,7 +110,7 @@ export const Emprendedores: React.FC = () => {
         </div>
 
         {/* Bonus Section */}
-        <div 
+        <div
           className="border border-lilac/20 p-8 md:p-12 rounded-2xl backdrop-blur-sm mb-20 border-dashed"
           style={{ backgroundColor: '#33082b' }}
         >
@@ -134,7 +134,7 @@ export const Emprendedores: React.FC = () => {
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-8">
             {[
               "Grok Pro", "Google AI Studio", "Merchant Center", "Meta Business Suite",
-              "WhatsApp Business", "Tiendanube / Empretienda", "Wix", "Mercado Libre", 
+              "WhatsApp Business", "Tiendanube / Empretienda", "Wix", "Mercado Libre",
               "Pedix", "Google Business", "Ads", "Pomeli"
             ].map((tool, i) => (
               <div key={i} className="border border-white/5 p-4 rounded-lg text-center text-xs font-semibold" style={{ backgroundColor: '#1e1a52', color: '#c2abed', textShadow: '0 0 8px rgba(194,171,237,0.7)' }}>
