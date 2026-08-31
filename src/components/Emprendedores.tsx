@@ -85,7 +85,7 @@ export const Emprendedores: React.FC = () => {
             style={{ backgroundColor: '#4a1040' }}
           >
             <p className="text-[10px] uppercase tracking-widest text-lilac mb-4">Para crecer</p>
-            <h3 className="font-serif text-2xl mb-2 flex items-center gap-3">💎 Pack Emprendedor PRO IA 15</h3>
+            <h3 className="font-serif text-2xl mb-2 flex items-center gap-3">💎 Pack Emprendedor IA 15</h3>
             <p className="text-xs text-text-muted mb-6 italic">Para crecer y vender más</p>
             <ul className="space-y-3 mb-6 text-sm text-text-secondary flex-1">
               <li className="flex items-center gap-3"><span>✔</span> 14 reels (1 por día)</li>
@@ -97,7 +97,7 @@ export const Emprendedores: React.FC = () => {
               💰 $220.000
             </div>
             <a
-              href="https://wa.me/543815341233?text=Hola!%20Me%20interesa%20el%20Pack%20Emprendedor%20PRO%20IA%2015"
+              href="https://wa.me/543815341233?text=Hola!%20Me%20interesa%20el%20Pack%20Emprendedor%20IA%2015"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 py-2 px-4 rounded-lg font-semibold text-sm transition-all hover:scale-105"
